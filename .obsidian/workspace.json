@@ -1,23 +1,23 @@
 {
   "main": {
-    "id": "8eb5c77bdd589ed8",
+    "id": "950d2be86d024f9a",
     "type": "split",
     "children": [
       {
-        "id": "84538da9abdb1e08",
+        "id": "d4582c7a1e4d3361",
         "type": "tabs",
         "children": [
           {
-            "id": "38882bc7d22693d7",
+            "id": "7910178e7f4dd30a",
             "type": "leaf",
             "state": {
               "type": "canvas",
               "state": {
                 "file": "RPG/2. 씬이동.canvas",
                 "viewState": {
-                  "x": 837.5,
-                  "y": -49.5,
-                  "zoom": -0.441006144167113
+                  "x": 659.624553770382,
+                  "y": 145.7663734756153,
+                  "zoom": -1.2118187802715825
                 }
               }
             }
@@ -28,15 +28,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "86f1965ac74d4da5",
+    "id": "717c1b0005e8e7e8",
     "type": "split",
     "children": [
       {
-        "id": "4ab79e7c66332732",
+        "id": "729fe27ec055d8f6",
         "type": "tabs",
         "children": [
           {
-            "id": "415e154f9e3b32e8",
+            "id": "57b3ca3d79ec45b0",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -46,7 +46,7 @@
             }
           },
           {
-            "id": "61311271324e496b",
+            "id": "7a9a74b68d97958c",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -61,7 +61,7 @@
             }
           },
           {
-            "id": "ba503e263c310251",
+            "id": "ecd014612a2bea80",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -75,15 +75,15 @@
     "width": 300
   },
   "right": {
-    "id": "2f13e806d438149e",
+    "id": "78af78603f0ebefb",
     "type": "split",
     "children": [
       {
-        "id": "788e9bf71f678b3f",
+        "id": "02a20276e3b6fa1b",
         "type": "tabs",
         "children": [
           {
-            "id": "5a61e6fd1db543cd",
+            "id": "01de3b200fc5b21b",
             "type": "leaf",
             "state": {
               "type": "backlink",
@@ -100,7 +100,7 @@
             }
           },
           {
-            "id": "be30c43262772574",
+            "id": "9e637fec9bf326f1",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
@@ -112,7 +112,7 @@
             }
           },
           {
-            "id": "f791aeb20fdc4607",
+            "id": "16d55641eeff0c01",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -123,7 +123,7 @@
             }
           },
           {
-            "id": "520bafb2e0477a4c",
+            "id": "ca36c9e74838b9c5",
             "type": "leaf",
             "state": {
               "type": "outline",
@@ -141,40 +141,47 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:퀵 스위처 열기": false,
-      "graph:그래프 뷰 열기": false,
-      "canvas:새 캔버스 만들기": false,
-      "daily-notes:오늘의 데일리 노트 열기": false,
-      "templates:템플릿 삽입": false,
-      "command-palette:명령어 팔레트 열기": false
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
     }
   },
-  "active": "38882bc7d22693d7",
+  "active": "7910178e7f4dd30a",
   "lastOpenFiles": [
-    "RPG/일반 던전.md",
-    "Image/Pasted image 20231116195214.png",
+    "RPG/01. 2d rpg 구체화.canvas",
+    "RPG/1. 2d rpg 구체화.canvas",
     "RPG/2. 씬이동.canvas",
     "RPG/마을.md",
     "RPG/보스 던전.md",
     "RPG/스킬.md",
-    "RPG/애니메이션.md",
     "RPG/스탯.md",
+    "RPG/애니메이션.md",
+    "RPG/일반 던전.md",
     "RPG/장비.md",
     "RPG/직업.md",
     "RPG/캐릭터 생성.md",
     "RPG/팁.md",
-    "Image/Pasted image 20231116195052.png",
-    "RPG/1. 2d rpg 구체화.canvas",
+    "Rpg 구조화.md",
+    "RPG/구현안함/펫.md",
+    "RPG/구현안함",
     "RPG/0. Rpg 구조화.md",
     "RPG/00. 시나리오.md",
+    "RPG",
+    "Image/Pasted image 20231116195214.png",
+    "Image/Pasted image 20231116195052.png",
     "Image/Pasted image 20231116194644.png",
     "Image/Pasted image 20231116194229.png",
     "Image",
-    "RPG/구현안함",
-    "RPG",
-    "RPG/구현안함/펫.md",
-    "Untitled.md",
-    "Untitled 1.md",
-    "스텟.md"
+    "펫.md",
+    "직업.md",
+    "장비.md",
+    "애니메이션.md",
+    "스킬.md",
+    "보스.md",
+    "2d rpg 구체화.canvas",
+    "스탯.md"
   ]
 }
