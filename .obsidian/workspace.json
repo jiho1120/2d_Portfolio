@@ -13,11 +13,11 @@
             "state": {
               "type": "canvas",
               "state": {
-                "file": "RPG/01. 2d rpg 구체화.canvas",
+                "file": "RPG/2. 씬이동.canvas",
                 "viewState": {
-                  "x": 155.91647058823526,
-                  "y": 2040.6917647058826,
-                  "zoom": -1.3755710140671535
+                  "x": 659.624553770382,
+                  "y": 145.7663734756153,
+                  "zoom": -1.2118187802715825
                 }
               }
             }
@@ -88,7 +88,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "RPG/01. 2d rpg 구체화.canvas",
+                "file": "RPG/2. 씬이동.canvas",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -105,7 +105,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "RPG/01. 2d rpg 구체화.canvas",
+                "file": "RPG/2. 씬이동.canvas",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -128,7 +128,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "RPG/01. 2d rpg 구체화.canvas"
+                "file": "RPG/2. 씬이동.canvas"
               }
             }
           }
@@ -151,9 +151,9 @@
   },
   "active": "7910178e7f4dd30a",
   "lastOpenFiles": [
-    "RPG/2. 씬이동.canvas",
-    "RPG/1. 2d rpg 구체화.canvas",
     "RPG/01. 2d rpg 구체화.canvas",
+    "RPG/1. 2d rpg 구체화.canvas",
+    "RPG/2. 씬이동.canvas",
     "RPG/마을.md",
     "RPG/보스 던전.md",
     "RPG/스킬.md",
