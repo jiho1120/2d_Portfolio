@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 24
-  productGUID: 1106612df86b62146974891b327a8bd9
+  productGUID: dd2322ffbd341a04396d0015a5fbb8b8
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -769,11 +769,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 
+  cloudProjectId: b55ee918-ab44-4f94-b2dd-966359490013
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: PlatFormerRPG
+  organizationId: ehhiop2642
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
