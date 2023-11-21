@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.SceneManagement;
+using static UnityEditor.PlayerSettings;
 
 public class DungeonManager : Singleton<DungeonManager>
 {
@@ -27,6 +29,20 @@ public class DungeonManager : Singleton<DungeonManager>
 
     private void Start()
     {
+        //for (int i = 0; i < 10; i++)
+        //{
+        //    tmpobj = Instantiate(monsterPrefabs[Random.Range(0, monsterPrefabs.Length)], this.transform.GetChild(0));
+        //    objectPool.Enqueue(tmpobj.GetComponent<Monster>());
+        //    tmpobj.SetActive(false);
+        //    allMonsterList.Add(tmpobj);
+        //}
+
+        //StartCoroutine(GenerateMonster());
+        SetDungeonInfo();
+    }
+
+    public void SetDungeonInfo()
+    {
         checkDungeonNum(30);
         for (int i = 0; i < 10; i++)
         {
@@ -35,8 +51,8 @@ public class DungeonManager : Singleton<DungeonManager>
             tmpobj.SetActive(false);
             allMonsterList.Add(tmpobj);
         }
-
         StartCoroutine(GenerateMonster());
+
     }
 
     public void checkDungeonNum(int playerLevel)
@@ -83,13 +99,13 @@ public class DungeonManager : Singleton<DungeonManager>
             tmpMonster.SetInfo(AllFlyMonsterSprites[dungeonNum]);
             vec.y = spawnPos[pos].position.y + 1;
         }
-        else if(tmpMonster.transform.CompareTag("GroundEnemy"))
+        else if (tmpMonster.transform.CompareTag("GroundEnemy"))
         {
             tmpMonster.SetInfo(AllGroundMonsterSprites[dungeonNum]);
             vec.y = spawnPos[pos].position.y;
         }
 
-        tmpMonster.transform.position = vec; 
+        tmpMonster.transform.position = vec;
         tmpMonster.gameObject.SetActive(true);
 
     }
