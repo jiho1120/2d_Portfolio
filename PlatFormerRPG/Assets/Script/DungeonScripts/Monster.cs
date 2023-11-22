@@ -17,6 +17,7 @@ public class Monster : MonoBehaviour, IHit
     Rigidbody2D rigid;
     SpriteRenderer spren;
     Animator anim;
+    public LayerMask layerMask;
     Coroutine enemyCor = null;
 
     public Constructure.MonsterStat monsterStat;
@@ -94,7 +95,7 @@ public class Monster : MonoBehaviour, IHit
     }
     public void findPlayer()
     {
-
+        //GameManager.Instance.player.transform.position;
     }
     public void Hit(float damage, Vector3 dir)
     {
