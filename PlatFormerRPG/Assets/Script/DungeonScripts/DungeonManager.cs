@@ -11,18 +11,28 @@ public class DungeonManager : Singleton<DungeonManager>
 
     public int dungeonNum { get; private set; }
 
-    
+    // 몬스터 프리팹 생성 후 큐랑 리스트에 담기 몬스터 스탯 저장 몬스터 생성 시간 설정 후 스폰 몬스터의 스폰위치와 스프라이트 설정
+
 
     private void Start()
     {
         checkDungeonNum(30);
         ChangePanelImage();
-
-        StartCoroutine(SpawnManager.instance.GenerateMonster());
+        CheckGenerateMonsterCoroutine();
         MonsterManager.instance.SetMonsterInfo();
     }
 
-    
+    void CheckGenerateMonsterCoroutine()
+    {
+        if (dungeonNum <= 3)
+        {
+            StartCoroutine(MonsterManager.instance.GenerateMonster());
+        }
+        else
+        {
+            return;
+        }
+    }
 
     public void checkDungeonNum(int playerLevel)
     {
@@ -38,9 +48,12 @@ public class DungeonManager : Singleton<DungeonManager>
         {
             dungeonNum = 2;
         }
-        else
+        else if (playerLevel < 40)
         {
             dungeonNum = 3;
+        } else
+        {
+            dungeonNum = 4;
         }
     }
 

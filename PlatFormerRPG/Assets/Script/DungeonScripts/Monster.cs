@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Constructure;
 
-public class Monster : MonoBehaviour
+public class Monster : MonoBehaviour, IHit
 {
     Vector3 scale = Vector3.one;
     Vector3 vec = Vector3.right;
@@ -13,11 +14,15 @@ public class Monster : MonoBehaviour
     bool isMove = false;
     bool IsLeft = true;
 
+    Rigidbody2D rigid;
     SpriteRenderer spren;
     Animator anim;
     Coroutine enemyCor = null;
 
-    public void SetInfo(Sprite _spr)
+    public Constructure.MonsterStat monsterStat;
+
+
+    public void SetMonsterSprite(Sprite _spr) // 몬스터 매니저로 옮기고 싶은데 힘들다
     {
         if (spren == null)
         {
@@ -29,7 +34,12 @@ public class Monster : MonoBehaviour
 
     void Start()
     {
+        rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        monsterStat = new Constructure.MonsterStat(DungeonManager.Instance.dungeonNum);
+        Debug.Log($"{monsterStat.hP}");
+
+
         MonsterStartCoroutine();
     }
 
@@ -41,7 +51,7 @@ public class Monster : MonoBehaviour
 
     public void MonsterStartCoroutine()
     {
-        enemyCor = StartCoroutine(EnemyMove());
+        enemyCor = StartCoroutine(MonsterMove());
     }
 
     protected virtual void MonsterAct()
@@ -68,7 +78,7 @@ public class Monster : MonoBehaviour
         }
     }
 
-    IEnumerator EnemyMove()
+    IEnumerator MonsterMove()
     {
         while (true)
         {
@@ -82,14 +92,35 @@ public class Monster : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision) // 충돌시 코루틴 설정부터 다시하기
+    public void findPlayer()
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            anim.SetBool("findPlayer", false);
-            speed = 1f;
 
+    }
+    public void Hit(float damage, Vector3 dir)
+    {
+        if (monsterStat.hP <= 0)
+        {
+            return;
         }
+
+        this.monsterStat.hP = Mathf.Clamp(this.monsterStat.hP - damage, 0, this.monsterStat.maxHP);
+        //slider.value = this.monsterStat.hP;
+        //anim.SetTrigger("Hit");
+        rigid.AddForce(dir, ForceMode2D.Impulse);
+    }
+    public float GetAtt()
+    {
+        return monsterStat.att;
     }
 
+    public void isDead()
+    {
+        //플레이어 경험치 += MonsterManager.Instance.monsterStat.giveExp;
+        // 플레이어 돈 += MonsterManager.Instance.monsterStat.giveMoney;
+
+
+        this.gameObject.SetActive(false);
+    }
+
+    
 }
