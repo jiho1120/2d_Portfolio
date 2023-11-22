@@ -2,18 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnManager : Singleton<SpawnManager>
+public class Spawn : MonoBehaviour
 {
     public Transform[] monsterSpawnPos;
     Monster tmpMonster;
 
     Vector3 vec = Vector3.zero; //몬스터 위치 벡터
 
-    float generateTime = 0;
-    [SerializeField]
-    float minGenerateTime = 0;
-    [SerializeField]
-    float maxGenerateTime = 0;
+    
 
 
     // Start is called before the first frame update
@@ -27,20 +23,19 @@ public class SpawnManager : Singleton<SpawnManager>
     {
         
     }
-
-    public void SetMonsterSpawnPos()
+    public void SetMonsterSpawnPos() // 몬스터의 스폰위치와 스프라이트 설정
     {
-        tmpMonster = MonsterManager.instance.GetMonsterFromPool();
+        tmpMonster = MonsterManager.Instance.GetMonsterFromPool();
         int pos = Random.Range(0, monsterSpawnPos.Length);
         vec.x = monsterSpawnPos[pos].position.x;
         if (tmpMonster.transform.CompareTag("FlyEnemy"))
         {
-            tmpMonster.SetMonsterSprite(MonsterManager.instance.AllFlyMonsterSprites[DungeonManager.instance.dungeonNum]);
+            tmpMonster.SetMonsterSprite(MonsterManager.Instance.AllFlyMonsterSprites[DungeonManager.Instance.dungeonNum]);
             vec.y = monsterSpawnPos[pos].position.y + 1;
         }
         else if (tmpMonster.transform.CompareTag("GroundEnemy"))
         {
-            tmpMonster.SetMonsterSprite(MonsterManager.instance.AllGroundMonsterSprites[DungeonManager.instance.dungeonNum]);
+            tmpMonster.SetMonsterSprite(MonsterManager.Instance.AllGroundMonsterSprites[DungeonManager.Instance.dungeonNum]);
             vec.y = monsterSpawnPos[pos].position.y;
         }
 
@@ -48,13 +43,5 @@ public class SpawnManager : Singleton<SpawnManager>
         tmpMonster.gameObject.SetActive(true);
 
     }
-    public IEnumerator GenerateMonster()
-    {
-        while (true)
-        {
-            generateTime = Random.Range(minGenerateTime, maxGenerateTime);
-            yield return new WaitForSeconds(generateTime);
-            SetMonsterSpawnPos();
-        }
-    }
+    
 }

@@ -16202,8 +16202,6 @@ MonoBehaviour:
   - {fileID: 411632242}
   - {fileID: 907344501}
   - {fileID: 275154919}
-  minGenerateTime: 1
-  maxGenerateTime: 5
 --- !u!114 &1847249606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16216,6 +16214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e315bf655f97a4047a9238d553a16a97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minGenerateTime: 1
+  maxGenerateTime: 2
   monsterPrefabs:
   - {fileID: 1113432519044330493, guid: a9dcc231211f873418db537acb091217, type: 3}
   - {fileID: 8722508433459836606, guid: 0c666ce8a3838764e993427624ef6ac7, type: 3}

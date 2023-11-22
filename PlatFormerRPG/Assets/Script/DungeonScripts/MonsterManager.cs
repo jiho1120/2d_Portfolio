@@ -7,20 +7,26 @@ using static Constructure;
 
 public class MonsterManager : Singleton<MonsterManager>
 {
+    float generateTime = 0;
+    [SerializeField]
+    float minGenerateTime = 0;
+    [SerializeField]
+    float maxGenerateTime = 0;
+
     public GameObject[] monsterPrefabs; // 0이 그라운드 1이 fly
     public Sprite[] AllGroundMonsterSprites;
     public Sprite[] AllFlyMonsterSprites;
 
+    Spawn spawn;
     GameObject tmpobj;//임시변수
     Queue<Monster> objectPool = new Queue<Monster>();
     List<GameObject> allMonsterList = new List<GameObject>();
 
-    public Constructure.MonsterStat monsterStat;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        spawn = GetComponent<Spawn>();
     }
 
     // Update is called once per frame
@@ -28,7 +34,8 @@ public class MonsterManager : Singleton<MonsterManager>
     {
         
     }
-    public void SetMonsterInfo()
+
+    public void SetMonsterInfo() // 몬스터 프리팹 생성 후 큐랑 리스트에 담기 몬스터 스탯 저장
     {
         for (int i = 0; i < 10; i++)
         {
@@ -36,15 +43,11 @@ public class MonsterManager : Singleton<MonsterManager>
             objectPool.Enqueue(tmpobj.GetComponent<Monster>());
             tmpobj.SetActive(false);
             allMonsterList.Add(tmpobj);
-            SetMonsterStat(DungeonManager.instance.dungeonNum);
-            Debug.Log($"{monsterStat.hP}, {monsterStat.maxHP}, {monsterStat.att}, {monsterStat.giveExp}, {monsterStat.giveMoney}");
+            
         }
 
     }
-    public void SetMonsterStat(int level)
-    {
-        monsterStat = new Constructure.MonsterStat(level);
-    }
+    
 
     public Monster GetMonsterFromPool()
     {
@@ -59,6 +62,14 @@ public class MonsterManager : Singleton<MonsterManager>
             return tmpobj.GetComponent<Monster>();
         }
     }
-
-    
+     
+    public IEnumerator GenerateMonster() // 몬스터 생성 시간 설정 후 스폰
+    {
+        while (true)
+        {
+            generateTime = Random.Range(minGenerateTime, maxGenerateTime);
+            yield return new WaitForSeconds(generateTime);
+            spawn.SetMonsterSpawnPos();
+        }
+    }
 }

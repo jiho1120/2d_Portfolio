@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class DungeonManager : Singleton<DungeonManager>
 {
-    Monster monster;
     public Image panelImage;
     public Sprite[] panelSprites;
     public GameObject[] tileMap;
 
     public int dungeonNum { get; private set; }
 
-    
+    // 몬스터 프리팹 생성 후 큐랑 리스트에 담기 몬스터 스탯 저장 몬스터 생성 시간 설정 후 스폰 몬스터의 스폰위치와 스프라이트 설정
+
 
     private void Start()
     {
@@ -26,7 +26,7 @@ public class DungeonManager : Singleton<DungeonManager>
     {
         if (dungeonNum <= 3)
         {
-            StartCoroutine(SpawnManager.instance.GenerateMonster());
+            StartCoroutine(MonsterManager.instance.GenerateMonster());
         }
         else
         {
