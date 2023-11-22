@@ -1,0 +1,20 @@
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+{}
+=======
+{
+  "app:open-vault": [
+    {
+      "modifiers": [
+        "Alt",
+        "Mod",
+        "Shift"
+      ],
+      "key": "Z"
+    }
+  ]
+}
+>>>>>>> Stashed changes
+=======
+{}
+>>>>>>> Stashed changes
