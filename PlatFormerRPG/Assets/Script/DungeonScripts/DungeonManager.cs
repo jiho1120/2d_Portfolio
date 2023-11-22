@@ -1,59 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
-using UnityEngine.SceneManagement;
-using static UnityEditor.PlayerSettings;
+using UnityEngine.UI;
 
 public class DungeonManager : Singleton<DungeonManager>
 {
-    public Transform[] spawnPos;
-    public GameObject[] monsterPrefabs; // 0이 그라운드 1이 fly
-    public Sprite[] AllGroundMonsterSprites;
-    public Sprite[] AllFlyMonsterSprites;
+    public Image panelImage;
+    public Sprite[] panelSprites;
+    public GameObject[] tileMap;
 
     public int dungeonNum { get; private set; }
 
-    float generateTime = 0;
-    [SerializeField]
-    float minGenerateTime = 0;
-    [SerializeField]
-    float maxGenerateTime = 0;
-
-    GameObject tmpobj; //임시변수
-    Monster tmpMonster;
-    Queue<Monster> objectPool = new Queue<Monster>();
-    List<GameObject> allMonsterList = new List<GameObject>();
-    Vector3 vec = Vector3.zero;
-
+    
 
     private void Start()
     {
-        //for (int i = 0; i < 10; i++)
-        //{
-        //    tmpobj = Instantiate(monsterPrefabs[Random.Range(0, monsterPrefabs.Length)], this.transform.GetChild(0));
-        //    objectPool.Enqueue(tmpobj.GetComponent<Monster>());
-        //    tmpobj.SetActive(false);
-        //    allMonsterList.Add(tmpobj);
-        //}
-
-        //StartCoroutine(GenerateMonster());
-        SetDungeonInfo();
-    }
-
-    public void SetDungeonInfo()
-    {
         checkDungeonNum(30);
-        for (int i = 0; i < 10; i++)
-        {
-            tmpobj = Instantiate(monsterPrefabs[Random.Range(0, monsterPrefabs.Length)], this.transform.GetChild(0));
-            objectPool.Enqueue(tmpobj.GetComponent<Monster>());
-            tmpobj.SetActive(false);
-            allMonsterList.Add(tmpobj);
-        }
-        StartCoroutine(GenerateMonster());
+        ChangePanelImage();
 
+        StartCoroutine(SpawnManager.instance.GenerateMonster());
+        MonsterManager.instance.SetMonsterInfo();
     }
+
+    
 
     public void checkDungeonNum(int playerLevel)
     {
@@ -75,48 +44,19 @@ public class DungeonManager : Singleton<DungeonManager>
         }
     }
 
-    public Monster GetMonsterFromPool()
+    public void ChangePanelImage() // 레벨 판별 번호 받아서 이미지 변경
     {
-        if (objectPool.Count > 0) //오브젝트 풀에 내용물이 있다면~
+        for (int i = 0; i < tileMap.Length; i++)
         {
-            return objectPool.Dequeue();
-        }
-        else
-        {
-            tmpobj = Instantiate(monsterPrefabs[Random.Range(0, monsterPrefabs.Length)]);
-            allMonsterList.Add(tmpobj);
-            return tmpobj.GetComponent<Monster>();
-        }
-    }
-
-    public void SetMonster()
-    {
-        tmpMonster = GetMonsterFromPool();
-        int pos = Random.Range(0, spawnPos.Length);
-        vec.x = spawnPos[pos].position.x;
-        if (tmpMonster.transform.CompareTag("FlyEnemy"))
-        {
-            tmpMonster.SetInfo(AllFlyMonsterSprites[dungeonNum]);
-            vec.y = spawnPos[pos].position.y + 1;
-        }
-        else if (tmpMonster.transform.CompareTag("GroundEnemy"))
-        {
-            tmpMonster.SetInfo(AllGroundMonsterSprites[dungeonNum]);
-            vec.y = spawnPos[pos].position.y;
+            // 해당 인덱스의 tileMap 활성화 여부를 판별하여 설정
+            tileMap[i].SetActive(i == DungeonManager.Instance.dungeonNum); // 나중에 게임 매니저 통해서 씬 로드할때 추가해야함
         }
 
-        tmpMonster.transform.position = vec;
-        tmpMonster.gameObject.SetActive(true);
+        // 마지막에 패널 이미지를 설정
+        panelImage.sprite = panelSprites[DungeonManager.Instance.dungeonNum];
 
     }
-    IEnumerator GenerateMonster()
-    {
-        while (true)
-        {
-            generateTime = Random.Range(minGenerateTime, maxGenerateTime);
-            yield return new WaitForSeconds(generateTime);
-            SetMonster();
-        }
-    }
+
+
 
 }
