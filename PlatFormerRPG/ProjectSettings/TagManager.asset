@@ -3,15 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - GroundEnemy
-  - FlyEnemy
-  - Ground
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Enemy
+  - 
   - Water
   - UI
   - 
@@ -43,4 +40,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: HpAndExp
+    uniqueID: 1221265055
+    locked: 0
+  - name: InfoUi
+    uniqueID: 781692811
+    locked: 0
+  - name: BackGround
+    uniqueID: 1619062145
     locked: 0
