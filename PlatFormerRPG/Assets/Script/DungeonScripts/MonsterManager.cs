@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Pool;
+using static Constructure;
 
 public class MonsterManager : Singleton<MonsterManager>
 {
@@ -9,10 +11,11 @@ public class MonsterManager : Singleton<MonsterManager>
     public Sprite[] AllGroundMonsterSprites;
     public Sprite[] AllFlyMonsterSprites;
 
-    public GameObject tmpobj { get; private set; } //임시변수
+    GameObject tmpobj;//임시변수
     Queue<Monster> objectPool = new Queue<Monster>();
     List<GameObject> allMonsterList = new List<GameObject>();
 
+    public Constructure.MonsterStat monsterStat;
 
     // Start is called before the first frame update
     void Start()
@@ -33,10 +36,15 @@ public class MonsterManager : Singleton<MonsterManager>
             objectPool.Enqueue(tmpobj.GetComponent<Monster>());
             tmpobj.SetActive(false);
             allMonsterList.Add(tmpobj);
+            SetMonsterStat(DungeonManager.instance.dungeonNum);
+            Debug.Log($"{monsterStat.hP}, {monsterStat.maxHP}, {monsterStat.att}, {monsterStat.giveExp}, {monsterStat.giveMoney}");
         }
 
     }
-
+    public void SetMonsterStat(int level)
+    {
+        monsterStat = new Constructure.MonsterStat(level);
+    }
 
     public Monster GetMonsterFromPool()
     {
