@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface IHit
 {
-    void Hit();
+    void Hit(float damage, Vector3 dir);
 
     float GetAtt();
 }
