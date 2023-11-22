@@ -13,25 +13,22 @@ public class Monster : MonoBehaviour
     bool isMove = false;
     bool IsLeft = true;
 
+    Rigidbody2D rigid;
     SpriteRenderer spren;
     Animator anim;
     Coroutine enemyCor = null;
 
-    public void SetInfo(Sprite _spr)
-    {
-        if (spren == null)
-        {
-            spren = this.transform.GetComponent<SpriteRenderer>();
-        }
-        spren.sprite = _spr;
-        speed = Random.Range(speedMin, speedMax);
-    }
+    
 
     void Start()
     {
+        rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         MonsterStartCoroutine();
     }
+
+    
+
 
     // Update is called once per frame
     void Update()
@@ -47,6 +44,16 @@ public class Monster : MonoBehaviour
     protected virtual void MonsterAct()
     {
         basicMove();
+    }
+
+    public void SetMonsterSprite(Sprite _spr)
+    {
+        if (spren == null)
+        {
+            spren = this.transform.GetComponent<SpriteRenderer>();
+        }
+        spren.sprite = _spr;
+        speed = Random.Range(speedMin, speedMax);
     }
 
     void basicMove()
@@ -82,14 +89,6 @@ public class Monster : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision) // 충돌시 코루틴 설정부터 다시하기
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            anim.SetBool("findPlayer", false);
-            speed = 1f;
-
-        }
-    }
+    
 
 }

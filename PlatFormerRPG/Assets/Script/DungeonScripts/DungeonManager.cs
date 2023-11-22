@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DungeonManager : Singleton<DungeonManager>
 {
+    Monster monster;
     public Image panelImage;
     public Sprite[] panelSprites;
     public GameObject[] tileMap;
@@ -17,12 +18,21 @@ public class DungeonManager : Singleton<DungeonManager>
     {
         checkDungeonNum(30);
         ChangePanelImage();
-
-        StartCoroutine(SpawnManager.instance.GenerateMonster());
+        CheckGenerateMonsterCoroutine();
         MonsterManager.instance.SetMonsterInfo();
     }
 
-    
+    void CheckGenerateMonsterCoroutine()
+    {
+        if (dungeonNum <= 3)
+        {
+            StartCoroutine(SpawnManager.instance.GenerateMonster());
+        }
+        else
+        {
+            return;
+        }
+    }
 
     public void checkDungeonNum(int playerLevel)
     {
@@ -38,9 +48,12 @@ public class DungeonManager : Singleton<DungeonManager>
         {
             dungeonNum = 2;
         }
-        else
+        else if (playerLevel < 40)
         {
             dungeonNum = 3;
+        } else
+        {
+            dungeonNum = 4;
         }
     }
 

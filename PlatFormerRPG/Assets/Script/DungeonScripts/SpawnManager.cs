@@ -35,12 +35,12 @@ public class SpawnManager : Singleton<SpawnManager>
         vec.x = monsterSpawnPos[pos].position.x;
         if (tmpMonster.transform.CompareTag("FlyEnemy"))
         {
-            tmpMonster.SetInfo(MonsterManager.instance.AllFlyMonsterSprites[DungeonManager.instance.dungeonNum]);
+            tmpMonster.SetMonsterSprite(MonsterManager.instance.AllFlyMonsterSprites[DungeonManager.instance.dungeonNum]);
             vec.y = monsterSpawnPos[pos].position.y + 1;
         }
         else if (tmpMonster.transform.CompareTag("GroundEnemy"))
         {
-            tmpMonster.SetInfo(MonsterManager.instance.AllGroundMonsterSprites[DungeonManager.instance.dungeonNum]);
+            tmpMonster.SetMonsterSprite(MonsterManager.instance.AllGroundMonsterSprites[DungeonManager.instance.dungeonNum]);
             vec.y = monsterSpawnPos[pos].position.y;
         }
 
