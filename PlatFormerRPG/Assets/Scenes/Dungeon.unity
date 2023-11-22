@@ -6741,7 +6741,7 @@ Transform:
   - {fileID: 259569016}
   - {fileID: 365345551}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &907344500
 GameObject:
@@ -9705,61 +9705,6 @@ TilemapCollider2D:
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
---- !u!1 &1563342134
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1563342136}
-  - component: {fileID: 1563342135}
-  m_Layer: 0
-  m_Name: MapController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1563342135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1563342134}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e3d2545cb6c8ca489a0422403c3b79c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  panelImage: {fileID: 502372900}
-  panelSprites:
-  - {fileID: 21300000, guid: fd00b29c3d9553d4c8e0ab3b572af409, type: 3}
-  - {fileID: 21300000, guid: 9d1a3e0bc36dfc9468a738d92b6e92d4, type: 3}
-  - {fileID: 21300000, guid: 367fef7c7a0cf8b4e8fc2020259965e9, type: 3}
-  - {fileID: 21300000, guid: 429517ea1b1287a47952cd5cd8261d74, type: 3}
-  tileMap:
-  - {fileID: 52272268}
-  - {fileID: 2046845036}
-  - {fileID: 25674011}
-  - {fileID: 1362924636}
---- !u!4 &1563342136
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1563342134}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1622392244
 GameObject:
   m_ObjectHideFlags: 0
@@ -9844,7 +9789,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1622392247
 BoxCollider2D:
@@ -9981,6 +9926,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1847249604}
+  - component: {fileID: 1847249607}
+  - component: {fileID: 1847249606}
   - component: {fileID: 1847249605}
   m_Layer: 0
   m_Name: DungeonManager
@@ -10003,9 +9950,55 @@ Transform:
   m_Children:
   - {fileID: 1666940668}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1847249605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847249603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b41f7cd8c68a98747a2962064d2d36fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterSpawnPos:
+  - {fileID: 340449351}
+  - {fileID: 462156688}
+  - {fileID: 232119504}
+  - {fileID: 411632242}
+  - {fileID: 907344501}
+  - {fileID: 275154919}
+  minGenerateTime: 1
+  maxGenerateTime: 2
+--- !u!114 &1847249606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847249603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e315bf655f97a4047a9238d553a16a97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPrefabs:
+  - {fileID: 8722508433459836606, guid: 0c666ce8a3838764e993427624ef6ac7, type: 3}
+  - {fileID: 1113432519044330493, guid: a9dcc231211f873418db537acb091217, type: 3}
+  AllGroundMonsterSprites:
+  - {fileID: 21300000, guid: f4ba7a5e8b25ae241a6c94d4d6df858d, type: 3}
+  - {fileID: 21300000, guid: ce60f325abe16e1408f2d226e825c21a, type: 3}
+  - {fileID: 21300000, guid: 590b73e132435194da7d40dc8a3816f0, type: 3}
+  - {fileID: 21300000, guid: 2d5d6782fc427ad498ff00ded71060f4, type: 3}
+  AllFlyMonsterSprites:
+  - {fileID: 21300000, guid: 6de610ccbbc0a094b804153e2dea43a6, type: 3}
+  - {fileID: 21300000, guid: 7fd151f4d9de8de47a1d5abe6e506e83, type: 3}
+  - {fileID: 21300000, guid: 96481b76a6fa9c6428e4e4b1522e9378, type: 3}
+  - {fileID: 21300000, guid: 764f930ba03e6324d805335eb66b8c98, type: 3}
+--- !u!114 &1847249607
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10017,28 +10010,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80f911b66e5408b448aa63766e88be14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPos:
-  - {fileID: 340449351}
-  - {fileID: 462156688}
-  - {fileID: 232119504}
-  - {fileID: 411632242}
-  - {fileID: 907344501}
-  - {fileID: 275154919}
-  monsterPrefabs:
-  - {fileID: 1113432519044330493, guid: a9dcc231211f873418db537acb091217, type: 3}
-  - {fileID: 8722508433459836606, guid: 0c666ce8a3838764e993427624ef6ac7, type: 3}
-  AllGroundMonsterSprites:
-  - {fileID: 21300000, guid: f4ba7a5e8b25ae241a6c94d4d6df858d, type: 3}
-  - {fileID: 21300000, guid: 230db3240b492574094d76e3dbd404a1, type: 3}
-  - {fileID: 21300000, guid: 590b73e132435194da7d40dc8a3816f0, type: 3}
-  - {fileID: 21300000, guid: 2d5d6782fc427ad498ff00ded71060f4, type: 3}
-  AllFlyMonsterSprites:
-  - {fileID: 21300000, guid: 6de610ccbbc0a094b804153e2dea43a6, type: 3}
-  - {fileID: 21300000, guid: 96481b76a6fa9c6428e4e4b1522e9378, type: 3}
-  - {fileID: 21300000, guid: 7fd151f4d9de8de47a1d5abe6e506e83, type: 3}
-  - {fileID: 21300000, guid: 764f930ba03e6324d805335eb66b8c98, type: 3}
-  minGenerateTime: 1
-  maxGenerateTime: 2
+  panelImage: {fileID: 502372900}
+  panelSprites:
+  - {fileID: 21300000, guid: fd00b29c3d9553d4c8e0ab3b572af409, type: 3}
+  - {fileID: 21300000, guid: 9d1a3e0bc36dfc9468a738d92b6e92d4, type: 3}
+  - {fileID: 21300000, guid: 367fef7c7a0cf8b4e8fc2020259965e9, type: 3}
+  - {fileID: 21300000, guid: 429517ea1b1287a47952cd5cd8261d74, type: 3}
+  tileMap:
+  - {fileID: 52272268}
+  - {fileID: 2046845036}
+  - {fileID: 25674011}
+  - {fileID: 1362924636}
 --- !u!1 &1940704443
 GameObject:
   m_ObjectHideFlags: 0
@@ -10074,7 +10056,7 @@ Transform:
   - {fileID: 907344501}
   - {fileID: 275154919}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2046845036
 GameObject:
