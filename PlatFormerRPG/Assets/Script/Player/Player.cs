@@ -160,7 +160,7 @@ public class Player : MonoBehaviour, IAtt
         }
 
         //¸ó½ºÅÍ¶û ´ê¾ÒÀ» ¶§
-        else if (collision.gameObject.CompareTag("Monster"))
+        else if (collision.gameObject.CompareTag("GroundEnemy") && collision.gameObject.CompareTag("FlyEnemy"))
         {
             isHit = true;
             direction = (collision.transform.position - transform.position).normalized;
