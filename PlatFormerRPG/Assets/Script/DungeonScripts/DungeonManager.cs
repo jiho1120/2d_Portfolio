@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DungeonManager : Singleton<DungeonManager>
 {
+    public Fplayer fplayer;
     public Image panelImage;
     public Sprite[] panelSprites;
     public GameObject[] tileMap;

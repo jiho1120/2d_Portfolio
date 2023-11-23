@@ -7,18 +7,20 @@ public class Monster : MonoBehaviour, IHit
 {
     Vector3 scale = Vector3.one;
     Vector3 vec = Vector3.right;
+    Vector3 direction = Vector3.zero;
 
     float speedMin = 1;
     float speedMax = 2;
     float speed;
     bool isMove = false;
     bool IsLeft = true;
+    bool isAttack = false;
 
     Rigidbody2D rigid;
     SpriteRenderer spren;
     Animator anim;
-    public LayerMask layerMask;
     Coroutine enemyCor = null;
+
 
     public Constructure.MonsterStat monsterStat;
 
@@ -38,7 +40,7 @@ public class Monster : MonoBehaviour, IHit
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         monsterStat = new Constructure.MonsterStat(DungeonManager.Instance.dungeonNum);
-        Debug.Log($"{monsterStat.hP}");
+        //Debug.Log($"{monsterStat.hP}");
 
 
         MonsterStartCoroutine();
@@ -96,8 +98,13 @@ public class Monster : MonoBehaviour, IHit
     }
     public void findPlayer()
     {
-        //GameManager.Instance.player.transform.position;
-        //anim.SetBool("PlyerFind", playerfind);
+        if (Vector2.Distance (transform.position, DungeonManager.Instance.fplayer.transform.position) < 15f)
+        {
+            //GameManager.Instance.player.transform.position;
+            //anim.SetBool("PlyerFind", playerfind);
+            isAttack = true;
+
+        }
 
     }
     public void AttackPlayer()
@@ -107,9 +114,12 @@ public class Monster : MonoBehaviour, IHit
         //    return;
         //}
 
-        //anim.SetBool("AttackPlayer", playerfind);
-
-        
+        if (isAttack)
+        {
+            direction = (DungeonManager.Instance.fplayer.transform.position - this.gameObject.transform.position).normalized;
+            //anim.SetBool("AttackPlayer", playerfind);
+            DungeonManager.Instance.fplayer.Hit(monsterStat.att, direction);
+        }
     }
 
     public void Hit(float damage, Vector3 dir)
