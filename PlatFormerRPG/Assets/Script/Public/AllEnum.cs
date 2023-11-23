@@ -1,18 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class AllEnum : MonoBehaviour
+public class AllEnum
 {
-    // Start is called before the first frame update
-    void Start()
+    public enum JobType
     {
-        
-    }
+        Human,
+        Ryu,
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        End
     }
 }
