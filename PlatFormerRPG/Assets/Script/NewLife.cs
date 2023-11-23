@@ -14,16 +14,8 @@ public class NewLife : MonoBehaviour
     public GameObject NotDialog;
     private string OkName;
     
-    private Dictionary<AllEnum.JobType, int> jobTypeValues = new Dictionary<AllEnum.JobType, int>();
-    
-    public NewLife()
-    {
-        foreach (AllEnum.JobType jobType in Enum.GetValues(typeof(AllEnum.JobType)))
-        {
-            jobTypeValues.Add(jobType, 0);
-        }
-    }
-    
+    //private Dictionary<AllEnum.JobType, int> jobTypeValues = new Dictionary<AllEnum.JobType, int>();
+    private AllEnum.JobType jobtype;
     public void SeleteCharacterHuman()
     {
         Character_Human.SetActive(true);
@@ -31,8 +23,8 @@ public class NewLife : MonoBehaviour
         {
             Character_Ryu.SetActive(false);
         }
-        jobTypeValues[AllEnum.JobType.Ryu] = 0;
-        jobTypeValues[AllEnum.JobType.Human] += 1;
+
+        jobtype = AllEnum.JobType.Human;
     }
 
     public void SeleteCharacterRyu()
@@ -42,8 +34,8 @@ public class NewLife : MonoBehaviour
         {
             Character_Human.SetActive(false);
         }
-        jobTypeValues[AllEnum.JobType.Human] = 0;
-        jobTypeValues[AllEnum.JobType.Ryu] += 1;
+
+        jobtype = AllEnum.JobType.Ryu;
     }
 
     public void OkButton()
@@ -62,6 +54,9 @@ public class NewLife : MonoBehaviour
             OkDialog.SetActive(true);
             Debug.Log("캐릭터 생성 성공");
             OkName = InputText.text;
+            // 플레이어 매니져에 데이터를 보낼 코드위치
+            // 이름, 직업만 보냄
+            // 매개변수로 이름 직업 보내야됨
             Invoke("OKDialogDisappear",2f);
         }
     }
