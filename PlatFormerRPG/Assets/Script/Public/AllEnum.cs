@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class AllEnum : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public enum JobType
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Ryu,
+        Human,
+    
+        End
     }
 }
