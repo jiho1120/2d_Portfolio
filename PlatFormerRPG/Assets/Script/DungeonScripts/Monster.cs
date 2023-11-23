@@ -58,6 +58,7 @@ public class Monster : MonoBehaviour, IHit
     protected virtual void MonsterAct()
     {
         basicMove();
+
     }
 
     void basicMove()
@@ -96,7 +97,21 @@ public class Monster : MonoBehaviour, IHit
     public void findPlayer()
     {
         //GameManager.Instance.player.transform.position;
+        //anim.SetBool("PlyerFind", playerfind);
+
     }
+    public void AttackPlayer()
+    {
+        //if (PlayerStat.hP <= 0)
+        //{
+        //    return;
+        //}
+
+        //anim.SetBool("AttackPlayer", playerfind);
+
+        
+    }
+
     public void Hit(float damage, Vector3 dir)
     {
         if (monsterStat.hP <= 0)
