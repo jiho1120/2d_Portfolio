@@ -14,7 +14,7 @@ public class Player : MonoBehaviour, IAtt
     Rigidbody2D rigid;
     Animator anim;
 
-    Constructure.Stat myStat;       //플레이어 스탯
+    public Constructure.Stat myStat;       //플레이어 스탯
 
     Vector3 vec = Vector3.zero;
     Vector3 scaleVec = Vector3.one;

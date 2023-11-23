@@ -16085,6 +16085,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7883184924184026241, guid: 3438023272e289d42b74e507f3f3f3a0, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7883184924283487524, guid: 3438023272e289d42b74e507f3f3f3a0, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -16129,9 +16133,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7883184924283487582, guid: 3438023272e289d42b74e507f3f3f3a0, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7883184924283487583, guid: 3438023272e289d42b74e507f3f3f3a0, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7883184924283487583, guid: 3438023272e289d42b74e507f3f3f3a0, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7883184924386530815, guid: 3438023272e289d42b74e507f3f3f3a0, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3438023272e289d42b74e507f3f3f3a0, type: 3}
