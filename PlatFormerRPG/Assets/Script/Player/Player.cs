@@ -6,18 +6,20 @@ using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour, IAtt
 {
-    
+
     Rigidbody2D rigid;
     Animator anim;
 
-    public Constructure.Stat myStat;       //ÇÃ·¹ÀÌ¾î ½ºÅÈ
+    Constructure.Stat myStat;       //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
+    //Allenum
 
     Vector3 vec = Vector3.zero;
     Vector3 scaleVec = Vector3.one;
     Vector3 direction = Vector3.zero;
 
     float x = 0;
-    public float speed = 5;
+    public float speed = 6;
+    public float jumpPower = 8;
     int jumpCount = 0;
     float knockBack = 1;
     bool isHit = false;
@@ -30,7 +32,7 @@ public class Player : MonoBehaviour, IAtt
         anim = transform.GetComponent<Animator>();
     }
 
-    //½ºÅÈ ÃÊ±â ¼¼ÆÃ
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½
     void StatSetting()
     {
         myStat = new Constructure.Stat(100, 10, 20, 0, 100, 0);
@@ -39,12 +41,12 @@ public class Player : MonoBehaviour, IAtt
 
     void Update()
     {
-        //Á¶ÀÛ
+        //Keyï¿½ï¿½ï¿½ï¿½
         x = Input.GetAxisRaw("Horizontal");
         vec.x = x;
         transform.Translate(vec.normalized * Time.deltaTime * speed);
 
-        //Ä³¸¯ÅÍ ½ºÇÁ¶óÀÌÆ® ¹ÝÀü
+        //Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         if (vec.x != 0)
         {
             scaleVec.x = vec.x;
@@ -56,41 +58,36 @@ public class Player : MonoBehaviour, IAtt
         }
         transform.localScale = scaleVec;
 
-        //Á¡ÇÁ
+        //ï¿½ï¿½ï¿½ï¿½
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if(jumpCount < 2)
             {
+                rigid.velocity = Vector2.zero;      //velocity ï¿½Ê±ï¿½È­, ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ù°ï¿½ ï¿½ï¿½
                 jumpCount++;
-
-                if(jumpCount == 2)
-                {
-                    speed = 2.5f;
-                }
             }
             else
             {
                 return;
             }
-            rigid.AddForce(Vector2.up * speed, ForceMode2D.Impulse);
+            rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
             anim.SetTrigger("IsJump");
-            speed = 5;
         }
 
-        //°ø°Ý(ÀÓ½Ã)
+        //ï¿½ï¿½ï¿½ï¿½(ï¿½Ó½ï¿½)
         if (Input.GetKeyDown(KeyCode.Z))
         {
             anim.SetTrigger("IsAtt");
         }
 
-        //½ºÅ³(ÀÓ½Ã)
+        //ï¿½ï¿½Å³(ï¿½Ó½ï¿½)
         if (Input.GetKeyDown(KeyCode.X))
         {
-            PlayerManager.Instance.skill.SkillSetting();
+            //PlayerManager.Instance.skill.SkillSetting();
             anim.SetTrigger("IsSkill");
         }
 
-        //HPÈ¸º¹(ÀÓ½Ã)
+        //HPÈ¸ï¿½ï¿½(ï¿½Ó½ï¿½)
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             myStat.HP += 10;
@@ -98,7 +95,7 @@ public class Player : MonoBehaviour, IAtt
             UIManager.Instance.SetHpSlider(myStat.HP);
         }
 
-        //°æÇèÄ¡(ÀÓ½Ã)
+        //ï¿½ï¿½ï¿½ï¿½Ä¡(ï¿½Ó½ï¿½)
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             myStat.ExpVal += 10;
@@ -116,19 +113,19 @@ public class Player : MonoBehaviour, IAtt
         }
     }
 
-    //±âº» °ø°Ý
+    //ï¿½âº» ï¿½ï¿½ï¿½ï¿½
     public float Attak()
     {
         return myStat.Att;
     }
 
-    //½ºÅ³ °ø°Ý
+    //ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½
     public float Skill()
     {
         return myStat.Skill;
     }
 
-    //ÀÔÀº ÇÇÇØ
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void GetHit(float damage, Vector3 dir)
     {
         if(myStat.HP <= 0)
@@ -144,15 +141,15 @@ public class Player : MonoBehaviour, IAtt
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        //¶¥¿¡ ´ê¾ÒÀ» ¶§
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         if (collision.gameObject.CompareTag("Ground"))
         {
             isHit = false;
-            jumpCount = 0;      //Á¡ÇÁ ÃÊ±âÈ­
-            rigid.velocity = Vector2.zero;      //¹Ì²ô·³¹æÁö
+            jumpCount = 0;      //ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
+            rigid.velocity = Vector2.zero;      //ï¿½Ì²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         }
 
-        //¸ó½ºÅÍ¶û ´ê¾ÒÀ» ¶§
+        //ï¿½ï¿½ï¿½Í¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         else if (collision.gameObject.CompareTag("GroundEnemy") && collision.gameObject.CompareTag("FlyEnemy"))
         {
             isHit = true;
@@ -160,17 +157,17 @@ public class Player : MonoBehaviour, IAtt
             direction.y += 1;
             direction *= knockBack;
 
-            GetHit(collision.transform.GetComponent<IAtt>().Attak(), direction);
+            GetHit(collision.transform.GetComponent<IAtt>().Attak(), direction);        //ï¿½ï¿½ï¿½ï¿½
         }
     }
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Æ®¸®°Å¿£ÅÍ");
+        Debug.Log("Æ®ï¿½ï¿½ï¿½Å¿ï¿½ï¿½ï¿½");
         if (other.gameObject.CompareTag("Potal"))
         {
             PlayerManager.Instance.InPotal = true;
-            Debug.Log("Æ÷Å»Á¢±Ù");
+            Debug.Log("ï¿½ï¿½Å»ï¿½ï¿½ï¿½ï¿½");
         }
     }
 
@@ -179,7 +176,7 @@ public class Player : MonoBehaviour, IAtt
         if (other.gameObject.CompareTag("Potal"))
         {
             PlayerManager.Instance.InPotal = false;
-            Debug.Log("Æ÷Å»¹þ¾î³²");
+            Debug.Log("ï¿½ï¿½Å»ï¿½ï¿½ï¿½î³²");
         }
     }
 }

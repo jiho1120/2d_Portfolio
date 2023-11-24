@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - MonsterHitBox
   - Potal
+  - BossWeapon
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - MonsterHittBox
   - Platform
   - Player
-  - 
+  - BossWaapon
   - 
   - 
   - 

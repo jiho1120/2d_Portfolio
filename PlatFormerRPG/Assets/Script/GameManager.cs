@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    public Player player;
+    public GameObject player;
 
     void Start()
     {
-        player = GetComponent<Player>();
+        
     }
 
     // Update is called once per frame

@@ -16,7 +16,7 @@ public class NewLife : MonoBehaviour
     private string OkName;
     
     //private Dictionary<AllEnum.JobType, int> jobTypeValues = new Dictionary<AllEnum.JobType, int>();
-    private AllEnum.JobType jobtype;
+    //private AllEnum.JobType jobtype;
     public void SeleteCharacterHuman()
     {
         Character_Human.SetActive(true);
@@ -25,7 +25,7 @@ public class NewLife : MonoBehaviour
             Character_Ryu.SetActive(false);
         }
 
-        jobtype = AllEnum.JobType.Human;
+        //jobtype = AllEnum.JobType.Human;
     }
 
     public void SeleteCharacterRyu()
@@ -36,7 +36,7 @@ public class NewLife : MonoBehaviour
             Character_Human.SetActive(false);
         }
 
-        jobtype = AllEnum.JobType.Ryu;
+        //jobtype = AllEnum.JobType.Ryu;
     }
 
     public void OkButton()
