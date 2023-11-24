@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
-    public Player Warrior;
-    public Player Wizard;
+    public Player Warrior;      //전사
+    public Player Wizard;       //마법사(드래곤)
     //public PlayerSkill skill;
 }
