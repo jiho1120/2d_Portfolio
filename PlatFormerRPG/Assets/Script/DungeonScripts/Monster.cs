@@ -17,7 +17,6 @@ public class Monster : MonoBehaviour, IHit
     Rigidbody2D rigid;
     SpriteRenderer spren;
     Animator anim;
-    public LayerMask layerMask;
     Coroutine enemyCor = null;
 
     public Constructure.MonsterStat monsterStat;
