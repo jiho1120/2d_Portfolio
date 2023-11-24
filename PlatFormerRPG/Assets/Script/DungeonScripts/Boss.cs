@@ -7,11 +7,13 @@ public class Boss : MonoBehaviour
     public Constructure.MonsterStat bossStat;
     Rigidbody2D rigid;
     Animator anim;
-    Coroutine enemyCor = null;
     Vector3 sclaeVec = new Vector3(0.5f,0.5f,0.5f);
     Vector3 telpoVec = new Vector3(2, 0, 0);
+    Vector3 vec = Vector3.right;
 
+    Coroutine enemyCor = null;
 
+    float speed = 10;
     bool isMove = false;
     bool IsLeft = true;
     bool boundary = true;
@@ -23,13 +25,15 @@ public class Boss : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         bossStat = new Constructure.MonsterStat(100); // DungeonManager.Instance.dungeonNum 으로 세팅하면 맵열때 숫자가 바뀜
-        Invoke("Teleport", 1f);
+        //Invoke("Teleport", 1f);
         StartCoroutine(Bossmove());
     }
 
     // Update is called once per frame
     void Update()
     {
+        Boundary();
+        LimitArea();
         chcekBossPhase();
     }
 
@@ -59,17 +63,16 @@ public class Boss : MonoBehaviour
     {
         if (PlayerManager.Instance.GetPlayerPosition().x > this.transform.position.x)
         {
-            sclaeVec.x = 0.5f;
+            IsLeft = false;
         }
         else
         {
-            sclaeVec.x = -0.5f;
+            IsLeft = true;
         }
     }
 
     void Teleport()
     {
-        Boundary();
         if (boundary)
         {
             if (PlayerManager.Instance.GetPlayerPosition().x <= 0) // 보스가 맵안쪽에 들어오게
@@ -98,6 +101,18 @@ public class Boss : MonoBehaviour
             boundary = false;
         }
     }
+    void LimitArea()
+    {
+        if (transform.position.x <= -14)
+        {
+            IsLeft = false;
+        }
+        else if (transform.position.x >= 14)
+        {
+            IsLeft = true;
+        }
+    }
+    
 
     IEnumerator Bossmove()
     {
@@ -106,15 +121,8 @@ public class Boss : MonoBehaviour
             isMove = true;
             anim.SetBool("isMove", isMove);
             IsLeft = Random.Range(0, 2) == 0 ? true : false;
-            if (IsLeft)
-            {
-                sclaeVec.x = -0.5f;
-            }
-            if (!IsLeft)
-            {
-                sclaeVec.x = 0.5f;
-            }
-            this.transform.localScale = sclaeVec;
+            sclaeVec.x = (IsLeft ? -0.5f : 0.5f);
+            transform.Translate(vec * speed * (IsLeft ? -1 : 1) * Time.deltaTime);
             yield return new WaitForSeconds(Random.Range(1f, 3f));
             isMove = false;
             anim.SetBool("isMove", isMove);
