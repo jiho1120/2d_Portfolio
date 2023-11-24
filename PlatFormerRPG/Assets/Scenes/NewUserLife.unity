@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 136469204}
   - component: {fileID: 136469203}
   m_Layer: 0
-  m_Name: NewCharaScriptDcuments
+  m_Name: NewCharaScriptDocuments
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

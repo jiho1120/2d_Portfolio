@@ -6,11 +6,7 @@ using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour, IAtt
 {
-    //public Camera cam;
-    //public Image[] coolImg;       //쿨타임 이미지
-    //public Slider hpSlider;         //HP Bar
-    //public Slider expSlider;        //EXP Bar
-    //public Text levelTxt;           //Level Txt
+    
     Rigidbody2D rigid;
     Animator anim;
 
@@ -38,11 +34,7 @@ public class Player : MonoBehaviour, IAtt
     void StatSetting()
     {
         myStat = new Constructure.Stat(100, 10, 20, 0, 100, 0);
-        //hpSlider.maxValue = myStat.MaxHP;
-        //hpSlider.value = myStat.MaxHP;
-        //expSlider.maxValue = myStat.MaxExpVal;
-        //expSlider.value = myStat.ExpVal;
-        //levelTxt.text = $"{0}";
+        UIManager.Instance.State(myStat);
     }
 
     void Update()
@@ -103,22 +95,23 @@ public class Player : MonoBehaviour, IAtt
         {
             myStat.HP += 10;
             //hpSlider.value = myStat.HP;
+            UIManager.Instance.SetHpSlider(myStat.HP);
         }
 
         //경험치(임시)
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             myStat.ExpVal += 10;
-            //expSlider.value = myStat.ExpVal;
+            // expSlider.value = myStat.ExpVal;
 
             if(myStat.ExpVal == myStat.MaxExpVal)
             {
                 myStat.Level += 1;
-                //levelTxt.text = $"{myStat.Level}";
+                // levelTxt.text = $"{myStat.Level}";
                 myStat.ExpVal = 0;
-                //expSlider.value = myStat.ExpVal;
+                // expSlider.value = myStat.ExpVal;
                 myStat.MaxExpVal += 100;
-                //expSlider.maxValue = myStat.MaxExpVal;
+                // expSlider.maxValue = myStat.MaxExpVal;
             }
         }
     }
@@ -144,7 +137,7 @@ public class Player : MonoBehaviour, IAtt
         }
 
         this.myStat.HP = Mathf.Clamp(this.myStat.HP - damage, 0, this.myStat.MaxHP);
-        //hpSlider.value = this.myStat.HP;
+        // hpSlider.value = this.myStat.HP;
         anim.SetTrigger("IsHit");
         rigid.AddForce(dir, ForceMode2D.Impulse);
     }
@@ -168,6 +161,25 @@ public class Player : MonoBehaviour, IAtt
             direction *= knockBack;
 
             GetHit(collision.transform.GetComponent<IAtt>().Attak(), direction);
+        }
+    }
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("트리거엔터");
+        if (other.gameObject.CompareTag("Potal"))
+        {
+            PlayerManager.Instance.InPotal = true;
+            Debug.Log("포탈접근");
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Potal"))
+        {
+            PlayerManager.Instance.InPotal = false;
+            Debug.Log("포탈벗어남");
         }
     }
 }

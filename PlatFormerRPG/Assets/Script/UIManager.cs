@@ -49,12 +49,13 @@ public class UIManager : MonoBehaviour
     public GameObject OnShopCanvas;
     public GameObject OffShopCanvas;
     public Button ShopButton;
+    public GameObject Potal;
     
     // 캐릭터 채력 및 레벨 리스트
     public GameObject PlayerDisPlay;
-    public Text LevelInfo;
-    public Slider HPbar;
-    public Slider Expbar;
+    // public Text LevelInfo;
+    // public Slider HPbar;
+    // public Slider Expbar;
     
     // 게임이 현재 일시정지 중인지 여부를 나타내는 변수
     public static bool isPaused = false;
@@ -63,6 +64,13 @@ public class UIManager : MonoBehaviour
     public GameObject Quest1;
     public GameObject StateInfoDialog;
     public GameObject ShupUi;
+    
+    //public Camera cam;
+    //public Image[] coolImg;       //쿨타임 이미지
+    public Slider hpSlider;         //HP Bar
+    public Slider expSlider;        //EXP Bar
+    public Text levelTxt;           //Level Txt
+    
     
     
     void Awake()
@@ -82,7 +90,7 @@ public class UIManager : MonoBehaviour
         }
     }
     #endregion
-
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Y))
@@ -102,7 +110,36 @@ public class UIManager : MonoBehaviour
             ResumeGame();
             Debug.Log("성공적으로 일시정지가 해제 되었습니다. 함수명 : OnResume");
         }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            if (PlayerManager.Instance.InPotal == true)
+            {
+                Debug.Log("이동");
+                SceneManager.LoadScene("Dungeon");
+            }
+            else if (PlayerManager.Instance.InPotal == false)
+            {
+                Debug.Log("펄스 입니다");
+            }
+        }
     }
+
+    public void State(Constructure.Stat myStat)
+    {
+        hpSlider.maxValue = myStat.MaxHP;
+        hpSlider.value = myStat.HP;
+        expSlider.maxValue = myStat.MaxExpVal;
+        expSlider.value = myStat.ExpVal;
+        levelTxt.text = myStat.Level.ToString();
+    }
+
+    public void SetHpSlider(float HP)
+    {
+        hpSlider.value = HP;
+    }
+
+    
 
     #region 버튼 함수
     public void OnPause(bool pauseStatus)
@@ -145,8 +182,9 @@ public class UIManager : MonoBehaviour
         QuestCanvas.SetActive(false);
         QuestOpenCanvas.SetActive(false);
         DunGeonCanvas.SetActive(false);
-        ShopCanvas.SetActive(false);
         InfoBtnCanvas.SetActive(false);
+        OnShopCanvas.SetActive(false);
+        OffShopCanvas.SetActive(false);
         
     }
     public void OnInfo()

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -58,6 +59,7 @@ public class NewLife : MonoBehaviour
             // 이름, 직업만 보냄
             // 매개변수로 이름 직업 보내야됨
             Invoke("OKDialogDisappear",2f);
+            SceneManager.LoadScene("VillageScene");
         }
     }
 
