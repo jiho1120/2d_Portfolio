@@ -5,11 +5,8 @@ using static Constructure;
 
 public class Monster : MonoBehaviour, IHit
 {
-    public Player player;  // 게임 매니저의 플레이어로 교체해야함
-
     Vector3 scale = Vector3.one;
     Vector3 vec = Vector3.right;
-    Vector3 dir = Vector3.zero;
 
     float speedMin = 1;
     float speedMax = 2;
@@ -21,7 +18,6 @@ public class Monster : MonoBehaviour, IHit
     SpriteRenderer spren;
     Animator anim;
     Coroutine enemyCor = null;
-
 
     public Constructure.MonsterStat monsterStat;
 
@@ -41,8 +37,9 @@ public class Monster : MonoBehaviour, IHit
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         monsterStat = new Constructure.MonsterStat(DungeonManager.Instance.dungeonNum);
+        Debug.Log($"{monsterStat.hP}");
 
-        Invoke("FindPlayer", 2f);
+
         MonsterStartCoroutine();
     }
 
@@ -50,7 +47,6 @@ public class Monster : MonoBehaviour, IHit
     void Update()
     {
         MonsterAct();
-        isDead();
     }
 
     public void MonsterStartCoroutine()
@@ -97,25 +93,12 @@ public class Monster : MonoBehaviour, IHit
             yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         }
     }
-    public void FindPlayer()
+    public void findPlayer()
     {
-        //    //GameManager.Instance.player.transform.position;
-        //    //anim.SetBool("PlyerFind", playerfind);
-        //    if (Vector3.Distance(player.transform.position, this.transform.position) < 5)
-        //    {
-        //        Debug.Log("발견");
-        //        findPlayer = true;
-        //    }
+        //GameManager.Instance.player.transform.position;
+        //anim.SetBool("PlyerFind", playerfind);
 
-        if (Vector3.Distance(player.transform.position, this.transform.position) < 5)
-        {
-            Debug.Log("발견");
-            AttackPlayer();
-        }
     }
-
-   
-
     public void AttackPlayer()
     {
         //if (PlayerStat.hP <= 0)
@@ -124,8 +107,8 @@ public class Monster : MonoBehaviour, IHit
         //}
 
         //anim.SetBool("AttackPlayer", playerfind);
-        Debug.Log("공격");
 
+        
     }
 
     public void Hit(float damage, Vector3 dir)
@@ -147,29 +130,12 @@ public class Monster : MonoBehaviour, IHit
 
     public void isDead()
     {
-        if (this.monsterStat.hP <= 0)
-        {
-            //플레이어 경험치 += MonsterManager.Instance.monsterStat.giveExp;
-            // 플레이어 돈 += MonsterManager.Instance.monsterStat.giveMoney;
-
-            this.gameObject.SetActive(false);
-        }
+        //플레이어 경험치 += MonsterManager.Instance.monsterStat.giveExp;
+        // 플레이어 돈 += MonsterManager.Instance.monsterStat.giveMoney;
 
 
+        this.gameObject.SetActive(false);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-
-        if (collision.gameObject.CompareTag("Player")) // 플레이어 무기로 바꿔야함
-        {
-            dir = this.transform.position - player.transform.position;
-            anim.SetTrigger("hit");
-            Hit(20, dir);
-            Debug.Log(this.monsterStat.hP);
-        }
-    }
-
-
-
+    
 }

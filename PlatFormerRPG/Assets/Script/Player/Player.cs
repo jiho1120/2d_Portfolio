@@ -11,17 +11,20 @@ public class Player : MonoBehaviour, IAtt
     //public Slider hpSlider;         //HP Bar
     //public Slider expSlider;        //EXP Bar
     //public Text levelTxt;           //Level Txt
+    //public InputField inputName;      //플레이어 이름
     Rigidbody2D rigid;
     Animator anim;
 
-    public Constructure.Stat myStat;       //플레이어 스탯
+    Constructure.Stat myStat;       //플레이어 스탯
+    //Allenum
 
     Vector3 vec = Vector3.zero;
     Vector3 scaleVec = Vector3.one;
     Vector3 direction = Vector3.zero;
 
     float x = 0;
-    public float speed = 5;
+    public float speed = 6;
+    public float jumpPower = 8;
     int jumpCount = 0;
     float knockBack = 1;
     bool isHit = false;
@@ -37,7 +40,8 @@ public class Player : MonoBehaviour, IAtt
     //스탯 초기 세팅
     void StatSetting()
     {
-        myStat = new Constructure.Stat(100, 10, 20, 0, 100, 0);
+        myStat = new Constructure.Stat(/*inputName.text,*/ 100, 10, 20, 0, 100, 0);
+        //플레이어 이름bar
         //hpSlider.maxValue = myStat.MaxHP;
         //hpSlider.value = myStat.MaxHP;
         //expSlider.maxValue = myStat.MaxExpVal;
@@ -47,7 +51,7 @@ public class Player : MonoBehaviour, IAtt
 
     void Update()
     {
-        //조작
+        //Key조작
         x = Input.GetAxisRaw("Horizontal");
         vec.x = x;
         transform.Translate(vec.normalized * Time.deltaTime * speed);
@@ -69,20 +73,15 @@ public class Player : MonoBehaviour, IAtt
         {
             if(jumpCount < 2)
             {
+                rigid.velocity = Vector2.zero;      //velocity 초기화, 일정하게 뛰게 함
                 jumpCount++;
-
-                if(jumpCount == 2)
-                {
-                    speed = 2.5f;
-                }
             }
             else
             {
                 return;
             }
-            rigid.AddForce(Vector2.up * speed, ForceMode2D.Impulse);
+            rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
             anim.SetTrigger("IsJump");
-            speed = 5;
         }
 
         //공격(임시)
@@ -167,7 +166,7 @@ public class Player : MonoBehaviour, IAtt
             direction.y += 1;
             direction *= knockBack;
 
-            GetHit(collision.transform.GetComponent<IAtt>().Attak(), direction);
+            GetHit(collision.transform.GetComponent<IAtt>().Attak(), direction);        //수정
         }
     }
 }
