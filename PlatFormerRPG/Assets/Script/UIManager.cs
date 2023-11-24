@@ -127,10 +127,17 @@ public class UIManager : MonoBehaviour
 
     public void State(Constructure.Stat myStat)
     {
-        hpSlider.maxValue = myStat.MaxHP;
-        hpSlider.value = myStat.HP;
-        expSlider.maxValue = myStat.MaxExpVal;
-        expSlider.value = myStat.ExpVal;
+        if (hpSlider !=null)
+        {
+            hpSlider.maxValue = myStat.MaxHP;
+            hpSlider.value = myStat.HP;
+        }
+        if (expSlider != null)
+        {
+            expSlider.maxValue = myStat.MaxExpVal;
+            expSlider.value = myStat.ExpVal;
+        }
+        if (levelTxt !=null)        
         levelTxt.text = myStat.Level.ToString();
     }
 

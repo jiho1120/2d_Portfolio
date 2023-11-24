@@ -23,24 +23,31 @@ public class Player : MonoBehaviour, IAtt
     int jumpCount = 0;
     float knockBack = 1;
     bool isHit = false;
-
+    bool isStart = false;
     void Start()
     {
-        StatSetting();
-
         rigid = transform.GetComponent<Rigidbody2D>();
         anim = transform.GetComponent<Animator>();
+        StatSetting();
+        isStart = true;
     }
 
     //���� �ʱ� ����
     void StatSetting()
     {
         myStat = new Constructure.Stat(100, 10, 20, 0, 100, 0);
-        UIManager.Instance.State(myStat);
+        if (UIManager.Instance !=null)
+        {
+            UIManager.Instance.State(myStat);
+        }        
     }
 
     void Update()
     {
+        if (isStart==false)
+        {
+            return;
+        }
         //Key����
         x = Input.GetAxisRaw("Horizontal");
         vec.x = x;
