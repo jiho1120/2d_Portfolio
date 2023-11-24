@@ -11,10 +11,10 @@ public class Boss : MonoBehaviour
     Vector3 telpoVec = new Vector3(2, 0, 0);
     Vector3 vec = Vector3.right;
 
-    Coroutine enemyCor = null;
+    Coroutine bossCor = null;
 
-    float speed = 10;
-    bool isMove = false;
+    float speed = 5;
+    bool isMove = true;
     bool IsLeft = true;
     bool boundary = true;
     int bossPhase = 0;
@@ -23,10 +23,15 @@ public class Boss : MonoBehaviour
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
+
         anim = GetComponent<Animator>();
         bossStat = new Constructure.MonsterStat(100); // DungeonManager.Instance.dungeonNum 으로 세팅하면 맵열때 숫자가 바뀜
         //Invoke("Teleport", 1f);
-        StartCoroutine(Bossmove());
+        if (bossCor!=null)        
+            bossCor = StartCoroutine(Bossmove());
+
+
+        //StopCoroutine(bossCor);
     }
 
     // Update is called once per frame
@@ -37,9 +42,17 @@ public class Boss : MonoBehaviour
         chcekBossPhase();
     }
 
+
+
     // 움직임은 이정하게 움직이지만 1페이즈 들어가면 순간이동 하게
 
-
+    private void FixedUpdate()
+    {
+        if (isMove)
+        {
+            transform.Translate(vec * speed * (IsLeft ? -1 : 1) * Time.fixedDeltaTime);
+        }
+    }
 
     void chcekBossPhase()
     {
@@ -122,7 +135,6 @@ public class Boss : MonoBehaviour
             anim.SetBool("isMove", isMove);
             IsLeft = Random.Range(0, 2) == 0 ? true : false;
             sclaeVec.x = (IsLeft ? -0.5f : 0.5f);
-            transform.Translate(vec * speed * (IsLeft ? -1 : 1) * Time.deltaTime);
             yield return new WaitForSeconds(Random.Range(1f, 3f));
             isMove = false;
             anim.SetBool("isMove", isMove);
