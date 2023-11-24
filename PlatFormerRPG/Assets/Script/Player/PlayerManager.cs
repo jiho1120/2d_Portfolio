@@ -4,20 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : Singleton<PlayerManager>
 {
     public Player player;
-    public PlayerSkill skill;
+    //public PlayerSkill skill;
 
-    #region ΩÃ±€≈Ê
-    private static PlayerManager instance = null;
-    public static PlayerManager Instance => instance;
-    private void Awake()
+
+
+    public Vector3 GetPlayerPosition()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
+        return player.transform.position  - Vector3.up * 1.5f;
     }
-    #endregion ΩÃ±€≈Ê
+    
 }
