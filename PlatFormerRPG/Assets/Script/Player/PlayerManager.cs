@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
-    public Player player;
-    public PlayerSkill skill;
+    public Player Warrior;
+    public Player Wizard;
+    //public PlayerSkill skill;
 }

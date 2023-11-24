@@ -93,7 +93,7 @@ public class Player : MonoBehaviour, IAtt
         //스킬(임시)
         if (Input.GetKeyDown(KeyCode.X))
         {
-            PlayerManager.Instance.skill.SkillSetting();
+            //PlayerManager.Instance.skill.SkillSetting();
             anim.SetTrigger("IsSkill");
         }
 
