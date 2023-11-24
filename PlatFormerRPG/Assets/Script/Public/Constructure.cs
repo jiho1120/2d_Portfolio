@@ -6,6 +6,7 @@ public class Constructure
 {
     public struct Stat
     {
+        //public string Name;
         public float HP;
         public float MaxHP;
         public float Att;
@@ -14,8 +15,9 @@ public class Constructure
         public float MaxExpVal;
         public float Level;
 
-        public Stat(float hp, float att, float skill, float exp, float maxEXP, float level)
+        public Stat(/*string name,*/ float hp, float att, float skill, float exp, float maxEXP, float level)
         {
+            //this.Name = name;
             this.HP = hp;
             this.MaxHP = hp;
             this.Att = att;

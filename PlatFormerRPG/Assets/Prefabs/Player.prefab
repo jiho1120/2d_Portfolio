@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7883184924184026240}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: WarriorSkillParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 7883184924283487576}
   - component: {fileID: 7883184924283487577}
   - component: {fileID: 7883184924283487582}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -218,7 +218,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7883184924386530814}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: WarriorSkillPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
