@@ -6,12 +6,10 @@ using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour, IAtt
 {
-
     Rigidbody2D rigid;
     Animator anim;
 
-    Constructure.Stat myStat;       //�÷��̾� ����
-    //Allenum
+    Constructure.Stat myStat;       //스탯 정보
 
     Vector3 vec = Vector3.zero;
     Vector3 scaleVec = Vector3.one;
@@ -24,6 +22,7 @@ public class Player : MonoBehaviour, IAtt
     float knockBack = 1;
     bool isHit = false;
     bool isStart = false;
+
     void Start()
     {
         rigid = transform.GetComponent<Rigidbody2D>();
@@ -32,7 +31,7 @@ public class Player : MonoBehaviour, IAtt
         isStart = true;
     }
 
-    //���� �ʱ� ����
+    //Player 스탯 세팅
     void StatSetting()
     {
         myStat = new Constructure.Stat(100, 10, 20, 0, 100, 0);
@@ -48,12 +47,13 @@ public class Player : MonoBehaviour, IAtt
         {
             return;
         }
-        //Key����
+
+        //Key조작(자후 조이스틱으로 변경)
         x = Input.GetAxisRaw("Horizontal");
         vec.x = x;
         transform.Translate(vec.normalized * Time.deltaTime * speed);
 
-        //ĳ���� ��������Ʈ ����
+        //Player 이동 반전
         if (vec.x != 0)
         {
             scaleVec.x = vec.x;
@@ -65,12 +65,12 @@ public class Player : MonoBehaviour, IAtt
         }
         transform.localScale = scaleVec;
 
-        //����
+        //점프
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if(jumpCount < 2)
             {
-                rigid.velocity = Vector2.zero;      //velocity �ʱ�ȭ, �����ϰ� �ٰ� ��
+                rigid.velocity = Vector2.zero;      //velocity 초기화(일정한 점프 유지)
                 jumpCount++;
             }
             else
@@ -81,20 +81,9 @@ public class Player : MonoBehaviour, IAtt
             anim.SetTrigger("IsJump");
         }
 
-        //����(�ӽ�)
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            anim.SetTrigger("IsAtt");
-        }
+        //기본 공격, 스킬 공격 => Attak.script
 
-        //��ų(�ӽ�)
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            //PlayerManager.Instance.skill.SkillSetting();
-            anim.SetTrigger("IsSkill");
-        }
-
-        //HPȸ��(�ӽ�)
+        //HP 확인용 Key(임시)
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             myStat.HP += 10;
@@ -102,7 +91,7 @@ public class Player : MonoBehaviour, IAtt
             UIManager.Instance.SetHpSlider(myStat.HP);
         }
 
-        //����ġ(�ӽ�)
+        //경험치 확인용 Key(임시)
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             myStat.ExpVal += 10;
@@ -120,19 +109,19 @@ public class Player : MonoBehaviour, IAtt
         }
     }
 
-    //�⺻ ����
+    //기본 공격
     public float Attak()
     {
         return myStat.Att;
     }
 
-    //��ų ����
+    //스킬 공격
     public float Skill()
     {
         return myStat.Skill;
     }
 
-    //���� ����
+    //입은 피해
     public void GetHit(float damage, Vector3 dir)
     {
         if(myStat.HP <= 0)
@@ -148,15 +137,15 @@ public class Player : MonoBehaviour, IAtt
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        //���� ����� ��
+        //땅과 닿았을 때
         if (collision.gameObject.CompareTag("Ground"))
         {
             isHit = false;
-            jumpCount = 0;      //���� �ʱ�ȭ
-            rigid.velocity = Vector2.zero;      //�̲�������
+            jumpCount = 0;
+            rigid.velocity = Vector2.zero;      //미끄럼방지
         }
 
-        //���Ͷ� ����� ��
+        //몬스터와 닿았을 때
         else if (collision.gameObject.CompareTag("GroundEnemy") && collision.gameObject.CompareTag("FlyEnemy"))
         {
             isHit = true;
@@ -164,17 +153,15 @@ public class Player : MonoBehaviour, IAtt
             direction.y += 1;
             direction *= knockBack;
 
-            GetHit(collision.transform.GetComponent<IAtt>().Attak(), direction);        //����
+            GetHit(collision.transform.GetComponent<IHit>().GetAtt(), direction);
         }
     }
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Ʈ���ſ���");
         if (other.gameObject.CompareTag("Potal"))
         {
             PlayerManager.Instance.InPotal = true;
-            Debug.Log("��Ż����");
         }
     }
 
@@ -183,7 +170,6 @@ public class Player : MonoBehaviour, IAtt
         if (other.gameObject.CompareTag("Potal"))
         {
             PlayerManager.Instance.InPotal = false;
-            Debug.Log("��Ż���");
         }
     }
 }
