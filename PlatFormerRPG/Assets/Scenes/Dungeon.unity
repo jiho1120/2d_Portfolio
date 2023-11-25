@@ -10865,23 +10865,6 @@ Transform:
   m_Father: {fileID: 912928831}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &674501952 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7060444190282352222, guid: ae34377687bfa8b41968424624add263, type: 3}
-  m_PrefabInstance: {fileID: 1240927948}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &674501956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 674501952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5005befc10780e342960ba654c674d9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &675269220
 GameObject:
   m_ObjectHideFlags: 0
@@ -13844,23 +13827,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!1 &885717966 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8082632728573235127, guid: 5b48183cdb578e54293bcfba2e0e45cd, type: 3}
-  m_PrefabInstance: {fileID: 2140619638}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &885717970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 885717966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5005befc10780e342960ba654c674d9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &912928830
 GameObject:
   m_ObjectHideFlags: 0
@@ -14170,14 +14136,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7964625215660847875, guid: ae34377687bfa8b41968424624add263, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7964625215660847877, guid: ae34377687bfa8b41968424624add263, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 1407034700}
     - target: {fileID: 7964625215660847886, guid: ae34377687bfa8b41968424624add263, type: 3}
       propertyPath: m_Name
       value: GroundMonster
@@ -14227,6 +14185,7 @@ GameObject:
   - component: {fileID: 1387631109}
   - component: {fileID: 1387631108}
   - component: {fileID: 1387631107}
+  - component: {fileID: 1387631111}
   m_Layer: 0
   m_Name: DungeonManager
   m_TagString: Untagged
@@ -14321,6 +14280,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1387631111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1387631106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17cd5316f9211b34fa5c0798c19b2ba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InPotal: 0
+  player: {fileID: 1407034700}
 --- !u!114 &1407034700 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2859557976935698444, guid: 89f1e03bb5e2833408e9fde420e8e986, type: 3}
@@ -17368,13 +17341,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9176351829013347050, guid: 5b48183cdb578e54293bcfba2e0e45cd, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9176351829013347052, guid: 5b48183cdb578e54293bcfba2e0e45cd, type: 3}
-      propertyPath: player
+      propertyPath: Bullet
       value: 
-      objectReference: {fileID: 1407034700}
+      objectReference: {fileID: 6119763235419695949, guid: 869a03421a7db3d428f5f6dcf1f185e5, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b48183cdb578e54293bcfba2e0e45cd, type: 3}

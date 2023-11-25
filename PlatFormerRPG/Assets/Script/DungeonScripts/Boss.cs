@@ -27,9 +27,9 @@ public class Boss : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         bossStat = new Constructure.MonsterStat(100); // DungeonManager.Instance.dungeonNum 으로 세팅하면 맵열때 숫자가 바뀜
-        Invoke("Teleport", 1f);
-        if (bossCor!=null)        
-            bossCor = StartCoroutine(Bossmove());
+        bossCor = StartCoroutine(Bossmove());
+        InvokeRepeating("Teleport", 1f, 10f);
+        //if (bossCor!=null)        
 
 
         //StopCoroutine(bossCor);
@@ -38,17 +38,14 @@ public class Boss : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Boundary();
         LimitArea();
+        chcekBossPhase();
+        Boundary();
         CloseAttack();
         FarAttack();
-        chcekBossPhase();
 
     }
 
-
-
-    // 움직임은 이정하게 움직이지만 1페이즈 들어가면 순간이동 하게
 
     private void FixedUpdate()
     {
@@ -104,10 +101,13 @@ public class Boss : MonoBehaviour
             if (PlayerManager.Instance.GetPlayerPosition().x <= 0) // 보스가 맵안쪽에 들어오게
             {
                 this.transform.position = (PlayerManager.Instance.GetPlayerPosition() + telpoVec);
+                IsLeft = true;
             }
             else
             {
                 this.transform.position = (PlayerManager.Instance.GetPlayerPosition() - telpoVec);
+                IsLeft = false;
+
             }
         }
         //Debug.Log($"{PlayerManager.Instance.GetPlayerPosition() } \n {this.transform.position}");

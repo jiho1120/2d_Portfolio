@@ -10,6 +10,7 @@ TagManager:
   - MonsterHitBox
   - Potal
   - BossWeapon
+  - MonsterBullet
   layers:
   - Default
   - TransparentFX

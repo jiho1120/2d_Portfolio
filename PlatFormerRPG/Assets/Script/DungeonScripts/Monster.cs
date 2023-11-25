@@ -8,11 +8,9 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Monster : MonoBehaviour, IHit
 {
-    public Player player;
     Vector3 scale = Vector3.one;
     Vector3 vec = Vector3.right;
     Vector3 dir = Vector3.zero;
-
 
     float speedMin = 1;
     float speedMax = 2;
@@ -21,7 +19,7 @@ public class Monster : MonoBehaviour, IHit
     float knockBack = 1;
     bool isMove = false;
     bool IsLeft = true;
-    bool findPlayer = false;
+    bool boundary = false;
 
     Transform target;
 
@@ -57,8 +55,8 @@ public class Monster : MonoBehaviour, IHit
     // Update is called once per frame
     void Update()
     {
-        AttackPlayer();
         MonsterAct();
+        Boundary();
         isDead();
     }
 
@@ -102,25 +100,57 @@ public class Monster : MonoBehaviour, IHit
             yield return new WaitForSeconds(Random.Range(1f, 3f));
             isMove = false;
             anim.SetBool("isMove", isMove);
+            AttackPlayer();
             IsLeft = Random.Range(0, 2) == 0 ? true : false;
             yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         }
     }
+
+    void Boundary()
+    {
+        if (PlayerManager.Instance.GetPlayerPosition().x > this.transform.position.x - 1 || PlayerManager.Instance.GetPlayerPosition().x < this.transform.position.x + 1
+            || PlayerManager.Instance.GetPlayerPosition().y > this.transform.position.y - 1 || PlayerManager.Instance.GetPlayerPosition().y < this.transform.position.y + 1)
+        {
+            boundary = true;
+        }
+        else
+        {
+            boundary = false;
+        }
+    }
     public void AttackPlayer()
+    {
+        if (this.gameObject.CompareTag("GroundEnemy"))
+        {
+            CloseAttack();
+        }
+        else if (this.gameObject.CompareTag("FlyEnemy"))
+        {
+            FarAttack();
+        }
+    }
+    public void CloseAttack()
     {
         //if (PlayerManager.Instance.player.myStat.HP <= 0)
         //{
         //    return;
         //}
-
-        if (findPlayer)
+        if (boundary)
         {
             Vector3 targetPosition = new Vector3(target.position.x, transform.position.y, transform.position.z);
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, followspeed * Time.deltaTime);
             Debug.Log("µ¹Áø");
         }
+    }
 
+    public void FarAttack()
+    {
+        Debug.Log(boundary);
 
+        if (boundary == true)
+        {
+            Debug.Log("Æ¡");
+        }
     }
 
     public void Hit(float damage, Vector3 dir)
