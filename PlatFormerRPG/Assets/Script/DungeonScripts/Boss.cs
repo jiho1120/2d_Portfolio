@@ -5,21 +5,23 @@ using UnityEngine;
 public class Boss : MonoBehaviour
 {
     public Constructure.MonsterStat bossStat;
-    Rigidbody2D rigid;
-    Animator anim;
-    Vector3 sclaeVec = new Vector3(0.5f,0.5f,0.5f);
-    Vector3 telpoVec = new Vector3(2, 0, 0);
-    Vector3 vec = Vector3.right;
-
-    Coroutine bossCor = null;
 
     float speed = 3;
     bool isMove = true;
     bool IsLeft = true;
     bool isAttack = false;
     bool boundary = false;
+    int bossPhase = 1;
 
-    int bossPhase = 0;
+    Vector3 sclaeVec = new Vector3(0.5f,0.5f,0.5f);
+    Vector3 telpoVec = new Vector3(2, 0, 0);
+    Vector3 vec = Vector3.right;
+
+    Rigidbody2D rigid;
+    Animator anim;
+    Coroutine bossCor = null;
+
+    
 
     // Start is called before the first frame update
     void Start()
@@ -38,14 +40,14 @@ public class Boss : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        LimitArea();
         chcekBossPhase();
+        LimitArea();
         Boundary();
+
         CloseAttack();
         FarAttack();
 
     }
-
 
     private void FixedUpdate()
     {
@@ -55,67 +57,19 @@ public class Boss : MonoBehaviour
         }
     }
 
+    //기본 능력
     void chcekBossPhase()
     {
-        if (bossStat.hP < (bossStat.hP * 0.5))
+        if (bossStat.hP <= (bossStat.maxHP * 0.5))
         {
+            bossStat.hP = bossStat.maxHP * 0.5f;
             bossPhase++;
         }
     }
 
-    void CloseAttack()
-    {
-        if (boundary == true && isAttack == true)
-        {
-            anim.SetBool("closeAttack", isAttack);
-        }
-        isAttack = false;
-    }
-
-    void FarAttack()
-    {
-        if (isAttack == true)
-        {
-            anim.SetBool("farAttack", isAttack);
-        }
-        isAttack = false;
-    }
-
-    void WatchPlayer()
-    {
-        if (PlayerManager.Instance.GetPlayerPosition().x > this.transform.position.x)
-        {
-            IsLeft = false;
-        }
-        else
-        {
-            IsLeft = true;
-        }
-    }
-
-    void Teleport()
-    {
-        if (boundary)
-        {
-            WatchPlayer();
-            if (PlayerManager.Instance.GetPlayerPosition().x <= 0) // 보스가 맵안쪽에 들어오게
-            {
-                this.transform.position = (PlayerManager.Instance.GetPlayerPosition() + telpoVec);
-                IsLeft = true;
-            }
-            else
-            {
-                this.transform.position = (PlayerManager.Instance.GetPlayerPosition() - telpoVec);
-                IsLeft = false;
-
-            }
-        }
-        //Debug.Log($"{PlayerManager.Instance.GetPlayerPosition() } \n {this.transform.position}");
-    }
-
     void Boundary()
     {
-        if(PlayerManager.Instance.GetPlayerPosition().x > this.transform.position.x - 2 || PlayerManager.Instance.GetPlayerPosition().x < this.transform.position.x + 2 
+        if (PlayerManager.Instance.GetPlayerPosition().x > this.transform.position.x - 2 || PlayerManager.Instance.GetPlayerPosition().x < this.transform.position.x + 2
             || PlayerManager.Instance.GetPlayerPosition().y > this.transform.position.y - 2 || PlayerManager.Instance.GetPlayerPosition().y < this.transform.position.y + 2)
         {
             boundary = true;
@@ -136,6 +90,11 @@ public class Boss : MonoBehaviour
             IsLeft = true;
         }
     }
+
+
+
+    //이동관련함수 
+
     
 
     IEnumerator Bossmove()
@@ -152,5 +111,71 @@ public class Boss : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         }
     }
+    void Teleport()
+    {
+        if (boundary)
+        {
+            WatchPlayer();
+            if (PlayerManager.Instance.GetPlayerPosition().x <= 0) // 보스가 맵안쪽에 들어오게
+            {
+                this.transform.position = (PlayerManager.Instance.GetPlayerPosition() + telpoVec);
+                IsLeft = true;
+            }
+            else
+            {
+                this.transform.position = (PlayerManager.Instance.GetPlayerPosition() - telpoVec);
+                IsLeft = false;
+
+            }
+        }
+    }
+    void WatchPlayer() // 순간이동시 플레이어 보기위한 함수
+    {
+        if (PlayerManager.Instance.GetPlayerPosition().x > this.transform.position.x)
+        {
+            IsLeft = false;
+        }
+        else
+        {
+            IsLeft = true;
+        }
+    }
+
+
+    //공격 함수
+
+
+    void CloseAttack()
+    {
+        if (boundary == true && isAttack == true)
+        {
+            anim.SetBool("closeAttack", isAttack);
+        }
+        isAttack = false;
+    }
+
+    void FarAttack()
+    {
+        if (isAttack == true)
+        {
+            anim.SetBool("farAttack", isAttack);
+        }
+        isAttack = false;
+    }
+
+    //죽음
+    
+
+    public void isDead()
+    {
+        if (bossStat.hP <= 0)
+        {
+            PlayerManager.Instance.player.myStat.ExpVal += bossStat.giveExp;
+            //PlayerManager.Instance.player.myStat.money += bossStat.giveMoney;
+            this.gameObject.SetActive(false);
+        }
+    }
+
+    
 
 }
