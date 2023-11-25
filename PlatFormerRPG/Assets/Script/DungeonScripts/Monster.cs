@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Constructure;
+using static UnityEngine.GraphicsBuffer;
 
 public class Monster : MonoBehaviour, IHit
 {
@@ -11,8 +13,12 @@ public class Monster : MonoBehaviour, IHit
     float speedMin = 1;
     float speedMax = 2;
     float speed;
+    float followspeed = 5f;
     bool isMove = false;
     bool IsLeft = true;
+    bool findPlayer = false;
+
+    Transform target;
 
     Rigidbody2D rigid;
     SpriteRenderer spren;
@@ -22,7 +28,7 @@ public class Monster : MonoBehaviour, IHit
     public Constructure.MonsterStat monsterStat;
 
 
-    public void SetMonsterSprite(Sprite _spr) // 몬스터 매니저로 옮기고 싶은데 힘들다
+    public void SetMonsterSprite(Sprite _spr)
     {
         if (spren == null)
         {
@@ -37,7 +43,7 @@ public class Monster : MonoBehaviour, IHit
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         monsterStat = new Constructure.MonsterStat(DungeonManager.Instance.dungeonNum);
-        Debug.Log($"{monsterStat.hP}");
+        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 
 
         MonsterStartCoroutine();
@@ -46,6 +52,7 @@ public class Monster : MonoBehaviour, IHit
     // Update is called once per frame
     void Update()
     {
+        AttackPlayer();
         MonsterAct();
     }
 
@@ -93,22 +100,50 @@ public class Monster : MonoBehaviour, IHit
             yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         }
     }
-    public void findPlayer()
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        //GameManager.Instance.player.transform.position;
-        //anim.SetBool("PlyerFind", playerfind);
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            findPlayer = true;
+            Debug.Log("찾음");
+        }
+        else
+        {
+            findPlayer = false;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            findPlayer = false;
+            Debug.Log("놓침");
+
+        }
+        else
+        {
+            findPlayer = true;
+        }
 
     }
+    
     public void AttackPlayer()
     {
-        //if (PlayerStat.hP <= 0)
+        //if (PlayerManager.Instance.player.myStat.HP <= 0)
         //{
         //    return;
         //}
 
+        if (findPlayer)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target.position, followspeed * Time.deltaTime);
+            Debug.Log("돌진");
+        }
         //anim.SetBool("AttackPlayer", playerfind);
 
-        
+
     }
 
     public void Hit(float damage, Vector3 dir)

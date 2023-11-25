@@ -10,7 +10,7 @@ public class Player : MonoBehaviour, IAtt
     Rigidbody2D rigid;
     Animator anim;
 
-    Constructure.Stat myStat;       //�÷��̾� ����
+    public Constructure.Stat myStat;       //�÷��̾� ����
     //Allenum
 
     Vector3 vec = Vector3.zero;
