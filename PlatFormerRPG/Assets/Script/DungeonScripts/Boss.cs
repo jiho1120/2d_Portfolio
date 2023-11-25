@@ -13,20 +13,21 @@ public class Boss : MonoBehaviour
 
     Coroutine bossCor = null;
 
-    float speed = 5;
+    float speed = 3;
     bool isMove = true;
     bool IsLeft = true;
-    bool boundary = true;
+    bool isAttack = false;
+    bool boundary = false;
+
     int bossPhase = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
-
         anim = GetComponent<Animator>();
         bossStat = new Constructure.MonsterStat(100); // DungeonManager.Instance.dungeonNum 으로 세팅하면 맵열때 숫자가 바뀜
-        //Invoke("Teleport", 1f);
+        Invoke("Teleport", 1f);
         if (bossCor!=null)        
             bossCor = StartCoroutine(Bossmove());
 
@@ -39,7 +40,10 @@ public class Boss : MonoBehaviour
     {
         Boundary();
         LimitArea();
+        CloseAttack();
+        FarAttack();
         chcekBossPhase();
+
     }
 
 
@@ -64,12 +68,20 @@ public class Boss : MonoBehaviour
 
     void CloseAttack()
     {
-
+        if (boundary == true && isAttack == true)
+        {
+            anim.SetBool("closeAttack", isAttack);
+        }
+        isAttack = false;
     }
 
     void FarAttack()
     {
-
+        if (isAttack == true)
+        {
+            anim.SetBool("farAttack", isAttack);
+        }
+        isAttack = false;
     }
 
     void WatchPlayer()
@@ -88,6 +100,7 @@ public class Boss : MonoBehaviour
     {
         if (boundary)
         {
+            WatchPlayer();
             if (PlayerManager.Instance.GetPlayerPosition().x <= 0) // 보스가 맵안쪽에 들어오게
             {
                 this.transform.position = (PlayerManager.Instance.GetPlayerPosition() + telpoVec);
@@ -96,16 +109,14 @@ public class Boss : MonoBehaviour
             {
                 this.transform.position = (PlayerManager.Instance.GetPlayerPosition() - telpoVec);
             }
-            WatchPlayer();
         }
-
-        Debug.Log($"{PlayerManager.Instance.GetPlayerPosition() } \n {this.transform.position}");
+        //Debug.Log($"{PlayerManager.Instance.GetPlayerPosition() } \n {this.transform.position}");
     }
 
     void Boundary()
     {
-        if(PlayerManager.Instance.GetPlayerPosition().x > this.transform.position.x - 1 || PlayerManager.Instance.GetPlayerPosition().x < this.transform.position.x + 1 
-            || PlayerManager.Instance.GetPlayerPosition().y > this.transform.position.y - 1 || PlayerManager.Instance.GetPlayerPosition().y < this.transform.position.y + 1)
+        if(PlayerManager.Instance.GetPlayerPosition().x > this.transform.position.x - 2 || PlayerManager.Instance.GetPlayerPosition().x < this.transform.position.x + 2 
+            || PlayerManager.Instance.GetPlayerPosition().y > this.transform.position.y - 2 || PlayerManager.Instance.GetPlayerPosition().y < this.transform.position.y + 2)
         {
             boundary = true;
         }
