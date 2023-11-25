@@ -27,10 +27,8 @@ public class Monster : MonoBehaviour, IHit
     SpriteRenderer spren;
     Animator anim;
     Coroutine enemyCor = null;
-
     public Constructure.MonsterStat monsterStat;
-
-
+    
     public void SetMonsterSprite(Sprite _spr)
     {
         if (spren == null)
@@ -50,6 +48,7 @@ public class Monster : MonoBehaviour, IHit
 
 
         MonsterStartCoroutine();
+
     }
 
     // Update is called once per frame
@@ -58,6 +57,8 @@ public class Monster : MonoBehaviour, IHit
         MonsterAct();
         Boundary();
         isDead();
+        AttackPlayer();
+
     }
 
     public void MonsterStartCoroutine()
@@ -100,7 +101,6 @@ public class Monster : MonoBehaviour, IHit
             yield return new WaitForSeconds(Random.Range(1f, 3f));
             isMove = false;
             anim.SetBool("isMove", isMove);
-            AttackPlayer();
             IsLeft = Random.Range(0, 2) == 0 ? true : false;
             yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         }
@@ -145,13 +145,13 @@ public class Monster : MonoBehaviour, IHit
 
     public void FarAttack()
     {
-        Debug.Log(boundary);
 
         if (boundary == true)
         {
             Debug.Log("ơ");
         }
     }
+    
 
     public void Hit(float damage, Vector3 dir)
     {
@@ -161,6 +161,7 @@ public class Monster : MonoBehaviour, IHit
         }
 
         this.monsterStat.hP = Mathf.Clamp(this.monsterStat.hP - damage, 0, this.monsterStat.maxHP);
+        anim.SetTrigger("hit");
         rigid.AddForce(dir, ForceMode2D.Impulse);
     }
     public float GetAtt()
@@ -185,7 +186,6 @@ public class Monster : MonoBehaviour, IHit
         if (collision.gameObject.CompareTag("Player"))
         {
             dir = (this.transform.position - collision.transform.position).normalized;
-            anim.SetTrigger("hit");
             Hit(20, dir);
             Debug.Log(this.monsterStat.hP);
         }
