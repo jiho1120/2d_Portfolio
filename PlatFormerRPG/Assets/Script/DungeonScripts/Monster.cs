@@ -14,21 +14,24 @@ public class Monster : MonoBehaviour, IHit
 
     float speedMin = 1;
     float speedMax = 2;
-    float speed;
-    float followspeed = 1f;
-    float knockBack = 1;
+    protected float speed { get; private set; }
+    public float followspeed = 1f;
+    public float knockBack = 1;
     bool isMove = false;
     bool IsLeft = true;
-    bool boundary = false;
+    public bool boundary { get; private set; } = false;
+    float xDifference;
+    float yDifference;
+    float errorMargin;
 
-    Transform target;
+    protected Transform target;
 
-    Rigidbody2D rigid;
-    SpriteRenderer spren;
-    Animator anim;
-    Coroutine enemyCor = null;
+    protected Rigidbody2D rigid;
+    protected SpriteRenderer spren;
+    protected Animator anim;
+    protected Coroutine enemyCor = null;
     public Constructure.MonsterStat monsterStat;
-    
+
     public void SetMonsterSprite(Sprite _spr)
     {
         if (spren == null)
@@ -41,38 +44,14 @@ public class Monster : MonoBehaviour, IHit
 
     void Start()
     {
-        rigid = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        monsterStat = new Constructure.MonsterStat(DungeonManager.Instance.dungeonNum);
-        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-
-
-        MonsterStartCoroutine();
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        MonsterAct();
-        Boundary();
-        isDead();
-        AttackPlayer();
-
     }
 
-    public void MonsterStartCoroutine()
-    {
-        enemyCor = StartCoroutine(MonsterMove());
-    }
-
-    protected virtual void MonsterAct()
-    {
-        basicMove();
-
-    }
-
-    void basicMove()
+    public void basicMove()
     {
         if (isMove)
         {
@@ -91,7 +70,7 @@ public class Monster : MonoBehaviour, IHit
         }
     }
 
-    IEnumerator MonsterMove()
+    public IEnumerator MonsterMove()
     {
         while (true)
         {
@@ -106,52 +85,45 @@ public class Monster : MonoBehaviour, IHit
         }
     }
 
-    void Boundary()
+
+    //public void Boundary()
+    //{
+    //    if (PlayerManager.Instance.GetPlayerPosition().x > this.transform.position.x - 1 || PlayerManager.Instance.GetPlayerPosition().x < this.transform.position.x + 1
+    //        || PlayerManager.Instance.GetPlayerPosition().y > this.transform.position.y - 1 || PlayerManager.Instance.GetPlayerPosition().y < this.transform.position.y + 1)
+    //    {
+    //        boundary = true;
+    //    }
+    //    else
+    //    {
+    //        boundary = false;
+    //    }
+    //}
+
+    public void Boundary()
     {
-        if (PlayerManager.Instance.GetPlayerPosition().x > this.transform.position.x - 1 || PlayerManager.Instance.GetPlayerPosition().x < this.transform.position.x + 1
-            || PlayerManager.Instance.GetPlayerPosition().y > this.transform.position.y - 1 || PlayerManager.Instance.GetPlayerPosition().y < this.transform.position.y + 1)
+        xDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().x - this.transform.position.x); //절댓값
+        yDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().y - this.transform.position.y);
+
+        // 정밀도에 따라서 오차 범위를 조절하세요 (예: 0.1)
+        errorMargin = 2f;
+
+        if (xDifference < errorMargin && yDifference < errorMargin)
         {
             boundary = true;
+
         }
         else
         {
             boundary = false;
         }
     }
-    public void AttackPlayer()
-    {
-        if (this.gameObject.CompareTag("GroundEnemy"))
-        {
-            CloseAttack();
-        }
-        else if (this.gameObject.CompareTag("FlyEnemy"))
-        {
-            FarAttack();
-        }
-    }
-    public void CloseAttack()
-    {
-        //if (PlayerManager.Instance.player.myStat.HP <= 0)
-        //{
-        //    return;
-        //}
-        if (boundary)
-        {
-            Vector3 targetPosition = new Vector3(target.position.x, transform.position.y, transform.position.z);
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, followspeed * Time.deltaTime);
-            Debug.Log("돌진");
-        }
-    }
-
-    public void FarAttack()
+    public virtual void Attack()
     {
 
-        if (boundary == true)
-        {
-            Debug.Log("퉤");
-        }
     }
-    
+
+
+
 
     public void Hit(float damage, Vector3 dir)
     {

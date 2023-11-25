@@ -8,8 +8,8 @@ public class Spawn : MonoBehaviour
     Monster tmpMonster;
 
     Vector3 vec = Vector3.zero; //몬스터 위치 벡터
+    int monsterType;
 
-    
 
 
     // Start is called before the first frame update
@@ -25,15 +25,17 @@ public class Spawn : MonoBehaviour
     }
     public void SetMonsterSpawnPos() // 몬스터의 스폰위치와 스프라이트 설정
     {
-        tmpMonster = MonsterManager.Instance.GetMonsterFromPool();
+        monsterType = Random.Range(0, 2); // 0이 그라운드, 1이 fly
+        tmpMonster = MonsterManager.Instance.GetMonsterFromPool(monsterType);
         int pos = Random.Range(0, monsterSpawnPos.Length);
         vec.x = monsterSpawnPos[pos].position.x;
-        if (tmpMonster.transform.CompareTag("FlyEnemy"))
+
+        if (monsterType == 1)
         {
             tmpMonster.SetMonsterSprite(MonsterManager.Instance.AllFlyMonsterSprites[DungeonManager.Instance.dungeonNum]);
             vec.y = monsterSpawnPos[pos].position.y + 1;
         }
-        else if (tmpMonster.transform.CompareTag("GroundEnemy"))
+        else if (monsterType == 0)
         {
             tmpMonster.SetMonsterSprite(MonsterManager.Instance.AllGroundMonsterSprites[DungeonManager.Instance.dungeonNum]);
             vec.y = monsterSpawnPos[pos].position.y;

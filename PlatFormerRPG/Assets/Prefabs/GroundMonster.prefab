@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7964625215660847874}
   - component: {fileID: 7964625215660847875}
   - component: {fileID: 7964625215660847872}
-  - component: {fileID: 7964625215660847877}
   - component: {fileID: 7964625215660847876}
+  - component: {fileID: 6368749688665049140}
   m_Layer: 3
   m_Name: GroundMonster
   m_TagString: GroundEnemy
@@ -125,20 +125,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 6
---- !u!114 &7964625215660847877
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7964625215660847886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 278bafb545f1b6c4c9262b539bed8eb8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  genPoint: {fileID: 0}
-  Bullet: {fileID: 0}
 --- !u!95 &7964625215660847876
 Animator:
   serializedVersion: 5
@@ -160,3 +146,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6368749688665049140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7964625215660847886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60ab054727c26364e820224095417bdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
