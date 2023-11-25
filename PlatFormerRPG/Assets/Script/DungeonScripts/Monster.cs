@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using static Constructure;
@@ -7,13 +8,17 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Monster : MonoBehaviour, IHit
 {
+    public Player player;
     Vector3 scale = Vector3.one;
     Vector3 vec = Vector3.right;
+    Vector3 dir = Vector3.zero;
+
 
     float speedMin = 1;
     float speedMax = 2;
     float speed;
     float followspeed = 1f;
+    float knockBack = 1;
     bool isMove = false;
     bool IsLeft = true;
     bool findPlayer = false;
@@ -54,6 +59,7 @@ public class Monster : MonoBehaviour, IHit
     {
         AttackPlayer();
         MonsterAct();
+        isDead();
     }
 
     public void MonsterStartCoroutine()
@@ -100,35 +106,6 @@ public class Monster : MonoBehaviour, IHit
             yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         }
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            findPlayer = true;
-            Debug.Log("찾음");
-        }
-        else
-        {
-            findPlayer = false;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            findPlayer = false;
-            Debug.Log("놓침");
-
-        }
-        else
-        {
-            findPlayer = true;
-        }
-
-    }
-    
     public void AttackPlayer()
     {
         //if (PlayerManager.Instance.player.myStat.HP <= 0)
@@ -142,7 +119,6 @@ public class Monster : MonoBehaviour, IHit
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, followspeed * Time.deltaTime);
             Debug.Log("돌진");
         }
-        //anim.SetBool("AttackPlayer", playerfind);
 
 
     }
@@ -155,8 +131,6 @@ public class Monster : MonoBehaviour, IHit
         }
 
         this.monsterStat.hP = Mathf.Clamp(this.monsterStat.hP - damage, 0, this.monsterStat.maxHP);
-        //slider.value = this.monsterStat.hP;
-        anim.SetTrigger("Hit");
         rigid.AddForce(dir, ForceMode2D.Impulse);
     }
     public float GetAtt()
@@ -166,12 +140,25 @@ public class Monster : MonoBehaviour, IHit
 
     public void isDead()
     {
+        if (this.monsterStat.hP <= 0)
+        {
+            this.gameObject.SetActive(false);
+        }
         //플레이어 경험치 += MonsterManager.Instance.monsterStat.giveExp;
         // 플레이어 돈 += MonsterManager.Instance.monsterStat.giveMoney;
 
 
-        this.gameObject.SetActive(false);
     }
 
-    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            dir = (this.transform.position - collision.transform.position).normalized;
+            anim.SetTrigger("hit");
+            Hit(20, dir);
+            Debug.Log(this.monsterStat.hP);
+        }
+    }
+
 }
