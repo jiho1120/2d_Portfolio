@@ -13,7 +13,7 @@ public class Monster : MonoBehaviour, IHit
     float speedMin = 1;
     float speedMax = 2;
     float speed;
-    float followspeed = 5f;
+    float followspeed = 1f;
     bool isMove = false;
     bool IsLeft = true;
     bool findPlayer = false;
@@ -138,7 +138,8 @@ public class Monster : MonoBehaviour, IHit
 
         if (findPlayer)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target.position, followspeed * Time.deltaTime);
+            Vector3 targetPosition = new Vector3(target.position.x, transform.position.y, transform.position.z);
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, followspeed * Time.deltaTime);
             Debug.Log("µ¹Áø");
         }
         //anim.SetBool("AttackPlayer", playerfind);
@@ -155,7 +156,7 @@ public class Monster : MonoBehaviour, IHit
 
         this.monsterStat.hP = Mathf.Clamp(this.monsterStat.hP - damage, 0, this.monsterStat.maxHP);
         //slider.value = this.monsterStat.hP;
-        //anim.SetTrigger("Hit");
+        anim.SetTrigger("Hit");
         rigid.AddForce(dir, ForceMode2D.Impulse);
     }
     public float GetAtt()
