@@ -18,14 +18,12 @@ public class FlyMonster : Monster
         attackRate = 3f;
         timeAfterAttack = 0;
         errorMargin = 3;
-
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        basicMove();
+        LimitArea();
         Boundary();
         timeAfterAttack += Time.deltaTime;
         Attack();
@@ -33,6 +31,10 @@ public class FlyMonster : Monster
 
     }
 
+    private void FixedUpdate()
+    {
+        basicMove();
+    }
 
     public override void Attack()
     {
@@ -41,10 +43,9 @@ public class FlyMonster : Monster
         {
             if (timeAfterAttack >= attackRate)
             {
+                anim.SetTrigger("attack");
                 timeAfterAttack = 0f;
-
                 GameObject monsterBullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
-
             }
         }
     }

@@ -11,6 +11,7 @@ TagManager:
   - Potal
   - BossWeapon
   - MonsterBullet
+  - Wall
   layers:
   - Default
   - TransparentFX

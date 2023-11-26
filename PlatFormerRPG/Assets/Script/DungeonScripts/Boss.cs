@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Constructure;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class Boss : MonoBehaviour, IHit
 {
@@ -151,9 +153,10 @@ public class Boss : MonoBehaviour, IHit
             IsLeft = true;
         }
     }
+    
 
-    //이동관련함수 
-    IEnumerator Bossmove()
+//이동관련함수 
+IEnumerator Bossmove()
     {
         while (true)
         {
