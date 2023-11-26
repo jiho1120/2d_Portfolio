@@ -7,10 +7,11 @@ using UnityEngine.SceneManagement;
 public class PlayerManager : Singleton<PlayerManager>
 {
     public bool InPotal = false;
+
+    public Attak PlayerAtt;     //플레이어 공격, 스킬
+
+    // 밑에 플레이어는 지우지 말아주세요 테스트용입니다.
     public Player player;
-
-    //public PlayerSkill skill;
-
 
 
     public Vector3 GetPlayerPosition()
