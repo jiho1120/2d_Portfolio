@@ -11,7 +11,7 @@ public class Boss : MonoBehaviour, IHit
     public Constructure.MonsterStat bossStat;
 
     float speed = 3;
-    int bossPhase = 1;
+    int bossPhase = 2;
     int attackCount = 0;
     bool isMove = true;
     bool IsLeft = true;
@@ -26,6 +26,8 @@ public class Boss : MonoBehaviour, IHit
     Vector3 vec = Vector3.right;
     Vector3 dir = Vector3.zero;
 
+    public GameObject bulletPrefab;
+    public GameObject bulletSpawnPos;
 
     Rigidbody2D rigid;
     Animator anim;
@@ -236,6 +238,8 @@ IEnumerator Bossmove()
             WatchPlayer();
             anim.SetBool("farAttack", isAttack);
             Debug.Log("farAttack");
+            GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
+
 
         }
         isAttack = false;

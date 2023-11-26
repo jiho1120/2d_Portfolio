@@ -307,7 +307,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a134ffa4121b88547910d4619aa293ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followspeed: 1
   knockBack: 1
-  bulletPrefab: {fileID: 3903431413263133118, guid: 445573f456705d6458d69e74e9bae0fb, type: 3}
+  bulletPrefab: {fileID: 8445012293128930882, guid: b366ecef5deaa584d9e27a3086214c06, type: 3}
   bulletSpawnPoint: {fileID: 1863442040}
