@@ -14,6 +14,7 @@ public class Monster : MonoBehaviour, IHit
 
     public float knockBack = 1;
     public float realAttack; // 나중에 공격력에다 추가 공격력 더해서 반환하는 최종 플레이어가 입을 데미지
+    float addAtt;
     float speedMin = 1;
     float speedMax = 2;
     float xDifference;
@@ -124,7 +125,7 @@ public class Monster : MonoBehaviour, IHit
     }
     public float GetAtt()
     {
-        return monsterStat.att;
+        return  realAttack = monsterStat.att * addAtt;
     }
 
     public void isDead()

@@ -22,7 +22,7 @@ public class Boss : MonoBehaviour, IHit
     bool isAttack = false;
     bool boundary = false;
     public float realAttack;
-    float addAttack;
+    float addAtt;
     float xDifference;
     float yDifference;
     float errorMargin;
@@ -224,7 +224,7 @@ public class Boss : MonoBehaviour, IHit
                     anim.SetBool("farAttack", isAttack);
                 }
             }
-            realAttack = bossStat.att * addAttack;
+            realAttack = bossStat.att * addAtt;
             yield return new WaitForSeconds(3f);
         }
     }
@@ -234,7 +234,7 @@ public class Boss : MonoBehaviour, IHit
         if (boundary)
         {
             anim.SetBool("closeAttack", isAttack);
-            addAttack = 1;
+            addAtt = 1;
             isAttack = false;
             Debug.Log("closeAttack");
         }
@@ -246,7 +246,7 @@ public class Boss : MonoBehaviour, IHit
         if (boundary)
         {
             anim.SetBool("closeSkill", isAttack);
-            addAttack = 10;
+            addAtt = 10;
             isAttack = false;
             Debug.Log("closeSkill");
         }
@@ -257,7 +257,7 @@ public class Boss : MonoBehaviour, IHit
     {
         GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
         anim.SetBool("farAttack", isAttack);
-        addAttack = 5;
+        addAtt = 5;
         isAttack = false;
         Debug.Log("farAttack");
         attackCount++;
@@ -266,7 +266,7 @@ public class Boss : MonoBehaviour, IHit
     void FarSkill()
     {
         anim.SetBool("farSkill", isAttack);
-        addAttack = 15;
+        addAtt = 15;
         isAttack = false;
         Debug.Log("farSkill");
         attackCount = 0;
