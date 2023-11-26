@@ -52,7 +52,7 @@ public class Boss : MonoBehaviour, IHit
         hpSlider = GetComponent<Slider>();
         //테스트하려고 능력치 줄여놈
         bossStat = new Constructure.MonsterStat(10); // DungeonManager.Instance.dungeonNum 으로 세팅하면 맵열때 숫자가 바뀜
-        hpSlider.maxValue = bossStat.maxHP;
+        //hpSlider.maxValue = bossStat.maxHP;
         bossPhase = 1;
         bossMoveCor = StartCoroutine(Bossmove());
         bossAttCor = StartCoroutine(AttackCor());
@@ -282,8 +282,8 @@ public class Boss : MonoBehaviour, IHit
 
         this.bossStat.hP = Mathf.Clamp(this.bossStat.hP - damage, 0, this.bossStat.maxHP);
         anim.SetTrigger("hit");
-        hpSlider.value = bossStat.hP;
-        //rigid.AddForce(dir, ForceMode2D.Impulse); 넉백안줄거임
+        //hpSlider.value = bossStat.hP;
+        //rigid.AddForce(dir, ForceMode2D.Impulse); 넉백안줄거임 
     }
     public float GetAtt()
     {
@@ -295,7 +295,7 @@ public class Boss : MonoBehaviour, IHit
     {
         if (bossStat.hP <= 0)
         {
-            PlayerManager.Instance.player.myStat.ExpVal += bossStat.giveExp;
+            //PlayerManager.Instance.player.myStat.ExpVal += bossStat.giveExp;
             //PlayerManager.Instance.player.myStat.money += bossStat.giveMoney;
             gameObject.SetActive(false);
         }
