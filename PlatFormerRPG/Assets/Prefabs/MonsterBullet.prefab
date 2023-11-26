@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 3903431413263133115}
   - component: {fileID: 3903431413263133112}
   - component: {fileID: 3903431413263133113}
-  - component: {fileID: 7730203698313308540}
+  - component: {fileID: -6781989507872918613}
+  - component: {fileID: -6435920686702411581}
   m_Layer: 0
   m_Name: MonsterBullet
   m_TagString: MonsterBullet
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 3903431413263133118}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.7248, y: 0.684, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
+  m_LocalScale: {x: 0.16662, y: 0.069010004, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -96,13 +97,13 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2.0000002}
   m_Direction: 0
---- !u!50 &7730203698313308540
+--- !u!50 &-6781989507872918613
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -123,3 +124,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-6435920686702411581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3903431413263133118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66ecbe4227464194192736b388e60291, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
