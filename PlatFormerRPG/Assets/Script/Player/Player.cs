@@ -6,10 +6,17 @@ using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour, IAtt
 {
+    public GameObject swordPrefab;          //전사 스킬 object prefab
+    public Transform swordPos;              //전사 스킬 object 생성 위치
+    public GameObject fireBallPrefab;       //마법사 기본 공격 object prefab
+    public GameObject bigFireBallPrefab;    //마법사 스킬 공격 object prefab
+    public Transform fireBallPos;           //마법사 공격 object 생성 위치
+
     Rigidbody2D rigid;
     Animator anim;
+    GameObject tmpObj;              //임시변수
 
-    Constructure.Stat myStat;       //스탯 정보
+    public Constructure.Stat myStat;       //스탯 정보
 
     Vector3 vec = Vector3.zero;
     Vector3 scaleVec = Vector3.one;
@@ -34,7 +41,7 @@ public class Player : MonoBehaviour, IAtt
     //Player 스탯 세팅
     void StatSetting()
     {
-        myStat = new Constructure.Stat(100, 10, 20, 0, 100, 0);
+        myStat = new Constructure.Stat(100, 10, 20, 0, 100, 0, 0);
         if (UIManager.Instance !=null)
         {
             UIManager.Instance.State(myStat);
@@ -48,40 +55,8 @@ public class Player : MonoBehaviour, IAtt
             return;
         }
 
-        //Key조작(자후 조이스틱으로 변경)
-        x = Input.GetAxisRaw("Horizontal");
-        vec.x = x;
-        transform.Translate(vec.normalized * Time.deltaTime * speed);
-
-        //Player 이동 반전
-        if (vec.x != 0)
-        {
-            scaleVec.x = vec.x;
-            anim.SetBool("IsMove", true);
-        }
-        else
-        {
-            anim.SetBool("IsMove", false);
-        }
-        transform.localScale = scaleVec;
-
-        //점프
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if(jumpCount < 2)
-            {
-                rigid.velocity = Vector2.zero;      //velocity 초기화(일정한 점프 유지)
-                jumpCount++;
-            }
-            else
-            {
-                return;
-            }
-            rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-            anim.SetTrigger("IsJump");
-        }
-
-        //기본 공격, 스킬 공격 => Attak.script
+        PlayerMove();       //player 조작
+        PlayerAttSkill();       //player 공격, 스킬
 
         //HP 확인용 Key(임시)
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -106,6 +81,89 @@ public class Player : MonoBehaviour, IAtt
                 myStat.MaxExpVal += 100;
                 // expSlider.maxValue = myStat.MaxExpVal;
             }
+        }
+    }
+
+    //Player 조작
+    void PlayerMove()
+    {
+        //Key조작(자후 조이스틱으로 변경)
+        x = Input.GetAxisRaw("Horizontal");
+        vec.x = x;
+        transform.Translate(vec.normalized * Time.deltaTime * speed);
+
+        //Player 이동 반전
+        if (vec.x != 0)
+        {
+            scaleVec.x = vec.x;
+            anim.SetBool("IsMove", true);
+        }
+        else
+        {
+            anim.SetBool("IsMove", false);
+        }
+        transform.localScale = scaleVec;
+
+        //점프
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (jumpCount < 2)
+            {
+                rigid.velocity = Vector2.zero;      //velocity 초기화(일정한 점프 유지)
+                jumpCount++;
+            }
+            else
+            {
+                return;
+            }
+            rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+            anim.SetTrigger("IsJump");
+        }
+    }
+
+    //플레이어 공격, 스킬
+    void PlayerAttSkill()
+    {
+        //기본 공격
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            //player가 전사
+            //if (/*enum 불러와서 비교*/)
+            //{
+            //    
+            //}
+            ////player가 마법사
+            //else
+            //{
+            Instantiate(fireBallPrefab, fireBallPos.position, transform.rotation);
+            //tmpObj.SetActive(false);
+
+            //Attak();      //공격력
+
+            Debug.Log("공격 발사됨");
+            //}
+            anim.SetTrigger("IsAtt");
+        }
+
+        //스킬 공격
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            //player가 전사
+            //if (/*enum 불러와서 비교*/)
+            //{
+            //Instantiate(swordPrefab, swordPos.position, transform.rotation);
+            //}
+            ////player가 마법사
+            //else
+            //{
+            Instantiate(bigFireBallPrefab, fireBallPos.position, transform.rotation);
+            //tmpObj.SetActive(false);
+
+            //Skill();      //공격력
+
+            Debug.Log("스킬 발사됨");
+            //}
+            anim.SetTrigger("IsSkill");
         }
     }
 
