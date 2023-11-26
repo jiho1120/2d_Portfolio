@@ -12,16 +12,17 @@ public class Monster : MonoBehaviour, IHit
     Vector3 vec = Vector3.right;
     Vector3 dir = Vector3.zero;
 
-    protected float speed;
     public float knockBack = 1;
-    protected bool isMove = false;
-    protected bool IsLeft = true;
-    protected bool boundary = false;
-
+    public float realAttack; // 나중에 공격력에다 추가 공격력 더해서 반환하는 최종 플레이어가 입을 데미지
     float speedMin = 1;
     float speedMax = 2;
     float xDifference;
     float yDifference;
+
+    protected float speed;
+    protected bool isMove = false;
+    protected bool IsLeft = true;
+    protected bool boundary = false;
     protected float errorMargin;
     protected float timeAfterAttack;
     protected float attackRate; // 공격주기

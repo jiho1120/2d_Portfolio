@@ -7,7 +7,7 @@ TagManager:
   - GroundEnemy
   - FlyEnemy
   - Ground
-  - MonsterHitBox
+  - Boss
   - Potal
   - BossWeapon
   - MonsterBullet

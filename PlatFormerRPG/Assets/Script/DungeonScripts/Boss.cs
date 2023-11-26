@@ -2,36 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.SocialPlatforms;
+using UnityEngine.UI;
 using static Constructure;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class Boss : MonoBehaviour, IHit
 {
+
+    // 애니메이터 작동 오류 (시간되면 탄막 구현 제대로하기)
+    // 페이즈 넘어갈때 지정한 위치로 안가고 멈추는 이유
+    // 보스가 맵에 가려짐
     public Constructure.MonsterStat bossStat;
 
     float speed = 3;
-    int bossPhase = 2;
+    int bossPhase;
     int attackCount = 0;
     bool isMove = true;
     bool IsLeft = true;
     bool isAttack = false;
     bool boundary = false;
+    public float realAttack;
+    float addAttack;
     float xDifference;
     float yDifference;
     float errorMargin;
 
-    Vector3 sclaeVec = new Vector3(0.5f,0.5f,0.5f);
+    Vector3 sclaeVec = new Vector3(0.5f, 0.5f, 0.5f);
     Vector3 telpoVec = new Vector3(2, 0, 0);
     Vector3 vec = Vector3.right;
     Vector3 dir = Vector3.zero;
+    Vector3 middlePos = new Vector3(0, -5, 0);
+
 
     public GameObject bulletPrefab;
     public GameObject bulletSpawnPos;
+    public Slider hpSlider;
 
     Rigidbody2D rigid;
     Animator anim;
-    Coroutine bossCor = null;
+    Coroutine bossMoveCor = null;
     Coroutine bossAttCor = null;
 
 
@@ -40,14 +49,16 @@ public class Boss : MonoBehaviour, IHit
     {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        bossStat = new Constructure.MonsterStat(100); // DungeonManager.Instance.dungeonNum 으로 세팅하면 맵열때 숫자가 바뀜
-        bossCor = StartCoroutine(Bossmove());
+        hpSlider = GetComponent<Slider>();
+        //테스트하려고 능력치 줄여놈
+        bossStat = new Constructure.MonsterStat(10); // DungeonManager.Instance.dungeonNum 으로 세팅하면 맵열때 숫자가 바뀜
+        hpSlider.maxValue = bossStat.maxHP;
+        bossPhase = 1;
+        bossMoveCor = StartCoroutine(Bossmove());
         bossAttCor = StartCoroutine(AttackCor());
         InvokeRepeating("Teleport", 1f, 10f);
-        //if (bossCor!=null)        
-
-
-        //StopCoroutine(bossCor);
+        //if (bossMoveCor!=null)        
+        //StopCoroutine(bossMoveCor);
     }
 
     // Update is called once per frame
@@ -56,20 +67,15 @@ public class Boss : MonoBehaviour, IHit
         sclaeVec.x = (IsLeft ? 0.5f : -0.5f);
         chcekBossPhase();
         LimitArea();
+        isDead();
 
         if (bossPhase == 1)
         {
             Boundary();
-            CloseAttack();
-            CloseSkill();
-
         }
         else if (bossPhase == 2)
         {
-            StopCoroutine(bossCor);
             CancelInvoke("Teleport");
-            FarAttack();
-            FarSkill();
         }
         else
         {
@@ -77,37 +83,7 @@ public class Boss : MonoBehaviour, IHit
         }
     }
 
-    IEnumerator AttackCor()
-    {
-        while (true)
-        {
-            isAttack = true;
-            if (bossPhase == 1)
-            {
-                if (attackCount == 5)
-                {
-                    CloseSkill();
-                }
-                else
-                {
-                    CloseAttack();
-                }
-            }
-            else if (bossPhase == 2)
-            {
-                if(attackCount == 5)
-                {
-                    FarSkill();
-                }
-                else
-                {
-                    FarAttack();
-                }
-            }
-            
-            yield return new WaitForSeconds(3f);
-        }
-    }
+    
 
     private void FixedUpdate()
     {
@@ -123,7 +99,6 @@ public class Boss : MonoBehaviour, IHit
     {
         if (bossStat.hP <= (bossStat.maxHP * 0.5))
         {
-            bossStat.hP = bossStat.maxHP * 0.5f;
             bossPhase++;
         }
     }
@@ -155,12 +130,12 @@ public class Boss : MonoBehaviour, IHit
             IsLeft = true;
         }
     }
-    
 
-//이동관련함수 
-IEnumerator Bossmove()
+
+    //이동관련함수 
+    IEnumerator Bossmove()
     {
-        while (true)
+        while (bossPhase == 1)
         {
             isMove = true;
             anim.SetBool("isMove", isMove);
@@ -169,6 +144,12 @@ IEnumerator Bossmove()
             isMove = false;
             anim.SetBool("isMove", isMove);
             yield return new WaitForSeconds(Random.Range(0.5f, 1f));
+            if (bossPhase == 2)
+            {
+                SetMiddlePosition();
+                StopCoroutine(bossMoveCor);
+                bossStat.hP = bossStat.maxHP * 0.5f;
+            }
         }
     }
 
@@ -186,9 +167,11 @@ IEnumerator Bossmove()
                 this.transform.position = (PlayerManager.Instance.GetPlayerPosition() - telpoVec);
                 //IsLeft = false;
             }
+            isMove = false;
+            anim.SetBool("isMove", isMove);
             WatchPlayer();
         }
-    } 
+    }
 
     void WatchPlayer() // 순간이동이나 공격시 플레이어 보기위한 함수
     {
@@ -203,60 +186,90 @@ IEnumerator Bossmove()
         sclaeVec.x = (IsLeft ? 0.5f : -0.5f);
     }
 
+    void SetMiddlePosition()
+    {
+        Vector3.MoveTowards(transform.position, middlePos, Time.deltaTime * speed);
+    }
+
     //공격 함수
+    IEnumerator AttackCor()
+    {
+        while (true)
+        {
+            isAttack = true;
+            WatchPlayer();
+            if (bossPhase == 1)
+            {
+                if (attackCount >= 4) // 5번째에 스킬
+                {
+                    CloseSkill();
+                    anim.SetBool("closeSkill", isAttack);
+                }
+                else
+                {
+                    CloseAttack();
+                    anim.SetBool("closeAttack", isAttack);
+                }
+            }
+            else if (bossPhase == 2)
+            {
+                if (attackCount >= 4)
+                {
+                    FarSkill();
+                    anim.SetBool("farSkill", isAttack);
+                }
+                else
+                {
+                    FarAttack();
+                    anim.SetBool("farAttack", isAttack);
+                }
+            }
+            realAttack = bossStat.att * addAttack;
+            yield return new WaitForSeconds(3f);
+        }
+    }
+
     void CloseAttack()
     {
-        if (boundary == true && isAttack == true)
+        if (boundary)
         {
-            WatchPlayer();
             anim.SetBool("closeAttack", isAttack);
+            addAttack = 1;
+            isAttack = false;
             Debug.Log("closeAttack");
         }
-        
-        isAttack = false;
         attackCount++;
-        anim.SetBool("closeAttack", isAttack);
     }
 
     void CloseSkill()
     {
-        if (boundary == true && isAttack == true)
+        if (boundary)
         {
-            WatchPlayer();
             anim.SetBool("closeSkill", isAttack);
+            addAttack = 10;
+            isAttack = false;
             Debug.Log("closeSkill");
         }
-        isAttack = false;
         attackCount = 0;
-        anim.SetBool("closeSkill", isAttack);
     }
 
     void FarAttack()
     {
-        if (isAttack == true)
-        {
-            WatchPlayer();
-            anim.SetBool("farAttack", isAttack);
-            Debug.Log("farAttack");
-            GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
-
-
-        }
-        isAttack = false;
-        attackCount++;
+        GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
         anim.SetBool("farAttack", isAttack);
+        addAttack = 5;
+        isAttack = false;
+        Debug.Log("farAttack");
+        attackCount++;
     }
 
     void FarSkill()
     {
-        if (isAttack == true)
-        {
-            anim.SetBool("farSkill", isAttack);
-            Debug.Log("farSkill");
-        }
-        isAttack = false;
-        attackCount = 0;
         anim.SetBool("farSkill", isAttack);
+        addAttack = 15;
+        isAttack = false;
+        Debug.Log("farSkill");
+        attackCount = 0;
     }
 
     //피격
@@ -269,11 +282,12 @@ IEnumerator Bossmove()
 
         this.bossStat.hP = Mathf.Clamp(this.bossStat.hP - damage, 0, this.bossStat.maxHP);
         anim.SetTrigger("hit");
+        hpSlider.value = bossStat.hP;
         //rigid.AddForce(dir, ForceMode2D.Impulse); 넉백안줄거임
     }
     public float GetAtt()
     {
-        return bossStat.att;
+        return realAttack;
     }
 
     //죽음
@@ -283,7 +297,7 @@ IEnumerator Bossmove()
         {
             PlayerManager.Instance.player.myStat.ExpVal += bossStat.giveExp;
             //PlayerManager.Instance.player.myStat.money += bossStat.giveMoney;
-            this.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
     }
 
@@ -294,7 +308,7 @@ IEnumerator Bossmove()
         if (collision.gameObject.CompareTag("Player")) // 무기로바꿔야함
         {
             dir = (this.transform.position - collision.transform.position).normalized;
-            Hit(20, dir);
+            Hit(20, dir); //PlayerManager.Instance.player.myStat.Att;
             Debug.Log(bossStat.hP);
         }
     }

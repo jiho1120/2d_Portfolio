@@ -31,12 +31,6 @@ public class MonsterBullet : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-        else if (collision.gameObject.CompareTag("Ground"))
-        {
-            if (gameObject != null)
-            {
-                Destroy(gameObject);
-            }
-        }
+        
     }
 }

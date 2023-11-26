@@ -17,6 +17,7 @@ public class FlyMonster : Monster
         StartCoroutine(MonsterMove());
         attackRate = 3f;
         timeAfterAttack = 0;
+        realAttack = monsterStat.att;
         errorMargin = 3;
     }
 

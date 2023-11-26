@@ -18,6 +18,7 @@ public class GroundMonster : Monster
         attackRate = 3f;
         timeAfterAttack = 0;
         errorMargin = 4;
+        realAttack = monsterStat.att;
         ownSpeed = speed;
     }
 
