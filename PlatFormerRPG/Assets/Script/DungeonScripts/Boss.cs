@@ -124,36 +124,22 @@ public class Boss : MonoBehaviour, IHit
         }
     }
 
-    //void Boundary()
-    //{
-    //    if (PlayerManager.Instance.GetPlayerPosition().x > this.transform.position.x - 0.1 && PlayerManager.Instance.GetPlayerPosition().x < this.transform.position.x + 0.1
-    //        && PlayerManager.Instance.GetPlayerPosition().y > this.transform.position.y - 0.1 && PlayerManager.Instance.GetPlayerPosition().y < this.transform.position.y + 0.1)
-    //    {
-    //        boundary = true;
-    //    }
-    //    else
-    //    {
-    //        boundary = false;
-    //    }
-    //}
     void Boundary()
     {
         xDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().x - this.transform.position.x); //절댓값
         yDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().y - this.transform.position.y);
-
-        // 정밀도에 따라서 오차 범위를 조절하세요 (예: 0.1)
         errorMargin = 2f;
 
         if (xDifference < errorMargin && yDifference < errorMargin)
         {
             boundary = true;
-
         }
         else
         {
             boundary = false;
         }
     }
+
     void LimitArea()
     {
         if (transform.position.x <= -12)
@@ -166,10 +152,7 @@ public class Boss : MonoBehaviour, IHit
         }
     }
 
-
-
     //이동관련함수 
-
     IEnumerator Bossmove()
     {
         while (true)
@@ -183,6 +166,7 @@ public class Boss : MonoBehaviour, IHit
             yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         }
     }
+
     void Teleport()
     {
         if (!boundary)
@@ -200,6 +184,7 @@ public class Boss : MonoBehaviour, IHit
             WatchPlayer();
         }
     } 
+
     void WatchPlayer() // 순간이동이나 공격시 플레이어 보기위한 함수
     {
         if (PlayerManager.Instance.GetPlayerPosition().x < this.transform.position.x)
@@ -212,7 +197,6 @@ public class Boss : MonoBehaviour, IHit
         }
         sclaeVec.x = (IsLeft ? 0.5f : -0.5f);
     }
-
 
     //공격 함수
     void CloseAttack()
@@ -228,6 +212,7 @@ public class Boss : MonoBehaviour, IHit
         attackCount++;
         anim.SetBool("closeAttack", isAttack);
     }
+
     void CloseSkill()
     {
         if (boundary == true && isAttack == true)
@@ -235,13 +220,10 @@ public class Boss : MonoBehaviour, IHit
             WatchPlayer();
             anim.SetBool("closeSkill", isAttack);
             Debug.Log("closeSkill");
-
         }
-
         isAttack = false;
         attackCount = 0;
         anim.SetBool("closeSkill", isAttack);
-
     }
 
     void FarAttack()
@@ -256,8 +238,8 @@ public class Boss : MonoBehaviour, IHit
         isAttack = false;
         attackCount++;
         anim.SetBool("farAttack", isAttack);
-
     }
+
     void FarSkill()
     {
         if (isAttack == true)
@@ -268,11 +250,9 @@ public class Boss : MonoBehaviour, IHit
         isAttack = false;
         attackCount = 0;
         anim.SetBool("farSkill", isAttack);
-
     }
 
     //피격
-
     public void Hit(float damage, Vector3 dir)
     {
         if (bossStat.hP <= 0)

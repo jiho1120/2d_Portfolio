@@ -5,6 +5,9 @@ using static UnityEngine.GraphicsBuffer;
 
 public class FlyMonster : Monster
 {
+    public GameObject bulletPrefab;
+    public Transform bulletSpawnPoint;
+
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -12,6 +15,10 @@ public class FlyMonster : Monster
         monsterStat = new Constructure.MonsterStat(DungeonManager.Instance.dungeonNum);
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         StartCoroutine(MonsterMove());
+        attackRate = 3f;
+        timeAfterAttack = 0;
+        errorMargin = 3;
+
 
     }
 
@@ -20,17 +27,26 @@ public class FlyMonster : Monster
     {
         basicMove();
         Boundary();
+        timeAfterAttack += Time.deltaTime;
         Attack();
         isDead();
+
     }
 
 
     public override void Attack()
     {
         base.Attack();
-        if (boundary == true)
+        if (boundary)
         {
-            Debug.Log("¤¼¤¼");
+            if (timeAfterAttack >= attackRate)
+            {
+                timeAfterAttack = 0f;
+
+                GameObject monsterBullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
+
+            }
         }
     }
+
 }

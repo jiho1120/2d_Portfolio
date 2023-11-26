@@ -12,17 +12,22 @@ public class Monster : MonoBehaviour, IHit
     Vector3 vec = Vector3.right;
     Vector3 dir = Vector3.zero;
 
+    
+    protected float speed { get; private set; }
+    public float knockBack = 1;
+    protected bool isMove = false;
+    protected bool IsLeft = true;
+    protected bool boundary = false;
     float speedMin = 1;
     float speedMax = 2;
-    protected float speed { get; private set; }
-    public float followspeed = 1f;
-    public float knockBack = 1;
-    bool isMove = false;
-    bool IsLeft = true;
-    public bool boundary { get; private set; } = false;
     float xDifference;
     float yDifference;
-    float errorMargin;
+    protected float errorMargin;
+    protected float timeAfterAttack;
+    protected float attackRate; // 공격주기
+
+
+
 
     protected Transform target;
 
@@ -85,46 +90,23 @@ public class Monster : MonoBehaviour, IHit
         }
     }
 
-
-    //public void Boundary()
-    //{
-    //    if (PlayerManager.Instance.GetPlayerPosition().x > this.transform.position.x - 1 || PlayerManager.Instance.GetPlayerPosition().x < this.transform.position.x + 1
-    //        || PlayerManager.Instance.GetPlayerPosition().y > this.transform.position.y - 1 || PlayerManager.Instance.GetPlayerPosition().y < this.transform.position.y + 1)
-    //    {
-    //        boundary = true;
-    //    }
-    //    else
-    //    {
-    //        boundary = false;
-    //    }
-    //}
-
     public void Boundary()
     {
-        xDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().x - this.transform.position.x); //절댓값
+        xDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().x - this.transform.position.x);
         yDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().y - this.transform.position.y);
-
-        // 정밀도에 따라서 오차 범위를 조절하세요 (예: 0.1)
-        errorMargin = 2f;
 
         if (xDifference < errorMargin && yDifference < errorMargin)
         {
             boundary = true;
-
         }
         else
         {
             boundary = false;
         }
     }
-    public virtual void Attack()
-    {
-
-    }
 
 
-
-
+    public virtual void Attack() { }
     public void Hit(float damage, Vector3 dir)
     {
         if (monsterStat.hP <= 0)
@@ -145,12 +127,11 @@ public class Monster : MonoBehaviour, IHit
     {
         if (this.monsterStat.hP <= 0)
         {
+            //PlayerManager.Instance.player.myStat.ExpVal += MonsterManager.Instance.monsterStat.giveExp;
+            // PlayerManager.Instance.player.myStat.money += MonsterManager.Instance.monsterStat.giveMoney;
             this.gameObject.SetActive(false);
         }
-        //플레이어 경험치 += MonsterManager.Instance.monsterStat.giveExp;
-        // 플레이어 돈 += MonsterManager.Instance.monsterStat.giveMoney;
-
-
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -162,5 +143,4 @@ public class Monster : MonoBehaviour, IHit
             Debug.Log(this.monsterStat.hP);
         }
     }
-
 }
