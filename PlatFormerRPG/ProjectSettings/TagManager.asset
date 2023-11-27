@@ -12,6 +12,8 @@ TagManager:
   - BossWeapon
   - MonsterBullet
   - Wall
+  - MonsterHitBox
+  - Topbullet
   layers:
   - Default
   - TransparentFX

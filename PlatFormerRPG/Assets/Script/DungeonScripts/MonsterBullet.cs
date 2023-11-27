@@ -6,6 +6,7 @@ public class MonsterBullet : MonoBehaviour
 {
     private Rigidbody2D rb;
     public float bulletSpeed = 1000f;
+    public float bulletDamage = 5;
 
     Transform playerPos;
     Vector3 dir;
@@ -24,6 +25,11 @@ public class MonsterBullet : MonoBehaviour
         {
             Destroy(gameObject, 5f);
         }
+    }
+
+    public float GetBulletDamage() // 플레이어에서 사용
+    {
+        return bulletDamage;
     }
     private void FixedUpdate()
     {

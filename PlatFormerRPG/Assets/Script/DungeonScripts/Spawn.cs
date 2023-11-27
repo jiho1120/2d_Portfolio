@@ -6,22 +6,32 @@ public class Spawn : MonoBehaviour
 {
     public Transform[] monsterSpawnPos;
     Monster tmpMonster;
-
     Vector3 vec = Vector3.zero; //몬스터 위치 벡터
     int monsterType;
+
+    public GameObject[] bulletPrefab;
+    public Transform[] bulletSpawnPos;
+
+    int numberOfBullets;
+    float angleStep;
+    float bulletRadius;
+    float angle;
+
+
+
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public void SetMonsterSpawnPos() // 몬스터의 스폰위치와 스프라이트 설정
     {
@@ -40,10 +50,18 @@ public class Spawn : MonoBehaviour
             tmpMonster.SetMonsterSprite(MonsterManager.Instance.AllGroundMonsterSprites[DungeonManager.Instance.dungeonNum]);
             vec.y = monsterSpawnPos[pos].position.y;
         }
-
         tmpMonster.transform.position = vec;
         tmpMonster.gameObject.SetActive(true);
-
     }
-    
+
+    public IEnumerator SetBulletSpawnPos()
+    {
+        for (int i = 0; i < bulletSpawnPos.Length; i++)
+        {
+            Quaternion bulletRotation = Quaternion.Euler(0f, 0f, 0f);
+            Vector3 bulletPosition = bulletSpawnPos[i].transform.position;
+            GameObject monsterBullet = Instantiate(bulletPrefab[Random.Range(0, bulletPrefab.Length)], bulletPosition, bulletRotation);
+            yield return new WaitForSeconds(5f);
+        }
+    }
 }

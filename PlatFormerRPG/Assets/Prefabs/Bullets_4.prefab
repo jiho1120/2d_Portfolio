@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4297020089659396020}
   m_Layer: 0
   m_Name: Bullets_4
-  m_TagString: MonsterBullet
+  m_TagString: Topbullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66ecbe4227464194192736b388e60291, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletSpeed: 1000
 --- !u!50 &2157745366016845497
 Rigidbody2D:
   serializedVersion: 4

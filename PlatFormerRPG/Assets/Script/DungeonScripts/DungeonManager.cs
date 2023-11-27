@@ -17,11 +17,11 @@ public class DungeonManager : Singleton<DungeonManager>
     {
         checkDungeonNum(40);
         ChangePanelImage();
-        CheckGenerateMonsterCoroutine();
+        CheckGenerateCoroutine();
         MonsterManager.instance.SetMonsterInfo();
     }
 
-    void CheckGenerateMonsterCoroutine()
+    void CheckGenerateCoroutine()
     {
         if (dungeonNum <= 3)
         {
@@ -29,7 +29,7 @@ public class DungeonManager : Singleton<DungeonManager>
         }
         else
         {
-            return;
+            StartCoroutine(MonsterManager.instance.GenerateBullet());
         }
     }
 

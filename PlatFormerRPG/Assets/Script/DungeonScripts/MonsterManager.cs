@@ -24,6 +24,8 @@ public class MonsterManager : Singleton<MonsterManager>
 
     List<GameObject> allMonsterList = new List<GameObject>();
 
+    Coroutine bulletCor = null;
+
 
     // Start is called before the first frame update
     void Start()
@@ -75,6 +77,16 @@ public class MonsterManager : Singleton<MonsterManager>
             generateTime = Random.Range(minGenerateTime, maxGenerateTime);
             yield return new WaitForSeconds(generateTime);
             spawn.SetMonsterSpawnPos();
+        }
+    }
+    public IEnumerator GenerateBullet() // 총알 생성 시간 설정 후 스폰
+    {
+        while (true)
+        {
+            StartCoroutine(spawn.SetBulletSpawnPos());
+            //spawn.SetBulletSpawnPos();
+            generateTime = 40f;
+            yield return new WaitForSeconds(generateTime);
         }
     }
 }
