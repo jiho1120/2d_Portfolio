@@ -4,16 +4,30 @@ using UnityEngine;
 
 
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    // void Awake()
-    // {
-    //     InitializeSingletons();
-    // }
-    //
-    // void InitializeSingletons()
-    // {
-    //     UIManager.Initialize();
-    //     // Add other singleton initializations here if needed
-    // }
+    GameObject Warrior;
+    GameObject Wizald;
+
+    public GameObject WarriorPlayer;
+    public GameObject WizaldPlayer;
+    
+    Vector3 vec = Vector3.zero;
+
+    public void NewCharacter(AllEnum.Type characterType)
+    {
+        if (characterType == AllEnum.Type.Warrior)
+        {
+            Warrior = Instantiate(WarriorPlayer, vec, Quaternion.identity,transform);
+        }
+        
+        else if (characterType == AllEnum.Type.Dragon)
+        {
+            Wizald = Instantiate(WizaldPlayer, vec, Quaternion.identity,transform);
+        }
+    }
+
+
+    
+    
 }
