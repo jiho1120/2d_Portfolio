@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour, IAtt
 {
-    Rigidbody2D rigid;
+    public Rigidbody2D rigid;
     Animator anim;
 
     Constructure.Stat myStat;       //스탯 정보
@@ -18,9 +18,9 @@ public class Player : MonoBehaviour, IAtt
     float x = 0;
     public float speed = 6;
     public float jumpPower = 8;
-    int jumpCount = 0;
+    public int jumpCount = 0;
     float knockBack = 1;
-    bool isHit = false;
+    public bool isHit = false;
     bool isStart = false;
 
     void Start()
@@ -137,16 +137,8 @@ public class Player : MonoBehaviour, IAtt
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        //땅과 닿았을 때
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isHit = false;
-            jumpCount = 0;
-            rigid.velocity = Vector2.zero;      //미끄럼방지
-        }
-
         //몬스터와 닿았을 때
-        else if (collision.gameObject.CompareTag("GroundEnemy") && collision.gameObject.CompareTag("FlyEnemy"))
+        if (collision.gameObject.CompareTag("GroundEnemy") && collision.gameObject.CompareTag("FlyEnemy"))
         {
             isHit = true;
             direction = (collision.transform.position - transform.position).normalized;

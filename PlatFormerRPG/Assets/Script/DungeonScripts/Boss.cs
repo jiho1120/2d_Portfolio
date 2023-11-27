@@ -6,21 +6,26 @@ using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 using static Constructure;
 
+// 탄막 구현 제대로하기
+// 페이즈 넘어갈때 지정한 위치로 안가고 멈추는 이유
+// 벽뚫기 구현
+// 몬스터 와리가리 
+// 프로덕트 만들고 몬스터 랑 보스 겹치는거 상속
+
+
 public class Boss : MonoBehaviour, IHit
 {
 
-    // 애니메이터 작동 오류 (시간되면 탄막 구현 제대로하기)
-    // 페이즈 넘어갈때 지정한 위치로 안가고 멈추는 이유
-    // 보스가 맵에 가려짐
     public Constructure.MonsterStat bossStat;
 
     float speed = 3;
-    int bossPhase;
+    int bossPhase = 1;
     int attackCount = 0;
     bool isMove = true;
     bool IsLeft = true;
     bool isAttack = false;
     bool boundary = false;
+    bool checkPhase = true;
     float realAttack;
     float addAtt;
     float xDifference;
@@ -53,7 +58,6 @@ public class Boss : MonoBehaviour, IHit
         //테스트하려고 능력치 줄여놈
         bossStat = new Constructure.MonsterStat(10); // DungeonManager.Instance.dungeonNum 으로 세팅하면 맵열때 숫자가 바뀜
         //hpSlider.maxValue = bossStat.maxHP;
-        bossPhase = 1;
         bossMoveCor = StartCoroutine(Bossmove());
         bossAttCor = StartCoroutine(AttackCor());
         InvokeRepeating("Teleport", 1f, 10f);
@@ -64,6 +68,11 @@ public class Boss : MonoBehaviour, IHit
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            bossStat.hP = bossStat.maxHP * 0.4f;
+            Debug.Log("bossStat.hP    " + bossStat.hP);
+        }
         sclaeVec.x = (IsLeft ? 0.5f : -0.5f);
         chcekBossPhase();
         LimitArea();
@@ -95,17 +104,22 @@ public class Boss : MonoBehaviour, IHit
     //기본 능력
     void chcekBossPhase()
     {
-        if (bossStat.hP <= (bossStat.maxHP * 0.5))
+        if(checkPhase)
         {
-            bossPhase++;
+            if (bossStat.hP <= (bossStat.maxHP * 0.5))
+            {
+                bossPhase++;
+                checkPhase = false;
+            }
         }
+        
     }
 
     void Boundary()
     {
         xDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().x - this.transform.position.x); //절댓값
         yDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().y - this.transform.position.y);
-        errorMargin = 2f;
+        errorMargin = 10f;
 
         if (xDifference < errorMargin && yDifference < errorMargin)
         {
@@ -132,7 +146,7 @@ public class Boss : MonoBehaviour, IHit
 
     //이동관련함수 
     IEnumerator Bossmove()
-    {
+    {                
         while (bossPhase == 1)
         {
             isMove = true;
@@ -141,13 +155,14 @@ public class Boss : MonoBehaviour, IHit
             yield return new WaitForSeconds(Random.Range(1f, 3f));
             isMove = false;
             anim.SetBool("isMove", isMove);
-            yield return new WaitForSeconds(Random.Range(0.5f, 1f));
-            if (bossPhase == 2)
-            {
-                SetMiddlePosition();
-                StopCoroutine(bossMoveCor);
-                bossStat.hP = bossStat.maxHP * 0.5f;
-            }
+            yield return new WaitForSeconds(Random.Range(0.5f, 1f));            
+        }
+
+        if (bossPhase == 2)
+        {
+            StopCoroutine(bossMoveCor);
+            StartCoroutine(SetMiddlePosition());
+            bossStat.hP = bossStat.maxHP * 0.5f;
         }
     }
 
@@ -184,9 +199,17 @@ public class Boss : MonoBehaviour, IHit
         sclaeVec.x = (IsLeft ? 0.5f : -0.5f);
     }
 
-    void SetMiddlePosition()
+    IEnumerator SetMiddlePosition()
     {
-        Vector3.MoveTowards(transform.position, middlePos, Time.deltaTime * speed);
+        Debug.Log("도착 위치 : " + middlePos);
+        while (Vector2.Distance(transform.position, middlePos) > 0.1f)
+        {
+            Debug.Log("플레이어 : " + transform.position );            
+            transform.position = Vector3.MoveTowards(transform.position, middlePos, Time.deltaTime * 10);
+            yield return null;
+        }
+        transform.position = middlePos;
+        //transform.Translate(middlePos);
     }
 
     //공격 함수
@@ -201,12 +224,10 @@ public class Boss : MonoBehaviour, IHit
                 if (attackCount >= 4) // 5번째에 스킬
                 {
                     CloseSkill();
-                    anim.SetBool("closeSkill", isAttack);
                 }
                 else
                 {
                     CloseAttack();
-                    anim.SetBool("closeAttack", isAttack);
                 }
             }
             else if (bossPhase == 2)
@@ -214,12 +235,10 @@ public class Boss : MonoBehaviour, IHit
                 if (attackCount >= 4)
                 {
                     FarSkill();
-                    anim.SetBool("farSkill", isAttack);
                 }
                 else
                 {
                     FarAttack();
-                    anim.SetBool("farAttack", isAttack);
                 }
             }
             realAttack = bossStat.att * addAtt;
@@ -231,7 +250,7 @@ public class Boss : MonoBehaviour, IHit
     {
         if (boundary)
         {
-            anim.SetBool("closeAttack", isAttack);
+            anim.SetTrigger("closeAttack");
             addAtt = 1;
             isAttack = false;
             Debug.Log("closeAttack");
@@ -243,7 +262,7 @@ public class Boss : MonoBehaviour, IHit
     {
         if (boundary)
         {
-            anim.SetBool("closeSkill", isAttack);
+            anim.SetTrigger("closeSkill");
             addAtt = 10;
             isAttack = false;
             Debug.Log("closeSkill");
@@ -254,7 +273,7 @@ public class Boss : MonoBehaviour, IHit
     void FarAttack()
     {
         GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
-        anim.SetBool("farAttack", isAttack);
+        anim.SetTrigger("farAttack");
         addAtt = 5;
         isAttack = false;
         Debug.Log("farAttack");
@@ -263,7 +282,8 @@ public class Boss : MonoBehaviour, IHit
 
     void FarSkill()
     {
-        anim.SetBool("farSkill", isAttack);
+        GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
+        anim.SetTrigger("farSkill");
         addAtt = 15;
         isAttack = false;
         Debug.Log("farSkill");
