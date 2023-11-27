@@ -5,7 +5,7 @@ using UnityEngine;
 public class MonsterBullet : MonoBehaviour
 {
     private Rigidbody2D rb;
-    float bulletSpeed = 1000f;
+    public float bulletSpeed = 1000f;
 
     Transform playerPos;
     Vector3 dir;
@@ -13,8 +13,9 @@ public class MonsterBullet : MonoBehaviour
     private void Start()
     {
         playerPos = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        dir = playerPos.position - transform.position;
-        
+        dir = playerPos.position - transform.position; // 이러면 직선 공격
+
+
     }
     private void Update()
     {
@@ -24,6 +25,14 @@ public class MonsterBullet : MonoBehaviour
             Destroy(gameObject, 5f);
         }
     }
+    private void FixedUpdate()
+    {
+        // dir = playerPos.position - transform.position; // 이러면 유도탄
+    }
+    //public void SetDirection(Vector3 newDirection)  // 사용안함
+    //{
+    //    dir = newDirection.normalized;
+    //}
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

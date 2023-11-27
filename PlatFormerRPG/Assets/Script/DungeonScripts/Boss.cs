@@ -4,13 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Constructure;
 
-// 탄막 구현 제대로하기
-// 페이즈 넘어갈때 지정한 위치로 안가고 멈추는 이유
-// 벽뚫기 구현
-// 몬스터 와리가리 
-// 프로덕트 만들고 몬스터 랑 보스 겹치는거 상속
-
-
 public class Boss : Object
 {
     
@@ -234,13 +227,33 @@ public class Boss : Object
         attackCount++;
     }
 
+    //void FarSkill() // 원기옥 느낌
+    //{
+    //    anim.SetTrigger("farSkill");
+    //    addAtt = 15;
+    //    numberOfBullets = 8;
+    //    angleStep = 360f / numberOfBullets;
+    //    bulletRadius = 1.5f; 
+
+    //    for (int i = 0; i < numberOfBullets; i++)
+    //    {
+    //        angle = i * angleStep;
+    //        float x = bulletSpawnPos.transform.position.x + bulletRadius * Mathf.Cos(Mathf.Deg2Rad * angle);
+    //        float y = bulletSpawnPos.transform.position.y + bulletRadius * Mathf.Sin(Mathf.Deg2Rad * angle);
+
+    //        Vector3 bulletPosition = new Vector3(x, y, bulletSpawnPos.transform.position.z);
+    //        Quaternion bulletRotation = Quaternion.Euler(0f, 0f, angle);
+    //        GameObject monsterBullet = Instantiate(bulletPrefab, bulletPosition, bulletRotation);
+    //    }
+    //    attackCount = 0;
+    //}
     void FarSkill() // 원기옥 느낌
     {
         anim.SetTrigger("farSkill");
         addAtt = 15;
         numberOfBullets = 8;
         angleStep = 360f / numberOfBullets;
-        bulletRadius = 1.5f; 
+        bulletRadius = 1.5f;
 
         for (int i = 0; i < numberOfBullets; i++)
         {
@@ -254,7 +267,6 @@ public class Boss : Object
         }
         attackCount = 0;
     }
-
 
     //피격
     public override void Hit(float damage, Vector3 dir)
