@@ -19,8 +19,8 @@ public class MonsterManager : Singleton<MonsterManager>
 
     Spawn spawn;
     GameObject tmpobj;//임시변수
-    //Queue<Monster> objectPool = new Queue<Monster>();
-    Dictionary<int, Queue<Monster>> monsterObjectPool = new Dictionary<int, Queue<Monster>>();
+    Queue<Monster> objectPool = new Queue<Monster>();
+    //Dictionary<int, Queue<Monster>> monsterObjectPool = new Dictionary<int, Queue<Monster>>();
 
     List<GameObject> allMonsterList = new List<GameObject>();
 
@@ -34,40 +34,49 @@ public class MonsterManager : Singleton<MonsterManager>
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public void SetMonsterInfo() // 몬스터 프리팹 생성 후 큐랑 리스트에 담기 몬스터 스탯 저장
     {
-        for (int i = 0; i < 2; i++)
+        //for (int i = 0; i < 2; i++)
+        //{
+        //    monsterObjectPool.Add(i, new Queue<Monster>());
+        //    for (int j = 0; j < 10; j++)
+        //    {
+        //        tmpobj = Instantiate(monsterPrefabs[i], this.transform.GetChild(0));
+        //        monsterObjectPool[i].Enqueue(tmpobj.GetComponent<Monster>());// Monster a = new flymonster();
+        //        tmpobj.SetActive(false);
+        //        allMonsterList.Add(tmpobj);
+        //    }
+        //}
+        for (int i = 0; i < 10; i++)
         {
-            monsterObjectPool.Add(i, new Queue<Monster>());
-            for (int j = 0; j < 10; j++)
-            {
-                tmpobj = Instantiate(monsterPrefabs[i], this.transform.GetChild(0));
-                monsterObjectPool[i].Enqueue(tmpobj.GetComponent<Monster>());// Monster a = new flymonster();
-                tmpobj.SetActive(false);
-                allMonsterList.Add(tmpobj);
-            }
+            tmpobj = Instantiate(monsterPrefabs[Random.Range(0, monsterPrefabs.Length)], this.transform.GetChild(0));
+            objectPool.Enqueue(tmpobj.GetComponent<Monster>());
+            tmpobj.SetActive(false);
+            allMonsterList.Add(tmpobj);
+            
         }
+
     }
+    
 
-
-    public Monster GetMonsterFromPool(int monsterNum)
+    public Monster GetMonsterFromPool(/*int 몬스터종류번호*/)
     {
-        if (monsterObjectPool[monsterNum].Count > 0)
+        //return monsterObjectPool[몬스터종류번호].Dequeue();
+        if (objectPool.Count > 0) //오브젝트 풀에 내용물이 있다면~
         {
-            return monsterObjectPool[monsterNum].Dequeue();
-
+            return objectPool.Dequeue();
         }
         else
         {
-            tmpobj = Instantiate(monsterPrefabs[monsterNum], this.transform.GetChild(0));
+            tmpobj = Instantiate(monsterPrefabs[Random.Range(0, monsterPrefabs.Length)]);
             allMonsterList.Add(tmpobj);
             return tmpobj.GetComponent<Monster>();
         }
     }
-
+     
     public IEnumerator GenerateMonster() // 몬스터 생성 시간 설정 후 스폰
     {
         while (true)
