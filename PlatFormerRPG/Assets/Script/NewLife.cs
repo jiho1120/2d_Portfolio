@@ -13,10 +13,18 @@ public class NewLife : MonoBehaviour
     public Text InputText;
     public GameObject OkDialog;
     public GameObject NotDialog;
+    public GameObject SeletedWarrior;
+    public GameObject SeletedDragon;
     private string OkName;
     
     //private Dictionary<AllEnum.JobType, int> jobTypeValues = new Dictionary<AllEnum.JobType, int>();
-    //private AllEnum.JobType jobtype;
+    public static AllEnum.Type jobtype;
+
+    private void Start()
+    {
+        UIManager.Instance.OffUiScript();
+    }
+
     public void SeleteCharacterHuman()
     {
         Character_Human.SetActive(true);
@@ -25,9 +33,18 @@ public class NewLife : MonoBehaviour
             Character_Ryu.SetActive(false);
         }
 
-        //jobtype = AllEnum.JobType.Human;
+        jobtype = AllEnum.Type.Warrior;
+        SeletedWarrior.SetActive(true);
+        Invoke("SeletedWarriorActive",1f);  
+        
+    }
+    public void SeletedWarriorActive()
+    {
+        SeletedWarrior.SetActive(false);
+        
     }
 
+    
     public void SeleteCharacterRyu()
     {
         Character_Ryu.SetActive(true);
@@ -36,29 +53,37 @@ public class NewLife : MonoBehaviour
             Character_Human.SetActive(false);
         }
 
-        //jobtype = AllEnum.JobType.Ryu;
+        jobtype = AllEnum.Type.Dragon;
+        SeletedDragon.SetActive(true);
+        Invoke("SeletedDragonActive",0.3f);  
+        
     }
+    
+    public void SeletedDragonActive()
+    {
+        SeletedDragon.SetActive(false);
+        
+        
+    }
+
+    
 
     public void OkButton()
     {
         if (String.IsNullOrEmpty(InputText.text))
         {
-            Debug.Log("내용확인 = "+InputText.text);
             NotDialog.SetActive(true);
-            Debug.Log("캐릭터 생성 실패");
             Invoke("NotOkDialogDisappear",2f);  
             
         }
         else
         {
-            Debug.Log("내용확인 = "+InputText.text);
             OkDialog.SetActive(true);
-            Debug.Log("캐릭터 생성 성공");
             OkName = InputText.text;
-            // 플레이어 매니져에 데이터를 보낼 코드위치
-            // 이름, 직업만 보냄
-            // 매개변수로 이름 직업 보내야됨
+            PlayerManager.Instance.GetType(jobtype); // 이름, 직업만 보냄
+            PlayerManager.Instance.GetName(OkName);
             Invoke("OKDialogDisappear",2f);
+            UIManager.Instance.OnUiScript();
             SceneManager.LoadScene("VillageScene");
         }
     }

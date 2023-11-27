@@ -7,11 +7,11 @@ TagManager:
   - GroundEnemy
   - FlyEnemy
   - Ground
-  - Boss
+  - MonsterHitBox
   - Potal
   - BossWeapon
-  - MonsterBullet
-  - Wall
+  - Dust
+  - BackGround
   layers:
   - Default
   - TransparentFX

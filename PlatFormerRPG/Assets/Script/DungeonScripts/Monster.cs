@@ -1,41 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 using static Constructure;
-using static UnityEngine.GraphicsBuffer;
 
 public class Monster : MonoBehaviour, IHit
 {
-    protected Vector3 scale = Vector3.one;
+    Vector3 scale = Vector3.one;
     Vector3 vec = Vector3.right;
-    Vector3 dir = Vector3.zero;
 
-    public float knockBack = 1;
-    public float realAttack; // 나중에 공격력에다 추가 공격력 더해서 반환하는 최종 플레이어가 입을 데미지
-    float addAtt;
     float speedMin = 1;
     float speedMax = 2;
-    float xDifference;
-    float yDifference;
+    float speed;
+    bool isMove = false;
+    bool IsLeft = true;
 
-    protected float speed;
-    protected bool isMove = false;
-    protected bool IsLeft = true;
-    protected bool boundary = false;
-    protected float errorMargin;
-    protected float timeAfterAttack;
-    protected float attackRate; // 공격주기
+    Rigidbody2D rigid;
+    SpriteRenderer spren;
+    Animator anim;
+    Coroutine enemyCor = null;
 
-    protected Transform target;
-    protected Rigidbody2D rigid;
-    protected SpriteRenderer spren;
-    protected Animator anim;
-    protected Coroutine enemyCor = null;
     public Constructure.MonsterStat monsterStat;
 
-    public void SetMonsterSprite(Sprite _spr)
+
+    public void SetMonsterSprite(Sprite _spr) // 몬스터 매니저로 옮기고 싶은데 힘들다
     {
         if (spren == null)
         {
@@ -47,71 +34,83 @@ public class Monster : MonoBehaviour, IHit
 
     void Start()
     {
+        rigid = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        monsterStat = new Constructure.MonsterStat(DungeonManager.Instance.dungeonNum);
+        Debug.Log($"{monsterStat.hP}");
+
+
+        MonsterStartCoroutine();
     }
 
     // Update is called once per frame
     void Update()
     {
+        MonsterAct();
     }
 
-    public void basicMove()
+    public void MonsterStartCoroutine()
+    {
+        enemyCor = StartCoroutine(MonsterMove());
+    }
+
+    protected virtual void MonsterAct()
+    {
+        basicMove();
+
+    }
+
+    void basicMove()
     {
         if (isMove)
         {
-            scale.x = (IsLeft ? -1f : 1f);
+            scale.x = (IsLeft ? -1 : 1);
             transform.localScale = scale;
-            transform.Translate(vec * speed * (IsLeft ? -1 : 1) * Time.fixedDeltaTime);
+            transform.Translate(vec * speed * (IsLeft ? -1 : 1) * Time.deltaTime);
+
+            if (transform.position.x <= -14)
+            {
+                IsLeft = false;
+            }
+            else if (transform.position.x >= 14)
+            {
+                IsLeft = true;
+            }
         }
     }
 
-
-    public IEnumerator MonsterMove()
+    IEnumerator MonsterMove()
     {
         while (true)
         {
             isMove = true;
             anim.SetBool("isMove", isMove);
-            anim.SetBool("isLeft", isMove);
+            anim.SetBool("isLeft", IsLeft);
             yield return new WaitForSeconds(Random.Range(1f, 3f));
             isMove = false;
             anim.SetBool("isMove", isMove);
-            anim.SetBool("isLeft", isMove);
             IsLeft = Random.Range(0, 2) == 0 ? true : false;
             yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         }
     }
-
-    public void LimitArea()
+    public void findPlayer()
     {
-        if (transform.position.x <= -14)
-        {
-            IsLeft = false;
-        }
-        else if (transform.position.x >= 14)
-        {
-            IsLeft = true;
-        }
+        //GameManager.Instance.player.transform.position;
+        //anim.SetBool("PlyerFind", playerfind);
+
+    }
+    public void AttackPlayer()
+    {
+        //if (PlayerStat.hP <= 0)
+        //{
+        //    return;
+        //}
+
+        //anim.SetBool("AttackPlayer", playerfind);
+
+        
     }
 
-    public void Boundary()
-    {
-        xDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().x - this.transform.position.x);
-        yDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().y - this.transform.position.y);
-
-        if (xDifference < errorMargin && yDifference < errorMargin)
-        {
-            boundary = true;
-        }
-        else
-        {
-            boundary = false;
-        }
-    }
-
-
-    public virtual void Attack() 
-    {
-    }
     public void Hit(float damage, Vector3 dir)
     {
         if (monsterStat.hP <= 0)
@@ -120,36 +119,23 @@ public class Monster : MonoBehaviour, IHit
         }
 
         this.monsterStat.hP = Mathf.Clamp(this.monsterStat.hP - damage, 0, this.monsterStat.maxHP);
-        anim.SetTrigger("hit");
+        //slider.value = this.monsterStat.hP;
+        //anim.SetTrigger("Hit");
         rigid.AddForce(dir, ForceMode2D.Impulse);
     }
     public float GetAtt()
     {
-        return  realAttack = monsterStat.att * addAtt;
+        return monsterStat.att;
     }
 
     public void isDead()
     {
-        if (this.monsterStat.hP <= 0)
-        {
-            //PlayerManager.Instance.player.myStat.ExpVal += MonsterManager.Instance.monsterStat.giveExp;
-            // PlayerManager.Instance.player.myStat.money += MonsterManager.Instance.monsterStat.giveMoney;
-            this.gameObject.SetActive(false);
-        }
-        
+        //플레이어 경험치 += MonsterManager.Instance.monsterStat.giveExp;
+        // 플레이어 돈 += MonsterManager.Instance.monsterStat.giveMoney;
+
+
+        this.gameObject.SetActive(false);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            dir = (this.transform.position - collision.transform.position).normalized;
-            Hit(20, dir);
-            Debug.Log(this.monsterStat.hP);
-        }
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Wall"))
-        {
-            IsLeft = true ? false : true; 
-        }
-    }
+    
 }

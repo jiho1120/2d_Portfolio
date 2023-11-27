@@ -2,19 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : Singleton<GameManager>
+
+
+public class GameManager : MonoBehaviour
 {
-    public GameObject player;
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-    
+    // void Awake()
+    // {
+    //     InitializeSingletons();
+    // }
+    //
+    // void InitializeSingletons()
+    // {
+    //     UIManager.Initialize();
+    //     // Add other singleton initializations here if needed
+    // }
 }
