@@ -12,20 +12,20 @@ public class GroundMonster : Monster
     {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        monsterStat = new Constructure.MonsterStat(DungeonManager.Instance.dungeonNum);
+        objectStat = new Constructure.MonsterStat(DungeonManager.Instance.dungeonNum);
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         StartCoroutine(MonsterMove());
         attackRate = 3f;
         timeAfterAttack = 0;
         errorMargin = 4;
-        realAttack = monsterStat.att;
+        realAttack = objectStat.att;
         ownSpeed = speed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        LimitArea();
+        LimitArea(14f);
         Boundary();
         timeAfterAttack += Time.deltaTime;
         Attack();

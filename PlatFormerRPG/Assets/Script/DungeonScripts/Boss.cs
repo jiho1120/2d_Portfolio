@@ -1,49 +1,30 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 using static Constructure;
 
-// Åº¸· ±¸Çö Á¦´ë·ÎÇÏ±â
-// ÆäÀÌÁî ³Ñ¾î°¥¶§ ÁöÁ¤ÇÑ À§Ä¡·Î ¾È°¡°í ¸ØÃß´Â ÀÌÀ¯
-// º®¶Õ±â ±¸Çö
-// ¸ó½ºÅÍ ¿Í¸®°¡¸® 
-// ÇÁ·Î´öÆ® ¸¸µé°í ¸ó½ºÅÍ ¶û º¸½º °ãÄ¡´Â°Å »ó¼Ó
+// íƒ„ë§‰ êµ¬í˜„ ì œëŒ€ë¡œí•˜ê¸°
+// í˜ì´ì¦ˆ ë„˜ì–´ê°ˆë•Œ ì§€ì •í•œ ìœ„ì¹˜ë¡œ ì•ˆê°€ê³  ë©ˆì¶”ëŠ” ì´ìœ 
+// ë²½ëš«ê¸° êµ¬í˜„
+// ëª¬ìŠ¤í„° ì™€ë¦¬ê°€ë¦¬ 
+// í”„ë¡œë•íŠ¸ ë§Œë“¤ê³  ëª¬ìŠ¤í„° ë‘ ë³´ìŠ¤ ê²¹ì¹˜ëŠ”ê±° ìƒì†
 
 
-public class Boss : MonoBehaviour, IHit
+public class Boss : Object
 {
-
-    public Constructure.MonsterStat bossStat;
-
-    float speed = 3;
-    int bossPhase = 1;
-    int attackCount = 0;
-    bool isMove = true;
-    bool IsLeft = true;
-    bool boundary = false;
-    bool checkPhase = true;
-    float realAttack;
-    float addAtt;
-    float xDifference;
-    float yDifference;
-    float errorMargin;
-
-    Vector3 sclaeVec = new Vector3(0.5f, 0.5f, 0.5f);
+    
     Vector3 telpoVec = new Vector3(2, 0, 0);
-    Vector3 vec = Vector3.right;
-    Vector3 dir = Vector3.zero;
     Vector3 middlePos = new Vector3(0, -5, 0);
 
+    int bossPhase = 1;
+    int attackCount = 0;
+    bool checkPhase = true;
 
     public GameObject bulletPrefab;
     public GameObject bulletSpawnPos;
     public Slider hpSlider;
 
-    Rigidbody2D rigid;
-    Animator anim;
     Coroutine bossMoveCor = null;
     Coroutine bossAttCor = null;
 
@@ -51,17 +32,18 @@ public class Boss : MonoBehaviour, IHit
     // Start is called before the first frame update
     void Start()
     {
+        scale = new Vector3(0.5f, 0.5f, 0.5f);
+        speed = 3;
+        isMove = true;
+        errorMargin = 10f;
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         hpSlider = GetComponent<Slider>();
-        //Å×½ºÆ®ÇÏ·Á°í ´É·ÂÄ¡ ÁÙ¿©³ğ
-        bossStat = new Constructure.MonsterStat(10); // DungeonManager.Instance.dungeonNum À¸·Î ¼¼ÆÃÇÏ¸é ¸Ê¿­¶§ ¼ıÀÚ°¡ ¹Ù²ñ
-        //hpSlider.maxValue = bossStat.maxHP;
+        objectStat = new Constructure.MonsterStat(10); // DungeonManager.Instance.dungeonNum ìœ¼ë¡œ ì„¸íŒ…í•˜ë©´ ë§µì—´ë•Œ ìˆ«ìê°€ ë°”ë€œ
+        //hpSlider.maxValue = ObjectStat.maxHP;
         bossMoveCor = StartCoroutine(Bossmove());
         bossAttCor = StartCoroutine(AttackCor());
         InvokeRepeating("Teleport", 1f, 10f);
-        //if (bossMoveCor!=null)        
-        //StopCoroutine(bossMoveCor);
     }
 
     // Update is called once per frame
@@ -69,12 +51,12 @@ public class Boss : MonoBehaviour, IHit
     {
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            bossStat.hP = bossStat.maxHP * 0.4f;
-            Debug.Log("bossStat.hP    " + bossStat.hP);
+            objectStat.hP = objectStat.maxHP * 0.4f;
+            Debug.Log("objectStat.hP    " + objectStat.hP);
         }
-        sclaeVec.x = (IsLeft ? 0.5f : -0.5f);
+        scale.x = (IsLeft ? 0.5f : -0.5f);
         chcekBossPhase();
-        LimitArea();
+        LimitArea(12f);
         isDead();
 
         if (bossPhase == 1)
@@ -95,57 +77,28 @@ public class Boss : MonoBehaviour, IHit
     {
         if (isMove)
         {
-            transform.localScale = sclaeVec;
+            transform.localScale = scale;
             transform.Translate(vec * speed * (IsLeft ? -1 : 1) * Time.fixedDeltaTime);
         }
     }
 
-    //±âº» ´É·Â
+    //ê¸°ë³¸ ëŠ¥ë ¥
     void chcekBossPhase()
     {
-        if(checkPhase)
+        if (checkPhase)
         {
-            if (bossStat.hP <= (bossStat.maxHP * 0.5))
+            if (objectStat.hP <= (objectStat.maxHP * 0.5))
             {
                 bossPhase++;
                 checkPhase = false;
             }
         }
-        
+
     }
 
-    void Boundary()
-    {
-        xDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().x - this.transform.position.x); //Àı´ñ°ª
-        yDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().y - this.transform.position.y);
-        errorMargin = 10f;
-
-        if (xDifference < errorMargin && yDifference < errorMargin)
-        {
-            boundary = true;
-        }
-        else
-        {
-            boundary = false;
-        }
-    }
-
-    void LimitArea()
-    {
-        if (transform.position.x <= -12)
-        {
-            IsLeft = false;
-        }
-        else if (transform.position.x >= 12)
-        {
-            IsLeft = true;
-        }
-    }
-
-
-    //ÀÌµ¿°ü·ÃÇÔ¼ö 
+    //ì´ë™ê´€ë ¨í•¨ìˆ˜ 
     IEnumerator Bossmove()
-    {                
+    {
         while (bossPhase == 1)
         {
             isMove = true;
@@ -154,14 +107,14 @@ public class Boss : MonoBehaviour, IHit
             yield return new WaitForSeconds(Random.Range(1f, 3f));
             isMove = false;
             anim.SetBool("isMove", isMove);
-            yield return new WaitForSeconds(Random.Range(0.5f, 1f));            
+            yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         }
 
         if (bossPhase == 2)
         {
             StopCoroutine(bossMoveCor);
             StartCoroutine(SetMiddlePosition());
-            bossStat.hP = bossStat.maxHP * 0.5f;
+            objectStat.hP = objectStat.maxHP * 0.5f;
         }
     }
 
@@ -169,7 +122,7 @@ public class Boss : MonoBehaviour, IHit
     {
         if (!boundary)
         {
-            if (PlayerManager.Instance.GetPlayerPosition().x <= 0) // º¸½º°¡ ¸Ê¾ÈÂÊ¿¡ µé¾î¿À°Ô
+            if (PlayerManager.Instance.GetPlayerPosition().x <= 0) // ë³´ìŠ¤ê°€ ë§µì•ˆìª½ì— ë“¤ì–´ì˜¤ê²Œ
             {
                 this.transform.position = (PlayerManager.Instance.GetPlayerPosition() + telpoVec);
                 //IsLeft = true;
@@ -185,7 +138,7 @@ public class Boss : MonoBehaviour, IHit
         }
     }
 
-    void WatchPlayer() // ¼ø°£ÀÌµ¿ÀÌ³ª °ø°İ½Ã ÇÃ·¹ÀÌ¾î º¸±âÀ§ÇÑ ÇÔ¼ö
+    void WatchPlayer() // ìˆœê°„ì´ë™ì´ë‚˜ ê³µê²©ì‹œ í”Œë ˆì´ì–´ ë³´ê¸°ìœ„í•œ í•¨ìˆ˜
     {
         if (PlayerManager.Instance.GetPlayerPosition().x < this.transform.position.x)
         {
@@ -195,15 +148,15 @@ public class Boss : MonoBehaviour, IHit
         {
             IsLeft = false;
         }
-        sclaeVec.x = (IsLeft ? 0.5f : -0.5f);
+        scale.x = (IsLeft ? 0.5f : -0.5f);
     }
 
     IEnumerator SetMiddlePosition()
     {
-        Debug.Log("µµÂø À§Ä¡ : " + middlePos);
+        Debug.Log("ë„ì°© ìœ„ì¹˜ : " + middlePos);
         while (Vector2.Distance(transform.position, middlePos) > 0.1f)
         {
-            Debug.Log("ÇÃ·¹ÀÌ¾î : " + transform.position );            
+            Debug.Log("í”Œë ˆì´ì–´ : " + transform.position);
             transform.position = Vector3.MoveTowards(transform.position, middlePos, Time.deltaTime * 10);
             yield return null;
         }
@@ -211,7 +164,7 @@ public class Boss : MonoBehaviour, IHit
         //transform.Translate(middlePos);
     }
 
-    //°ø°İ ÇÔ¼ö
+    //ê³µê²© í•¨ìˆ˜
     IEnumerator AttackCor()
     {
         while (true)
@@ -219,7 +172,7 @@ public class Boss : MonoBehaviour, IHit
             WatchPlayer();
             if (bossPhase == 1)
             {
-                if (attackCount >= 4) // 5¹øÂ°¿¡ ½ºÅ³
+                if (attackCount >= 4) // 5ë²ˆì§¸ì— ìŠ¤í‚¬
                 {
                     CloseSkill();
                 }
@@ -239,7 +192,7 @@ public class Boss : MonoBehaviour, IHit
                     FarAttack();
                 }
             }
-            realAttack = bossStat.att * addAtt;
+            realAttack = objectStat.att * addAtt;
             yield return new WaitForSeconds(3f);
         }
     }
@@ -284,44 +237,22 @@ public class Boss : MonoBehaviour, IHit
         attackCount = 0;
     }
 
-    //ÇÇ°İ
-    public void Hit(float damage, Vector3 dir)
+    //í”¼ê²©
+    public override void Hit(float damage, Vector3 dir)
     {
-        if (bossStat.hP <= 0)
-        {
-            return;
-        }
-
-        this.bossStat.hP = Mathf.Clamp(this.bossStat.hP - damage, 0, this.bossStat.maxHP);
-        anim.SetTrigger("hit");
-        //hpSlider.value = bossStat.hP;
-        //rigid.AddForce(dir, ForceMode2D.Impulse); ³Ë¹é¾ÈÁÙ°ÅÀÓ 
-    }
-    public float GetAtt()
-    {
-        return realAttack;
+        base.Hit(damage, dir);
+        //hpSlider.value = objectStat.hP;
     }
 
-    //Á×À½
-    public void isDead()
-    {
-        if (bossStat.hP <= 0)
-        {
-            //PlayerManager.Instance.player.myStat.ExpVal += bossStat.giveExp;
-            //PlayerManager.Instance.player.myStat.money += bossStat.giveMoney;
-            gameObject.SetActive(false);
-        }
-    }
-
-    //Æ®¸®°Å
+    //íŠ¸ë¦¬ê±°
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player")) // ¹«±â·Î¹Ù²ã¾ßÇÔ
+        if (collision.gameObject.CompareTag("Player")) // ë¬´ê¸°ë¡œë°”ê¿”ì•¼í•¨
         {
             dir = (this.transform.position - collision.transform.position).normalized;
             Hit(20, dir); //PlayerManager.Instance.player.myStat.Att;
-            Debug.Log(bossStat.hP);
+            Debug.Log(objectStat.hP);
         }
     }
 

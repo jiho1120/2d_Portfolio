@@ -6,34 +6,13 @@ using UnityEngine;
 using static Constructure;
 using static UnityEngine.GraphicsBuffer;
 
-public class Monster : MonoBehaviour, IHit
+public class Monster : Object
 {
-    protected Vector3 scale = Vector3.one;
-    Vector3 vec = Vector3.right;
-    Vector3 dir = Vector3.zero;
-
     public float knockBack = 1;
-    public float realAttack; // 나중에 공격력에다 추가 공격력 더해서 반환하는 최종 플레이어가 입을 데미지
-    float addAtt;
     float speedMin = 1;
     float speedMax = 2;
-    float xDifference;
-    float yDifference;
-
-    protected float speed;
-    protected bool isMove = false;
-    protected bool IsLeft = true;
-    protected bool boundary = false;
-    protected float errorMargin;
-    protected float timeAfterAttack;
-    protected float attackRate; // 공격주기
-
-    protected Transform target;
-    protected Rigidbody2D rigid;
     protected SpriteRenderer spren;
-    protected Animator anim;
     protected Coroutine enemyCor = null;
-    public Constructure.MonsterStat monsterStat;
 
     public void SetMonsterSprite(Sprite _spr)
     {
@@ -81,62 +60,16 @@ public class Monster : MonoBehaviour, IHit
         }
     }
 
-    public void LimitArea()
-    {
-        if (transform.position.x <= -14)
-        {
-            IsLeft = false;
-        }
-        else if (transform.position.x >= 14)
-        {
-            IsLeft = true;
-        }
-    }
 
-    public void Boundary()
-    {
-        xDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().x - this.transform.position.x);
-        yDifference = Mathf.Abs(PlayerManager.Instance.GetPlayerPosition().y - this.transform.position.y);
-
-        if (xDifference < errorMargin && yDifference < errorMargin)
-        {
-            boundary = true;
-        }
-        else
-        {
-            boundary = false;
-        }
-    }
 
 
     public virtual void Attack() 
     {
     }
-    public void Hit(float damage, Vector3 dir)
+    public override void Hit(float damage, Vector3 dir)
     {
-        if (monsterStat.hP <= 0)
-        {
-            return;
-        }
-
-        this.monsterStat.hP = Mathf.Clamp(this.monsterStat.hP - damage, 0, this.monsterStat.maxHP);
-        anim.SetTrigger("hit");
+        base.Hit(damage, dir);
         rigid.AddForce(dir, ForceMode2D.Impulse);
-    }
-    public float GetAtt()
-    {
-        return  realAttack = monsterStat.att * addAtt;
-    }
-
-    public void isDead()
-    {
-        if (this.monsterStat.hP <= 0)
-        {
-            //PlayerManager.Instance.player.myStat.ExpVal += MonsterManager.Instance.monsterStat.giveExp;
-            // PlayerManager.Instance.player.myStat.money += MonsterManager.Instance.monsterStat.giveMoney;
-            this.gameObject.SetActive(false);
-        }
-        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -145,7 +78,7 @@ public class Monster : MonoBehaviour, IHit
         {
             dir = (this.transform.position - collision.transform.position).normalized;
             Hit(20, dir);
-            Debug.Log(this.monsterStat.hP);
+            Debug.Log(this.objectStat.hP);
         }
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Wall"))
         {
