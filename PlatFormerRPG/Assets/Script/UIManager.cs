@@ -127,6 +127,21 @@ public class UIManager : Singleton<UIManager>
     {
         Debug.Log(name+" 라는 이름이 정상적으로 입력이 되었습니다.");
     }
+
+    public void SetType(AllEnum.Type type)
+    {
+        if (type == AllEnum.Type.Warrior)
+        {
+            TypeW.SetActive(true);
+            TypeD.SetActive(false);
+        }
+
+        else if (type == AllEnum.Type.Dragon)
+        {
+            TypeD.SetActive(true);
+            TypeW.SetActive(false); 
+        }
+    }
     #region 버튼 함수
     public void OnPause(bool pauseStatus)
     {

@@ -80,8 +80,9 @@ public class NewLife : MonoBehaviour
         {
             OkDialog.SetActive(true);
             OkName = InputText.text;
-            PlayerManager.Instance.GetType(jobtype); // 이름, 직업만 보냄
-            PlayerManager.Instance.GetName(OkName);
+            PlayerManager.Instance.SetType(jobtype); // 이름, 직업만 보냄
+            UIManager.Instance.SetName(OkName);
+            UIManager.Instance.SetType(jobtype);
             Invoke("OKDialogDisappear",2f);
             UIManager.Instance.OnUiScript();
             SceneManager.LoadScene("VillageScene");
