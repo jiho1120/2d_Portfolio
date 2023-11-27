@@ -21,7 +21,7 @@ public class Boss : MonoBehaviour, IHit
     bool IsLeft = true;
     bool isAttack = false;
     bool boundary = false;
-    public float realAttack;
+    float realAttack;
     float addAtt;
     float xDifference;
     float yDifference;
@@ -82,8 +82,6 @@ public class Boss : MonoBehaviour, IHit
             return;
         }
     }
-
-    
 
     private void FixedUpdate()
     {

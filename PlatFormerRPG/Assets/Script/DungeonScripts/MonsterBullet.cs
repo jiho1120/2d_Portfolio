@@ -5,17 +5,20 @@ using UnityEngine;
 public class MonsterBullet : MonoBehaviour
 {
     private Rigidbody2D rb;
-    float bulletSpeed;
+    float bulletSpeed = 1000f;
 
     Transform playerPos;
     Vector3 dir;
 
     private void Start()
     {
-        bulletSpeed = 50000f;
         playerPos = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         dir = playerPos.position - transform.position;
-        GetComponent<Rigidbody2D>().AddForce(dir.normalized * Time.deltaTime* bulletSpeed);
+        
+    }
+    private void Update()
+    {
+        GetComponent<Rigidbody2D>().AddForce(dir.normalized  * bulletSpeed * Time.deltaTime);
         if (gameObject != null)
         {
             Destroy(gameObject, 5f);
