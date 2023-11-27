@@ -23,7 +23,6 @@ public class Boss : MonoBehaviour, IHit
     int attackCount = 0;
     bool isMove = true;
     bool IsLeft = true;
-    bool isAttack = false;
     bool boundary = false;
     bool checkPhase = true;
     float realAttack;
@@ -217,7 +216,6 @@ public class Boss : MonoBehaviour, IHit
     {
         while (true)
         {
-            isAttack = true;
             WatchPlayer();
             if (bossPhase == 1)
             {
@@ -252,7 +250,6 @@ public class Boss : MonoBehaviour, IHit
         {
             anim.SetTrigger("closeAttack");
             addAtt = 1;
-            isAttack = false;
             Debug.Log("closeAttack");
         }
         attackCount++;
@@ -264,7 +261,6 @@ public class Boss : MonoBehaviour, IHit
         {
             anim.SetTrigger("closeSkill");
             addAtt = 10;
-            isAttack = false;
             Debug.Log("closeSkill");
         }
         attackCount = 0;
@@ -275,7 +271,6 @@ public class Boss : MonoBehaviour, IHit
         GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
         anim.SetTrigger("farAttack");
         addAtt = 5;
-        isAttack = false;
         Debug.Log("farAttack");
         attackCount++;
     }
@@ -285,7 +280,6 @@ public class Boss : MonoBehaviour, IHit
         GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
         anim.SetTrigger("farSkill");
         addAtt = 15;
-        isAttack = false;
         Debug.Log("farSkill");
         attackCount = 0;
     }
