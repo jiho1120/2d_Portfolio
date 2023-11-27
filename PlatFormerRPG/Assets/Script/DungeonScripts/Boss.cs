@@ -20,6 +20,12 @@ public class Boss : Object
     int bossPhase = 1;
     int attackCount = 0;
     bool checkPhase = true;
+    
+    //총알
+    int numberOfBullets;
+    float angleStep;
+    float bulletRadius;
+    float angle;
 
     public GameObject bulletPrefab;
     public GameObject bulletSpawnPos;
@@ -221,21 +227,34 @@ public class Boss : Object
 
     void FarAttack()
     {
-        GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
         anim.SetTrigger("farAttack");
+        GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
         addAtt = 5;
         Debug.Log("farAttack");
         attackCount++;
     }
 
-    void FarSkill()
+    void FarSkill() // 원기옥 느낌
     {
-        GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
         anim.SetTrigger("farSkill");
         addAtt = 15;
-        Debug.Log("farSkill");
+        numberOfBullets = 8;
+        angleStep = 360f / numberOfBullets;
+        bulletRadius = 1.5f; 
+
+        for (int i = 0; i < numberOfBullets; i++)
+        {
+            angle = i * angleStep;
+            float x = bulletSpawnPos.transform.position.x + bulletRadius * Mathf.Cos(Mathf.Deg2Rad * angle);
+            float y = bulletSpawnPos.transform.position.y + bulletRadius * Mathf.Sin(Mathf.Deg2Rad * angle);
+
+            Vector3 bulletPosition = new Vector3(x, y, bulletSpawnPos.transform.position.z);
+            Quaternion bulletRotation = Quaternion.Euler(0f, 0f, angle);
+            GameObject monsterBullet = Instantiate(bulletPrefab, bulletPosition, bulletRotation);
+        }
         attackCount = 0;
     }
+
 
     //피격
     public override void Hit(float damage, Vector3 dir)

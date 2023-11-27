@@ -15,7 +15,7 @@ public class DungeonManager : Singleton<DungeonManager>
 
     private void Start()
     {
-        checkDungeonNum(30);
+        checkDungeonNum(40);
         ChangePanelImage();
         CheckGenerateMonsterCoroutine();
         MonsterManager.instance.SetMonsterInfo();
