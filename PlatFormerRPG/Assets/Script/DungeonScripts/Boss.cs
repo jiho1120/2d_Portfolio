@@ -22,7 +22,7 @@ public class Boss : Object
 
     public GameObject bulletPrefab;
     public GameObject bulletSpawnPos;
-    public Slider hpSlider;
+    Slider hpSlider;
 
     Coroutine bossMoveCor = null;
     Coroutine bossAttCor = null;
@@ -37,9 +37,9 @@ public class Boss : Object
         errorMargin = 10f;
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        hpSlider = GetComponent<Slider>();
+        hpSlider = UIManager.Instance.BossHpSlider.GetComponent<Slider>();
         objectStat = new Constructure.MonsterStat(100); // DungeonManager.Instance.dungeonNum 으로 세팅하면 맵열때 숫자가 바뀜
-        //hpSlider.maxValue = ObjectStat.maxHP;
+        UIManager.Instance.BossHpSlider.maxValue = objectStat.maxHP;
         bossMoveCor = StartCoroutine(Bossmove());
         bossAttCor = StartCoroutine(AttackCor());
         InvokeRepeating("Teleport", 1f, 10f);
@@ -48,6 +48,7 @@ public class Boss : Object
     // Update is called once per frame
     void Update()
     {
+        hpSlider.value = objectStat.hP;
         if (Input.GetKeyDown(KeyCode.F1))
         {
             objectStat.hP = objectStat.maxHP * 0.4f;
@@ -254,7 +255,7 @@ public class Boss : Object
     public override void Hit(float damage, Vector3 dir)
     {
         base.Hit(damage, dir);
-        //hpSlider.value = objectStat.hP;
+        
     }
 
     //트리거

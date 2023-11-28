@@ -75,8 +75,7 @@ public class UIManager : Singleton<UIManager>
     {
         hpSlider.value = 0;
         expSlider.value = 100;
-        BossHpSlider.value = 0;
-        BossHpSlider.gameObject.SetActive(false);
+        BossHpSlider.maxValue = 0;
         PotionCount += 3;
         PotionCountText.text = PotionCount.ToString();
 
@@ -239,8 +238,6 @@ public class UIManager : Singleton<UIManager>
         InfoBtnCanvas.SetActive(false);
         OnShopCanvas.SetActive(false);
         OffShopCanvas.SetActive(false);
-        BossHpSlider.gameObject.SetActive(true);
-        
     }
     public void OnInfo()
     {
