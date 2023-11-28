@@ -45,14 +45,20 @@ public class GroundMonster : Monster
         {
             if (timeAfterAttack >= attackRate)
             {
+                if (this.transform.position.x < PlayerManager.Instance.transform.position.x)
+                {
+                    IsLeft = false;
+                }
+                else
+                {
+                    IsLeft = true;
+                }
                 anim.SetTrigger("attack");
                 StartCoroutine(ChangeSpeed());
                 timeAfterAttack = 0f;
-                Debug.Log("µ¹Áø");
             }
         }
     }
-
     IEnumerator ChangeSpeed()
     {
         ownSpeed = speed;

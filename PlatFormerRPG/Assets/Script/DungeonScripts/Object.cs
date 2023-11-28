@@ -98,7 +98,7 @@ public class Object : MonoBehaviour, IHit
             Hit(PlayerManager.Instance.player.Attak(), dir);
             Debug.Log(this.objectStat.hP);
         }
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.CompareTag("Wall"))
         {
             IsLeft = true ? false : true;
         }

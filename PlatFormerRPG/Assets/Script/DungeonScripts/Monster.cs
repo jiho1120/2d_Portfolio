@@ -50,12 +50,12 @@ public class Monster : Object
         {
             isMove = true;
             anim.SetBool("isMove", isMove);
-            anim.SetBool("isLeft", isMove);
+            anim.SetBool("isLeft", IsLeft);
             yield return new WaitForSeconds(Random.Range(1f, 3f));
             isMove = false;
-            anim.SetBool("isMove", isMove);
-            anim.SetBool("isLeft", isMove);
             IsLeft = Random.Range(0, 2) == 0 ? true : false;
+            anim.SetBool("isMove", isMove);
+            anim.SetBool("isLeft", IsLeft);
             yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         }
     }
@@ -72,17 +72,5 @@ public class Monster : Object
         rigid.AddForce(dir, ForceMode2D.Impulse);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            dir = (this.transform.position - collision.transform.position).normalized;
-            Hit(20, dir);
-            Debug.Log(this.objectStat.hP);
-        }
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Wall"))
-        {
-            IsLeft = true ? false : true; 
-        }
-    }
+    
 }
