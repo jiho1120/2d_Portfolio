@@ -264,7 +264,7 @@ public class Boss : Object
         if (collision.gameObject.CompareTag("Player")) // 무기로바꿔야함
         {
             dir = (this.transform.position - collision.transform.position).normalized;
-            Hit(20, dir); //PlayerManager.Instance.player.myStat.Att;
+            Hit(PlayerManager.Instance.player.Attak(), dir);
             Debug.Log(objectStat.hP);
         }
     }

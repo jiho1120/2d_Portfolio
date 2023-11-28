@@ -20,7 +20,6 @@ public class Jump : MonoBehaviour
         if (collider.gameObject.CompareTag("Ground"))
         {
 
-            PlayerManager.Instance.player.isHit = false;
             PlayerManager.Instance.player.jumpCount = 0;
             PlayerManager.Instance.player.rigid.velocity = Vector2.zero;      //미끄럼방지
         }
