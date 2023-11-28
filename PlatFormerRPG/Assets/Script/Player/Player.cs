@@ -11,7 +11,7 @@ public class Player : MonoBehaviour, IAtt
 
     Animator anim;
 
-    Constructure.Stat myStat;       //�÷��̾� ����
+    public Constructure.Stat myStat;       //�÷��̾� ����
     //Allenum
 
     Vector3 vec = Vector3.zero;
@@ -165,11 +165,9 @@ public class Player : MonoBehaviour, IAtt
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Ʈ���ſ���");
         if (other.gameObject.CompareTag("Potal"))
         {
             PlayerManager.Instance.InPotal = true;
-            Debug.Log("��Ż����");
         }
     }
 
@@ -178,7 +176,6 @@ public class Player : MonoBehaviour, IAtt
         if (other.gameObject.CompareTag("Potal"))
         {
             PlayerManager.Instance.InPotal = false;
-            Debug.Log("��Ż���");
         }
     }
 }

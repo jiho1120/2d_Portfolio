@@ -25,7 +25,8 @@ public class UIManager : Singleton<UIManager>
      * 빨간색 슬라이더 : 채력
      * 노란색 슬라이더 : 경험치
      */
-    
+
+    #region 버튼 리스트
     // 버튼 리스트
     public GameObject PauseCanvas;
     public GameObject PauseObj;
@@ -38,26 +39,48 @@ public class UIManager : Singleton<UIManager>
     public GameObject StateInfoOffCanvas;
     public GameObject OnShopCanvas;
     public GameObject OffShopCanvas;
-    
+    #endregion
+
+    #region 게임이 현재 일시정지 중인지 여부를 나타내는 변수
     // 게임이 현재 일시정지 중인지 여부를 나타내는 변수
     public static bool isPaused = false;
-    
+    #endregion
+
+    #region 퀘스트 오브젝트
     // 퀘스트 오브젝트
     public GameObject Quest1;
     public GameObject StateInfoDialog;
     public GameObject ShupUi;
+    #endregion
+    
     
     //public Camera cam;
     //public Image[] coolImg;       //쿨타임 이미지
     public Slider hpSlider;         //HP Bar
     public Slider expSlider;        //EXP Bar
     public Text levelTxt;           //Level Txt
+    public int LevelCount = 0;
     public GameObject TypeW;
     public GameObject TypeD;
     public GameObject UiScript;
-    public Text NameText;
-    public Camera cmera;
-    public Canvas canvas;
+    public Slider BossHpSlider;
+    public int PotionCount = 0;
+    public Text PotionCountText;
+    public Text GoldText;
+    public int TotalGold = 0;
+    public int UseGold = 100;
+    public Constructure.Stat stat;
+
+    private void Start()
+    {
+        hpSlider.value = 0;
+        expSlider.value = 100;
+        BossHpSlider.value = 0;
+        BossHpSlider.gameObject.SetActive(false);
+        PotionCount += 3;
+        PotionCountText.text = PotionCount.ToString();
+
+    }
 
     private void Update()
     {
@@ -85,16 +108,46 @@ public class UIManager : Singleton<UIManager>
             if (PlayerManager.Instance.InPotal == true)
             {
                 Debug.Log("이동");
-                SceneManager.LoadScene("Dungeon");
+                OnDungeon();
             }
             else if (PlayerManager.Instance.InPotal == false)
             {
-                Debug.Log("펄스 입니다");
+                Debug.Log("이동 할 수 없는 상태 입니다");
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            BossHpSlider.value += 100;
+            Debug.Log("보스의 채력을 강제로 채력 0");
+        }
         
-        
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            hpSlider.value += 100;
+            Debug.Log("플레이어의 채력을 강제로 채력 0");
+        }
+
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            TotalGold += 10000;
+            Debug.Log("강제로 보유금액 10000으로 증가");
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            expSlider.value -= 50;
+            Debug.Log("경험치를 강제로 50씩 증가시킴");
+            if (expSlider.value == 0)
+            {
+                Debug.Log("레벨업!");
+                expSlider.value = 100;
+                LevelCount += 1;
+                levelTxt.text = LevelCount.ToString();
+                Debug.Log("레벨"+stat.Level);
+            }
+        }
     }
 
     public void State(Constructure.Stat myStat)
@@ -186,6 +239,7 @@ public class UIManager : Singleton<UIManager>
         InfoBtnCanvas.SetActive(false);
         OnShopCanvas.SetActive(false);
         OffShopCanvas.SetActive(false);
+        BossHpSlider.gameObject.SetActive(true);
         
     }
     public void OnInfo()
@@ -247,6 +301,44 @@ public class UIManager : Singleton<UIManager>
         Time.timeScale = 1; // 게임 시간을 다시 시작함
         isPaused = false;
         
+    }
+
+    #endregion
+
+    #region Potion
+
+    public void UsePotion()
+    {
+        
+        if (PotionCount <= 0 || hpSlider.value == 0)
+        {
+            PotionCount -= 0;
+            PotionCountText.text = PotionCount.ToString();
+            hpSlider.value -= 0;
+        }
+        else
+        {
+            hpSlider.value -= 100;
+            PotionCount -= 1;
+            PotionCountText.text = PotionCount.ToString();
+        }
+    }
+
+    public void GetPotion()
+    {
+        
+        if (TotalGold < UseGold)
+        {
+            Debug.Log("보유금액이 구매하고자 하는 금액보다 적음");
+        }
+        else
+        {
+            Debug.Log("구매완료");
+            
+            TotalGold -= UseGold;
+            PotionCount += 1;
+            PotionCountText.text = PotionCount.ToString();
+        }
     }
 
     #endregion
