@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class Player : MonoBehaviour, IAtt
 {
 
-    public Rigidbody2D rigid;
+    /*public*/ Rigidbody2D rigid;
 
     Animator anim;
 
@@ -34,7 +34,8 @@ public class Player : MonoBehaviour, IAtt
     void Start()
     {
         rigid = transform.GetComponent<Rigidbody2D>();
-        anim = transform.GetComponent<Animator>();
+        //anim = transform.GetComponent<Animator>();
+        anim = transform.GetComponentInChildren<Animator>();
         //col = transform.GetComponent<Collider2D>();
         //footCol = transform.GetComponentInChildren<Collider2D>();
         cols = transform.GetComponentsInChildren<Collider2D>();
@@ -136,8 +137,8 @@ public class Player : MonoBehaviour, IAtt
                 Debug.Log("다운키 실행");
                 ignoreCollision = true;
                 Physics2D.IgnoreCollision(cols[0], groundCol, true);
-                Physics2D.IgnoreCollision(cols[1], groundCol, true);
-                StartCoroutine(CollisionForSeconds(4f));
+                //Physics2D.IgnoreCollision(cols[1], groundCol, true);
+                StartCoroutine(CollisionForSeconds(1f));
             }            
         }
 
@@ -147,7 +148,7 @@ public class Player : MonoBehaviour, IAtt
         yield return new WaitForSeconds(seconds);
 
         Physics2D.IgnoreCollision(cols[0], groundCol, false);
-        Physics2D.IgnoreCollision(cols[1], groundCol, false);
+        //Physics2D.IgnoreCollision(cols[1], groundCol, false);
         ignoreCollision = false;
         groundCol = null;        
 
@@ -194,8 +195,10 @@ public class Player : MonoBehaviour, IAtt
         }
         if (collision.gameObject.CompareTag("Ground"))
         {
-            Debug.Log("이게 실행되면 돼야함");            
+            //Debug.Log("이게 실행되면 돼야함");            
             groundCol = collision.collider;
+            jumpCount = 0;
+            rigid.velocity = Vector2.zero;      //미끄럼방지
         }
 
     }

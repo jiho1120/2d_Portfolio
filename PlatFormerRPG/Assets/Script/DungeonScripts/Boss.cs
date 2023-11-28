@@ -51,7 +51,7 @@ public class Boss : Object
         if (Input.GetKeyDown(KeyCode.F1))
         {
             objectStat.hP = objectStat.maxHP * 0.4f;
-            Debug.Log("objectStat.hP    " + objectStat.hP);
+            //Debug.Log("objectStat.hP    " + objectStat.hP);
         }
         scale.x = (IsLeft ? 0.5f : -0.5f);
         chcekBossPhase();
@@ -152,10 +152,10 @@ public class Boss : Object
 
     IEnumerator SetMiddlePosition()
     {
-        Debug.Log("도착 위치 : " + middlePos);
+        //Debug.Log("도착 위치 : " + middlePos);
         while (Vector2.Distance(transform.position, middlePos) > 0.1f)
         {
-            Debug.Log("플레이어 : " + transform.position);
+            //Debug.Log("플레이어 : " + transform.position);
             transform.position = Vector3.MoveTowards(transform.position, middlePos, Time.deltaTime * 10);
             yield return null;
         }
@@ -192,7 +192,7 @@ public class Boss : Object
                 } 
             }
             realAttack = objectStat.att * addAtt;
-            Debug.Log("공겨력" + realAttack);
+            ////Debug.Log("공겨력" + realAttack);
             yield return new WaitForSeconds(3f);
         }
     }
@@ -203,7 +203,7 @@ public class Boss : Object
         {
             anim.SetTrigger("closeAttack");
             addAtt = 1;
-            Debug.Log("closeAttack");
+            //Debug.Log("closeAttack");
         }
         attackCount++;
     }
@@ -214,7 +214,7 @@ public class Boss : Object
         {
             anim.SetTrigger("closeSkill");
             addAtt = 1.1f;
-            Debug.Log("closeSkill");
+            //Debug.Log("closeSkill");
         }
         attackCount = 0;
     }
@@ -224,7 +224,7 @@ public class Boss : Object
         anim.SetTrigger("farAttack");
         GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
         addAtt = 1.2f;
-        Debug.Log("farAttack");
+        //Debug.Log("farAttack");
         attackCount++;
     }
 
@@ -265,7 +265,7 @@ public class Boss : Object
         {
             dir = (this.transform.position - collision.transform.position).normalized;
             Hit(PlayerManager.Instance.player.Attak(), dir);
-            Debug.Log(objectStat.hP);
+            //Debug.Log(objectStat.hP);
         }
     }
 
