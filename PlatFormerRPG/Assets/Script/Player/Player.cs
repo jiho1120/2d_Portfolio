@@ -15,7 +15,7 @@ public class Player : MonoBehaviour, IAtt
 
     public Rigidbody2D rigid;
     Animator anim;
-    GameObject tmpObj;              //임시변수
+    GameObject skillObject;              //임시변수
     PlatformEffector2D effector2D = null;       //이펙터
 
     //public GameObject[] AttSkillPrefabs;        //관리할 원본 공격, 스킬 prefab들
@@ -33,6 +33,7 @@ public class Player : MonoBehaviour, IAtt
     public int jumpCount = 0;
     float knockBack = 1;
     public bool isHit = false;
+    public bool isAtt = false;
     bool isStart = false;
     int layermask = 0;
 
@@ -48,6 +49,8 @@ public class Player : MonoBehaviour, IAtt
         layermask = 1 << LayerMask.NameToLayer("Enemy")/* | 1 << LayerMask.NameToLayer("Boss")*/;
 
 
+        skillObject = Instantiate(swordSkillPrefab, swordPos);
+        skillObject.SetActive(false);
     }
 
     //Player 스탯 세팅
@@ -96,19 +99,24 @@ public class Player : MonoBehaviour, IAtt
     {
         //Key조작(자후 조이스틱으로 변경)
         x = Input.GetAxisRaw("Horizontal");
-        vec.x = x;
-        transform.Translate(vec.normalized * Time.deltaTime * speed);
+        if (isAtt == false)
+        {
+            vec.x = x;
+            transform.Translate(vec.normalized * Time.deltaTime * speed);
 
-        //Player 이동 반전
-        if (vec.x != 0)
-        {
-            scaleVec.x = vec.x;
-            anim.SetBool("IsMove", true);
+            //Player 이동 반전
+            if (vec.x != 0)
+            {
+                scaleVec.x = vec.x;
+                anim.SetBool("IsMove", true);
+            }
+            else
+            {
+                anim.SetBool("IsMove", false);
+            }
         }
-        else
-        {
-            anim.SetBool("IsMove", false);
-        }
+
+
         transform.localScale = scaleVec;
 
         //점프
@@ -134,22 +142,18 @@ public class Player : MonoBehaviour, IAtt
         //기본 공격
         if (Input.GetKeyDown(KeyCode.Z))
         {
+            isAtt = true;
             //player가 전사
-            if (PlayerManager.Instance.CharacterType == AllEnum.Type.Warrior)
-            {
-                Attack_Warrior();
-                anim.SetTrigger("IsAtt");
-                //for (int i = 0; i < 1; i++)
-                //{
-                //    tmpObj = Instantiate(swordPrefab, swordPos);
-                //}
-            }
+            //if (PlayerManager.Instance.CharacterType == AllEnum.Type.Warrior)
+            //{
+            //    //Attack_Warrior();
+            //    anim.SetTrigger("IsAtt");                
+            //}
             //player가 마법사
-            else if (PlayerManager.Instance.CharacterType == AllEnum.Type.Dragon)
-            {
-                tmpObj = Instantiate(fireBallPrefab, fireBallPos.position, transform.rotation);
-            }
-            Attak();      //공격력
+            //else if (PlayerManager.Instance.CharacterType == AllEnum.Type.Dragon)
+            //{
+            //   // tmpObj = Instantiate(fireBallPrefab, fireBallPos.position, transform.rotation);
+            //}
             Debug.Log("공격함");
             anim.SetTrigger("IsAtt");
         }
@@ -157,6 +161,7 @@ public class Player : MonoBehaviour, IAtt
         //스킬 공격
         if (Input.GetKeyDown(KeyCode.X))
         {
+            isAtt = true;
             //player가 전사
             if (PlayerManager.Instance.CharacterType == AllEnum.Type.Warrior)
             {
@@ -173,23 +178,28 @@ public class Player : MonoBehaviour, IAtt
             anim.SetTrigger("IsSkill");
         }
 
-        tmpObj.SetActive(false);
+        //tmpObj.SetActive(false);
+    }
+
+    public void AttEnd()
+    {
+        isAtt = false;
     }
 
     //전사 기본 공격
     public void Attack_Warrior()
     {
-        Collider2D[] allcols = Physics2D.OverlapCircleAll(swordPos.position, 2, layermask);
-        float neardist = Mathf.Infinity;
-        int index = -1;
+        Collider2D[] allcols = Physics2D.OverlapCircleAll(swordPos.position, 5, layermask);
 
+        IHit hit;
         for (int i = 0; i < allcols.Length; i++)
         {
-            if (Vector2.Distance(allcols[i].transform.position, transform.position) < neardist)
+            hit = allcols[i].GetComponent<IHit>();
+            if (hit !=null)
             {
-                allcols[i].GetComponent<IAtt>().GetHit(Attak(), transform.right /*내 데미지, 방향*/);
-                index = i;
-            }
+                allcols[i].GetComponent<IHit>().Hit(Attak(), transform.right /*내 데미지, 방향*/);
+                Debug.Log("때림");
+            }                        
         }
     }
 

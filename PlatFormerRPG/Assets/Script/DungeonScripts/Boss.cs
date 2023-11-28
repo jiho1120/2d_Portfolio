@@ -254,19 +254,20 @@ public class Boss : Object
     public override void Hit(float damage, Vector3 dir)
     {
         base.Hit(damage, dir);
+   
         //hpSlider.value = objectStat.hP;
     }
 
     //트리거
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player")) // 무기로바꿔야함
-        {
-            dir = (this.transform.position - collision.transform.position).normalized;
-            Hit(20, dir); //PlayerManager.Instance.player.myStat.Att;
-            Debug.Log(objectStat.hP);
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Player")) // 무기로바꿔야함
+    //    {
+    //        dir = (this.transform.position - collision.transform.position).normalized;
+    //        Hit(20, dir); //PlayerManager.Instance.player.myStat.Att;
+    //        Debug.Log(objectStat.hP);
+    //    }
+    //}
 
 }
