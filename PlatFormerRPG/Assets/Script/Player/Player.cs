@@ -12,6 +12,11 @@ public class Player : MonoBehaviour, IAtt
     Animator anim;
 
     Constructure.Stat myStat;       //�÷��̾� ����
+    //Collider2D col;    
+    //Collider2D footCol;
+    Collider2D[] cols;
+    Collider2D groundCol;
+
     //Allenum
 
     Vector3 vec = Vector3.zero;
@@ -25,10 +30,14 @@ public class Player : MonoBehaviour, IAtt
     float knockBack = 1;
     public bool isHit = false;
     bool isStart = false;
+    bool ignoreCollision = false;
     void Start()
     {
         rigid = transform.GetComponent<Rigidbody2D>();
         anim = transform.GetComponent<Animator>();
+        //col = transform.GetComponent<Collider2D>();
+        //footCol = transform.GetComponentInChildren<Collider2D>();
+        cols = transform.GetComponentsInChildren<Collider2D>();
         StatSetting();
         isStart = true;
     }
@@ -37,15 +46,15 @@ public class Player : MonoBehaviour, IAtt
     void StatSetting()
     {
         myStat = new Constructure.Stat(100, 10, 20, 0, 100, 0);
-        if (UIManager.Instance !=null)
+        if (UIManager.Instance != null)
         {
             UIManager.Instance.State(myStat);
-        }        
+        }
     }
 
     void Update()
     {
-        if (isStart==false)
+        if (isStart == false)
         {
             return;
         }
@@ -69,7 +78,7 @@ public class Player : MonoBehaviour, IAtt
         //����
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if(jumpCount < 2)
+            if (jumpCount < 2)
             {
                 rigid.velocity = Vector2.zero;      //velocity �ʱ�ȭ, �����ϰ� �ٰ� ��
                 jumpCount++;
@@ -108,9 +117,9 @@ public class Player : MonoBehaviour, IAtt
         {
             myStat.ExpVal += 10;
             UIManager.Instance.SetExpSlider(myStat.ExpVal);
-            
 
-            if(myStat.ExpVal == myStat.MaxExpVal)
+
+            if (myStat.ExpVal == myStat.MaxExpVal)
             {
                 myStat.Level += 1;
                 UIManager.Instance.levelTxt.text = $"{myStat.Level}";
@@ -120,6 +129,29 @@ public class Player : MonoBehaviour, IAtt
                 UIManager.Instance.expSlider.maxValue = myStat.MaxExpVal;
             }
         }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {            
+            if (ignoreCollision == false && groundCol!=null)
+            {
+                Debug.Log("다운키 실행");
+                ignoreCollision = true;
+                Physics2D.IgnoreCollision(cols[0], groundCol, true);
+                Physics2D.IgnoreCollision(cols[1], groundCol, true);
+                StartCoroutine(CollisionForSeconds(4f));
+            }            
+        }
+
+    }
+    IEnumerator CollisionForSeconds(float seconds)
+    {        
+        yield return new WaitForSeconds(seconds);
+
+        Physics2D.IgnoreCollision(cols[0], groundCol, false);
+        Physics2D.IgnoreCollision(cols[1], groundCol, false);
+        ignoreCollision = false;
+        groundCol = null;        
+
+        Debug.Log("코 실행");
     }
 
     //�⺻ ����
@@ -137,7 +169,7 @@ public class Player : MonoBehaviour, IAtt
     //���� ����
     public void GetHit(float damage, Vector3 dir)
     {
-        if(myStat.HP <= 0)
+        if (myStat.HP <= 0)
         {
             return;
         }
@@ -150,7 +182,6 @@ public class Player : MonoBehaviour, IAtt
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-
         //몬스터와 닿았을 때
         if (collision.gameObject.CompareTag("GroundEnemy") && collision.gameObject.CompareTag("FlyEnemy"))
         {
@@ -161,8 +192,14 @@ public class Player : MonoBehaviour, IAtt
 
             GetHit(collision.transform.GetComponent<IAtt>().Attak(), direction);        //����
         }
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            Debug.Log("이게 실행되면 돼야함");            
+            groundCol = collision.collider;
+        }
+
     }
-    
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("Ʈ���ſ���");
@@ -171,6 +208,7 @@ public class Player : MonoBehaviour, IAtt
             PlayerManager.Instance.InPotal = true;
             Debug.Log("��Ż����");
         }
+        
     }
 
     private void OnTriggerExit2D(Collider2D other)
