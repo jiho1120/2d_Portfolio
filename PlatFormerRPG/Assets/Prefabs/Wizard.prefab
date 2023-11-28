@@ -82,7 +82,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2423904100724103318
 Transform:
   m_ObjectHideFlags: 0
@@ -112,8 +112,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b5e26f8ee59dda46bf75c5c02687688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rigid: {fileID: 0}
   speed: 6
   jumpPower: 8
+  jumpCount: 0
+  isHit: 0
 --- !u!95 &2423904100724103402
 Animator:
   serializedVersion: 5

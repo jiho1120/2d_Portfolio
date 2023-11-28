@@ -5,17 +5,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
     /*
      * 사용 이유 : UI의 버튼과 캐릭터 바를 관리한다.
      * 싱글톤을 사용함으로서 맵이동이 되어도 현재 상태가 씬이 바뀌어도 지속되도록 하려고 한다.
      */
-    #region Ui싱글톤
-    private static UIManager instance = null;
-    public static UIManager Instance => instance;
-    #endregion
-    #region 기본 싱글톤
     /*
      * UI 설명
      * 일시정지 버튼 : 현재 상태에서 일시정지.  pause 기능
@@ -33,29 +28,16 @@ public class UIManager : MonoBehaviour
     
     // 버튼 리스트
     public GameObject PauseCanvas;
-    public Button PauseButton;
     public GameObject PauseObj;
     public GameObject ResumeCanvas;
     public GameObject QuestCanvas;
     public GameObject QuestOpenCanvas;
     public GameObject DunGeonCanvas;
-    public GameObject InfoCanvas;
-    public GameObject HpExpCanvas;
     public GameObject InfoBtnCanvas;
     public GameObject StateInfoCanvas;
     public GameObject StateInfoOffCanvas;
-    public Button InfoButton;
-    public GameObject ShopCanvas;
     public GameObject OnShopCanvas;
     public GameObject OffShopCanvas;
-    public Button ShopButton;
-    public GameObject Potal;
-    
-    // 캐릭터 채력 및 레벨 리스트
-    public GameObject PlayerDisPlay;
-    // public Text LevelInfo;
-    // public Slider HPbar;
-    // public Slider Expbar;
     
     // 게임이 현재 일시정지 중인지 여부를 나타내는 변수
     public static bool isPaused = false;
@@ -70,29 +52,16 @@ public class UIManager : MonoBehaviour
     public Slider hpSlider;         //HP Bar
     public Slider expSlider;        //EXP Bar
     public Text levelTxt;           //Level Txt
-    
-    
-    
-    void Awake()
-    {
-        
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-        {
-            if (instance !=this)
-            {
-                Destroy(this.gameObject);
-            }
-        }
-    }
-    #endregion
-    
+    public GameObject TypeW;
+    public GameObject TypeD;
+    public GameObject UiScript;
+    public Text NameText;
+    public Camera cmera;
+    public Canvas canvas;
+
     private void Update()
     {
+        
         if (Input.GetKeyDown(KeyCode.Y))
         {
             PauseObj.SetActive(true);
@@ -123,6 +92,9 @@ public class UIManager : MonoBehaviour
                 Debug.Log("펄스 입니다");
             }
         }
+
+        
+        
     }
 
     public void State(Constructure.Stat myStat)
@@ -137,8 +109,8 @@ public class UIManager : MonoBehaviour
             expSlider.maxValue = myStat.MaxExpVal;
             expSlider.value = myStat.ExpVal;
         }
-        if (levelTxt !=null)        
-        levelTxt.text = myStat.Level.ToString();
+        if (levelTxt != null)        
+            levelTxt.text = myStat.Level.ToString();
     }
 
     public void SetHpSlider(float HP)
@@ -146,8 +118,30 @@ public class UIManager : MonoBehaviour
         hpSlider.value = HP;
     }
 
-    
+    public void SetExpSlider(float Exp)
+    {
+        expSlider.value = Exp;
+    }
 
+    public void SetName(string name)
+    {
+        Debug.Log(name+" 라는 이름이 정상적으로 입력이 되었습니다.");
+    }
+
+    public void SetType(AllEnum.Type type)
+    {
+        if (type == AllEnum.Type.Warrior)
+        {
+            TypeW.SetActive(true);
+            TypeD.SetActive(false);
+        }
+
+        else if (type == AllEnum.Type.Dragon)
+        {
+            TypeD.SetActive(true);
+            TypeW.SetActive(false); 
+        }
+    }
     #region 버튼 함수
     public void OnPause(bool pauseStatus)
     {
@@ -221,6 +215,19 @@ public class UIManager : MonoBehaviour
         OffShopCanvas.SetActive(false);
         ShupUi.SetActive(false);
     }
+
+    public void OffUiScript()
+    {
+        UiScript.SetActive(false);
+    }
+
+    public void OnUiScript()
+    {
+        UiScript.SetActive(true);
+    }
+
+    
+    
 
     #endregion
 
