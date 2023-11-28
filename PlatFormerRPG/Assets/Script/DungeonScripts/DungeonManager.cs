@@ -8,6 +8,7 @@ public class DungeonManager : Singleton<DungeonManager>
     public Image panelImage;
     public Sprite[] panelSprites;
     public GameObject[] tileMap;
+    public GameObject[] Walls;
 
     public int dungeonNum { get; private set; }
 
@@ -15,7 +16,7 @@ public class DungeonManager : Singleton<DungeonManager>
 
     private void Start()
     {
-        checkDungeonNum(40);
+        checkDungeonNum(30);
         ChangePanelImage();
         CheckGenerateCoroutine();
         MonsterManager.instance.SetMonsterInfo();
@@ -26,9 +27,15 @@ public class DungeonManager : Singleton<DungeonManager>
         if (dungeonNum <= 3)
         {
             monCor = StartCoroutine(MonsterManager.instance.GenerateMonster());
+            Walls[0].gameObject.SetActive(true);
+            Walls[1].gameObject.SetActive(true);
+            Walls[2].gameObject.SetActive(false);
         }
         else
         {
+            Walls[0].gameObject.SetActive(false);
+            Walls[1].gameObject.SetActive(false);
+            Walls[2].gameObject.SetActive(true);
             if (monCor != null)
             {
                 StopCoroutine(monCor);

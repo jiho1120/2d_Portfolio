@@ -200,6 +200,11 @@ public class Player : MonoBehaviour, IAtt
             jumpCount = 0;
             rigid.velocity = Vector2.zero;      //미끄럼방지
         }
+        if (collision.gameObject.CompareTag("DefaultGround"))
+        {
+            jumpCount = 0;
+            rigid.velocity = Vector2.zero;
+        }
 
     }
 
