@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class PlayerManager : Singleton<PlayerManager>
 {
     public bool InPotal = false;
+
     public AllEnum.Type CharacterType { get; private set; } = AllEnum.Type.Warrior;
     public PlayerBullet playerbullet;       //플레이어 원거리 공격
     // 밑에 플레이어는 지우지 말아주세요 테스트용입니다.
@@ -43,6 +44,19 @@ public class PlayerManager : Singleton<PlayerManager>
 
             // // Instantiate the Dragon prefab in the village
             // Instantiate(dragonPrefab, new Vector3(0f,1f,0f), Quaternion.identity);
+
+        }
+    }
+    public void NewCharacter(AllEnum.Type characterType)
+    {
+        if (characterType == AllEnum.Type.Warrior)
+        {
+            player = Instantiate(WarriorPlayer, Vector3.zero, Quaternion.identity, transform).GetComponent<Player>();
+        }
+        else if (characterType == AllEnum.Type.Dragon)
+        {
+            player = Instantiate(WizaldPlayer, Vector3.zero, Quaternion.identity, transform).GetComponent<Player>();
+
         }
     }
 

@@ -95,7 +95,7 @@ public class Object : MonoBehaviour, IHit
         if (collision.gameObject.CompareTag("Player"))
         {
             dir = (this.transform.position - collision.transform.position).normalized;
-            Hit(20, dir);
+            Hit(PlayerManager.Instance.player.Attak(), dir);
             Debug.Log(this.objectStat.hP);
         }
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Wall"))
