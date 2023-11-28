@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class DungeonManager : Singleton<DungeonManager>
 {
-    public Image panelImage;
+    Image panelImage;
     public Sprite[] panelSprites;
     public GameObject[] tileMap;
     public GameObject[] Walls;
@@ -17,7 +17,8 @@ public class DungeonManager : Singleton<DungeonManager>
 
     private void Start()
     {
-        checkDungeonNum(40);
+        panelImage = UIManager.instance.panelImage;
+        checkDungeonNum(30);
         ChangePanelImage();
         CheckGenerateCoroutine();
         MonsterManager.instance.SetMonsterInfo();

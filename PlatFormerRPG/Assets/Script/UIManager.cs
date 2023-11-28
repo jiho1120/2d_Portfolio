@@ -71,6 +71,8 @@ public class UIManager : Singleton<UIManager>
     public int UseGold = 100;
     public Constructure.Stat stat;
 
+    public Image panelImage;
+
     private void Start()
     {
         hpSlider.value = 0;
