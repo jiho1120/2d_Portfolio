@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 178909166437951406}
   - component: {fileID: 47805071574976832}
   - component: {fileID: 47485366675471548}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: vfx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4904,7 +4904,7 @@ GameObject:
   - component: {fileID: 172418444908097006}
   - component: {fileID: 48301613031401810}
   - component: {fileID: 49372296874819218}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: spark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9794,7 +9794,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3860875705156050399}
   - component: {fileID: 7602184296998518694}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: r_hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9879,7 +9879,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2504038256056761784}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BulletPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9911,7 +9911,7 @@ GameObject:
   m_Component:
   - component: {fileID: 663666676590754934}
   - component: {fileID: 2474879970232540884}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: l_hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9996,7 +9996,7 @@ GameObject:
   - component: {fileID: 5198311640539262030}
   - component: {fileID: 223372876059329242}
   - component: {fileID: 7196452884137797346}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14889,9 +14889,9 @@ GameObject:
   - component: {fileID: 2504038255066455308}
   - component: {fileID: 2504038255066455309}
   - component: {fileID: 2504038255066455297}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Boss
-  m_TagString: MonsterHitBox
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14985,8 +14985,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faab1f8ff518a344b9d5d5338b37dab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  realAttack: 0
   bulletPrefab: {fileID: 8445012293128930882, guid: b366ecef5deaa584d9e27a3086214c06, type: 3}
   bulletSpawnPos: {fileID: 2504038256056761787}
+  hpSlider: {fileID: 0}
 --- !u!1 &4070143728713425523
 GameObject:
   m_ObjectHideFlags: 0
@@ -14997,7 +14999,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1588702369144353094}
   - component: {fileID: 154118436720362076}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15081,7 +15083,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9119731468825217363}
   - component: {fileID: 8231776176525130225}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: r_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15165,7 +15167,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6495570673326000174}
   - component: {fileID: 6553875717207993319}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: l_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15250,7 +15252,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9132175635140537501}
   - component: {fileID: 599227011140563016}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: eye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15334,7 +15336,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4181838140561391023}
   - component: {fileID: 4123233011205152036}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: eye_shiny
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15418,7 +15420,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5925223740602644234}
   - component: {fileID: 3089816426374340394}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: r_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15503,7 +15505,7 @@ GameObject:
   m_Component:
   - component: {fileID: 980749660498040387}
   - component: {fileID: 7410426204172847415}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: add
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15587,7 +15589,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6529305078775412100}
   - component: {fileID: 2325784880197391344}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: l_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15672,7 +15674,7 @@ GameObject:
   - component: {fileID: 2475431430040040016}
   - component: {fileID: 4577808095063624072}
   - component: {fileID: 2504038255066455300}
-  m_Layer: 9
+  m_Layer: 3
   m_Name: w_add
   m_TagString: BossWeapon
   m_Icon: {fileID: 0}
@@ -15783,7 +15785,7 @@ GameObject:
   - component: {fileID: 8775013564632312619}
   - component: {fileID: 8775013564613963385}
   - component: {fileID: 8775013564613990361}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20641,7 +20643,7 @@ GameObject:
   m_Component:
   - component: {fileID: 287979456335482434}
   - component: {fileID: 1010709572264111130}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}

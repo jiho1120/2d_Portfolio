@@ -184,11 +184,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b5e26f8ee59dda46bf75c5c02687688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swordSkillPrefab: {fileID: 420454067020642452, guid: c21c6bf8e6035d740a4de670384d0090, type: 3}
+  swordPos: {fileID: 0}
+  fireBallPrefab: {fileID: 6119763235419695949, guid: 869a03421a7db3d428f5f6dcf1f185e5, type: 3}
+  bigFireBallPrefab: {fileID: 6119763235419695949, guid: 15f6a4966c5508246a59c67834dbb217, type: 3}
+  fireBallPos: {fileID: 2423904099963424503}
   rigid: {fileID: 0}
   speed: 6
   jumpPower: 8
   jumpCount: 0
   isHit: 0
+  isAtt: 0
 --- !u!95 &2423904100724103402
 Animator:
   serializedVersion: 5

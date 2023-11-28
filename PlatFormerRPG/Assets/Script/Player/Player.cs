@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour, IAtt
 {
-    //public GameObject swordPrefab;          //전사 기본 공격 object prefab
     public GameObject swordSkillPrefab;     //전사 스킬 object prefab
     public Transform swordPos;              //전사 스킬 object 생성 위치
     public GameObject fireBallPrefab;       //마법사 기본 공격 object prefab
@@ -15,9 +14,13 @@ public class Player : MonoBehaviour, IAtt
 
     public Rigidbody2D rigid;
     Animator anim;
-    GameObject skillObject;              //임시변수
-    PlatformEffector2D effector2D = null;       //이펙터
+    GameObject tmpobj;                   //bullet 생성 임시변수
+    //PlatformEffector2D effector2D = null;       //이펙터
 
+    //아래 Dictionary로 묶을 예정(=최적화)
+    GameObject skillObject_1;              //임시변수1
+    GameObject skillObject_2;              //임시변수2
+    GameObject skillObject_3;              //임시변수3
     //public GameObject[] AttSkillPrefabs;        //관리할 원본 공격, 스킬 prefab들
     //Dictionary<int, Queue<GameObject>> skillObjects = new Dictionary<int, Queue<GameObject>>();     //전사 스킬, 마법사 공격, 스킬 관리
 
@@ -32,11 +35,12 @@ public class Player : MonoBehaviour, IAtt
     public float jumpPower = 8;
     public int jumpCount = 0;
     float knockBack = 1;
-    public bool isHit = false;
-    public bool isAtt = false;
-    bool isStart = false;
+    public bool isHit = false;      //피해 여부
+    public bool isAtt = false;      //공격 여부
+    bool isStart = false;       //시작 판별
+    bool useSkill = true;       //스킬 사용 여부
     int layermask = 0;
-
+    
     Coroutine cor = null;
 
     void Start()
@@ -46,11 +50,15 @@ public class Player : MonoBehaviour, IAtt
         StatSetting();
         isStart = true;
 
-        layermask = 1 << LayerMask.NameToLayer("Enemy")/* | 1 << LayerMask.NameToLayer("Boss")*/;
+        layermask = 1 << LayerMask.NameToLayer("Enemy");        //몬스터 위치
 
-
-        skillObject = Instantiate(swordSkillPrefab, swordPos);
-        skillObject.SetActive(false);
+        //==Dictionary 최적화 예정==
+        skillObject_1 = Instantiate(swordSkillPrefab, swordPos);        //전사 스킬
+        skillObject_2 = Instantiate(fireBallPrefab, fireBallPos);       //마법사 공격
+        skillObject_3 = Instantiate(bigFireBallPrefab, fireBallPos);    //마법사 스킬
+        skillObject_1.SetActive(false);
+        skillObject_2.SetActive(false);
+        skillObject_3.SetActive(false);
     }
 
     //Player 스탯 세팅
@@ -143,52 +151,36 @@ public class Player : MonoBehaviour, IAtt
         if (Input.GetKeyDown(KeyCode.Z))
         {
             isAtt = true;
-            //player가 전사
-            //if (PlayerManager.Instance.CharacterType == AllEnum.Type.Warrior)
-            //{
-            //    //Attack_Warrior();
-            //    anim.SetTrigger("IsAtt");                
-            //}
-            //player가 마법사
-            //else if (PlayerManager.Instance.CharacterType == AllEnum.Type.Dragon)
-            //{
-            //   // tmpObj = Instantiate(fireBallPrefab, fireBallPos.position, transform.rotation);
-            //}
             anim.SetTrigger("IsAtt");
+            Debug.Log("공격함");               //확인용
         }
 
         //스킬 공격
         if (Input.GetKeyDown(KeyCode.X))
         {
             isAtt = true;
-            //player가 전사
-            if (PlayerManager.Instance.CharacterType == AllEnum.Type.Warrior)
-            {
-                Instantiate(swordSkillPrefab, swordPos.position, transform.rotation);
-            }
-            //player가 마법사
-            else if (PlayerManager.Instance.CharacterType == AllEnum.Type.Dragon)
-            {
-                Instantiate(bigFireBallPrefab, fireBallPos.position, transform.rotation);
-            }
-            
-            Skill();      //공격력
-            Debug.Log("스킬씀");
             anim.SetTrigger("IsSkill");
+            Debug.Log("스킬씀");               //확인용
         }
-
-        //tmpObj.SetActive(false);
     }
 
+    //공격 끝
     public void AttEnd()
     {
         isAtt = false;
     }
 
+    //스킬 끝
+    public void SkillEnd()
+    {
+        useSkill = true;
+        AttEnd();
+    }
+
     //전사 기본 공격
     public void Attack_Warrior()
     {
-        Collider2D[] allcols = Physics2D.OverlapCircleAll(swordPos.position, 5, layermask);
+        Collider2D[] allcols = Physics2D.OverlapCircleAll(swordPos.position, 4, layermask);
 
         IHit hit;
         for (int i = 0; i < allcols.Length; i++)
@@ -199,6 +191,35 @@ public class Player : MonoBehaviour, IAtt
                 allcols[i].GetComponent<IHit>().Hit(Attak(), transform.right /*내 데미지, 방향*/);
                 Debug.Log("때림");
             }                        
+        }
+    }
+
+    //전사 스킬 공격
+    public void Skill_Warrior()
+    {
+        if(useSkill == true)
+        {
+            useSkill = false;
+            tmpobj = Instantiate(swordSkillPrefab, swordPos.position, Quaternion.Euler(Vector3.forward * -90 * transform.localScale.x));        //생성과 동시에 물체의 각도를 맞춤
+        }
+    }
+
+    //마법사 기본 공격
+    public void Attack_Wizard()
+    {
+        if (isAtt == false)
+        {
+            tmpobj = Instantiate(fireBallPrefab, fireBallPos.position, transform.rotation);
+        }
+    }
+
+    //마법사 스킬 공격
+    public void Skill_Wizard()
+    {
+        if (useSkill == true)
+        {
+            useSkill = false;
+            tmpobj = Instantiate(bigFireBallPrefab, fireBallPos.position, transform.rotation);
         }
     }
 
@@ -226,6 +247,7 @@ public class Player : MonoBehaviour, IAtt
         UIManager.Instance.hpSlider.value = this.myStat.HP;
         anim.SetTrigger("IsHit");
         rigid.AddForce(dir, ForceMode2D.Impulse);
+        isAtt = false;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -235,20 +257,20 @@ public class Player : MonoBehaviour, IAtt
         {
             //isHit = false;
 
-            //땅 통과_땅을 통과할 때 점프 카운트 리셋되면 안됨
-            if(effector2D != null)
-            {
-                effector2D.rotationalOffset = 180;
-            }
-            else
-            {
+            ////땅 통과_땅을 통과할 때 점프 카운트 리셋되면 안됨
+            //if(effector2D != null)
+            //{
+            //    effector2D.rotationalOffset = 180;
+            //}
+            //else
+            //{
                 jumpCount = 0;
                 rigid.velocity = Vector2.zero;      //미끄럼방지
-            }
+            //}
         }
 
         //몬스터와 닿았을 때
-        else if (collision.gameObject.CompareTag("GroundEnemy") && collision.gameObject.CompareTag("FlyEnemy"))
+        else if (collision.gameObject.CompareTag("GroundEnemy") || collision.gameObject.CompareTag("FlyEnemy") || collision.gameObject.CompareTag("Boss"))
         {
             isHit = true;
             //부딪혔을 때 내가 몬스터보다 위에 있으면
@@ -261,12 +283,6 @@ public class Player : MonoBehaviour, IAtt
             GetHit(collision.transform.GetComponent<IHit>().GetAtt(), direction);
             Debug.Log("몬스터랑 닿았음");        //확인용
         }
-
-        //내가 점프 그라운드 위에 있으면
-        //else if (collision.gameObject.CompareTag("JumpGround"))
-        //{
-        //    effector2D = collision.transform.GetComponent<PlatformEffector2D>();
-        //}
     }
     
     private void OnTriggerEnter2D(Collider2D other)
@@ -282,14 +298,6 @@ public class Player : MonoBehaviour, IAtt
         if (other.gameObject.CompareTag("Potal"))
         {
             PlayerManager.Instance.InPotal = false;
-        }
-    }
-
-    IEnumerator AttSkillDelay()
-    {
-        while(true)
-        {
-
         }
     }
 }

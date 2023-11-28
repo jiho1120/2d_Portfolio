@@ -16730,16 +16730,8 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2504038255066455308, guid: fb1fa0767a7a4144e92643bb3e151377, type: 3}
-      propertyPath: m_BodyType
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 3225847484768180978, guid: fb1fa0767a7a4144e92643bb3e151377, type: 3}
       propertyPath: m_Name
-      value: Boss
-      objectReference: {fileID: 0}
-    - target: {fileID: 3225847484768180978, guid: fb1fa0767a7a4144e92643bb3e151377, type: 3}
-      propertyPath: m_TagString
       value: Boss
       objectReference: {fileID: 0}
     - target: {fileID: 6089801133774785176, guid: fb1fa0767a7a4144e92643bb3e151377, type: 3}

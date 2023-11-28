@@ -7,10 +7,7 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/FirstScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
+    guid: b783230a8d5f63647a5d720b698e8e5f
   - enabled: 1
     path: Assets/Scenes/NewUserLife.unity
     guid: 6b354526e989f459aaa9ffae31c93b18
@@ -19,5 +16,5 @@ EditorBuildSettings:
     guid: dd6fcbfd3f14f4d7f9ec2aabb191f53c
   - enabled: 1
     path: Assets/Scenes/Dungeon.unity
-    guid: e5b0bf9fbba36cf48b035dca6dbe2dda
+    guid: 13e3d7bb8e972d44695f05c79c955a65
   m_configObjects: {}

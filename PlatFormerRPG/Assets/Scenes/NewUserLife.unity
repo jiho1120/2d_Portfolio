@@ -591,7 +591,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8747a68393bfb60449e8aee294c2440d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 0}
 --- !u!1 &218077958
 GameObject:
   m_ObjectHideFlags: 0
@@ -2672,9 +2671,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InPotal: 0
-  WarriorPlayer: {fileID: 2859557976935698438, guid: 89f1e03bb5e2833408e9fde420e8e986, type: 3}
-  WizaldPlayer: {fileID: 2423904100724103313, guid: 285e406ab04ca8d4dbfcd7f9409f5d51, type: 3}
+  playerbullet:
+  - {fileID: -2356207419737882428, guid: c21c6bf8e6035d740a4de670384d0090, type: 3}
+  - {fileID: -7626173450772612200, guid: 869a03421a7db3d428f5f6dcf1f185e5, type: 3}
+  - {fileID: 5020169919035859435, guid: 15f6a4966c5508246a59c67834dbb217, type: 3}
   player: {fileID: 0}
+  WarriorPlayer: {fileID: 7617993168721994051, guid: 89f1e03bb5e2833408e9fde420e8e986, type: 3}
+  WizaldPlayer: {fileID: 2423904100724103313, guid: 285e406ab04ca8d4dbfcd7f9409f5d51, type: 3}
 --- !u!114 &1286558621
 MonoBehaviour:
   m_ObjectHideFlags: 0

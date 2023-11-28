@@ -14,6 +14,7 @@ TagManager:
   - Wall
   - MonsterHitBox
   - Topbullet
+  - PlayerBullet
   layers:
   - Default
   - TransparentFX
@@ -25,7 +26,7 @@ TagManager:
   - Platform
   - Player
   - BossWaapon
-  - 
+  - PlayerBullet
   - 
   - 
   - 
