@@ -6,19 +6,14 @@ using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour, IAtt
 {
-
     /*public*/ Rigidbody2D rigid;
-
     Animator anim;
-
     Constructure.Stat myStat;       //�÷��̾� ����
     //Collider2D col;    
     //Collider2D footCol;
     Collider2D[] cols;
     Collider2D groundCol;
-
     //Allenum
-
     Vector3 vec = Vector3.zero;
     Vector3 scaleVec = Vector3.one;
     Vector3 direction = Vector3.zero;
@@ -52,7 +47,7 @@ public class Player : MonoBehaviour, IAtt
             UIManager.Instance.State(myStat);
         }
     }
-
+    
     void Update()
     {
         if (isStart == false)
@@ -210,11 +205,9 @@ public class Player : MonoBehaviour, IAtt
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Ʈ���ſ���");
         if (other.gameObject.CompareTag("Potal"))
         {
             PlayerManager.Instance.InPotal = true;
-            Debug.Log("��Ż����");
         }
         
     }
@@ -224,7 +217,6 @@ public class Player : MonoBehaviour, IAtt
         if (other.gameObject.CompareTag("Potal"))
         {
             PlayerManager.Instance.InPotal = false;
-            Debug.Log("��Ż���");
         }
     }
 }
