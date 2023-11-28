@@ -9,7 +9,7 @@ public class Object : MonoBehaviour, IHit
     protected Vector3 vec = Vector3.right;
     protected Vector3 dir = Vector3.zero;
 
-    public float realAttack; // 나중에 공격력에다 추가 공격력 더해서 반환하는 최종 플레이어가 입을 데미지
+    protected float realAttack; // 나중에 공격력에다 추가 공격력 더해서 반환하는 최종 플레이어가 입을 데미지
     protected float addAtt;
     protected float limitAreaPos;
     protected float xDifference;
@@ -79,6 +79,8 @@ public class Object : MonoBehaviour, IHit
     {
         return realAttack = objectStat.att * addAtt;
     }
+
+    
 
     public void isDead()
     {

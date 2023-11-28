@@ -9,10 +9,7 @@ public class Player : MonoBehaviour, IAtt
     /*public*/ Rigidbody2D rigid;
     Animator anim;
     Constructure.Stat myStat;       //�÷��̾� ����
-    //Collider2D col;    
-    //Collider2D footCol;
-    Collider2D[] cols;
-    Collider2D groundCol;
+    
     //Allenum
     Vector3 vec = Vector3.zero;
     Vector3 scaleVec = Vector3.one;
@@ -25,7 +22,13 @@ public class Player : MonoBehaviour, IAtt
     float knockBack = 1;
     public bool isHit = false;
     bool isStart = false;
+    //이지호 만듬
     bool ignoreCollision = false;
+    //Collider2D col;    
+    //Collider2D footCol;
+    Collider2D[] cols;
+    Collider2D groundCol;
+
     void Start()
     {
         rigid = transform.GetComponent<Rigidbody2D>();
@@ -138,6 +141,7 @@ public class Player : MonoBehaviour, IAtt
         }
 
     }
+    //이지호 만듬
     IEnumerator CollisionForSeconds(float seconds)
     {        
         yield return new WaitForSeconds(seconds);
@@ -188,6 +192,7 @@ public class Player : MonoBehaviour, IAtt
 
             GetHit(collision.transform.GetComponent<IAtt>().Attak(), direction);        //����
         }
+        //이지호 제작
         if (collision.gameObject.CompareTag("Ground"))
         {
             //Debug.Log("이게 실행되면 돼야함");            
@@ -209,17 +214,36 @@ public class Player : MonoBehaviour, IAtt
         {
             PlayerManager.Instance.InPotal = true;
         }
+        //이지호 제작
         else if (other.gameObject.CompareTag("MonsterBullet"))
         {
             myStat.HP -= DungeonManager.Instance.boss.GetAtt();
+            anim.SetTrigger("IsHit");
+
         }
         else if (other.gameObject.CompareTag("Topbullet"))
         {
             myStat.HP -= 10f;
+            anim.SetTrigger("IsHit");
         }
-
+        else if (other.gameObject.CompareTag("BossWeapon")) // 밑에 코루틴이랑 비교해서 왜안되는지 찾기
+        {
+            if (!isHit)
+            {
+                StartCoroutine(DamageDelay());
+            }
+        }
     }
+    private IEnumerator DamageDelay()
+    {
+        isHit = true;
+        GetHit(DungeonManager.Instance.boss.GetAtt(), Vector3.zero);
 
+        anim.SetTrigger("IsHit");
+
+        yield return new WaitForSeconds(1.0f);
+        isHit = false;
+    }
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Potal"))

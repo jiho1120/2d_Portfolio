@@ -18,7 +18,7 @@ public class DungeonManager : Singleton<DungeonManager>
     private void Start()
     {
         panelImage = UIManager.instance.panelImage;
-        checkDungeonNum(30);
+        checkDungeonNum(40);
         ChangePanelImage();
         CheckGenerateCoroutine();
         MonsterManager.instance.SetMonsterInfo();
