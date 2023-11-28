@@ -209,7 +209,15 @@ public class Player : MonoBehaviour, IAtt
         {
             PlayerManager.Instance.InPotal = true;
         }
-        
+        else if (other.gameObject.CompareTag("MonsterBullet"))
+        {
+            myStat.HP -= DungeonManager.Instance.boss.GetAtt();
+        }
+        else if (other.gameObject.CompareTag("Topbullet"))
+        {
+            myStat.HP -= 10f;
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D other)
