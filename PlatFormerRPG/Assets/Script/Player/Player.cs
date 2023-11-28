@@ -154,7 +154,6 @@ public class Player : MonoBehaviour, IAtt
             //{
             //   // tmpObj = Instantiate(fireBallPrefab, fireBallPos.position, transform.rotation);
             //}
-            Debug.Log("공격함");
             anim.SetTrigger("IsAtt");
         }
 
