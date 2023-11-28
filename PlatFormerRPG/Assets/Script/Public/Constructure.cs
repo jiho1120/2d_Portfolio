@@ -39,7 +39,7 @@ public class Constructure
         {
             this.hP = 20 * level;
             this.maxHP = 20 * level;
-            this.att = 10 * level;
+            this.att = 1 * level;
             this.giveExp = 50 * level;
             this.giveMoney = 100 * level;
         }

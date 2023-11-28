@@ -38,7 +38,7 @@ public class Boss : Object
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         hpSlider = GetComponent<Slider>();
-        objectStat = new Constructure.MonsterStat(10); // DungeonManager.Instance.dungeonNum 으로 세팅하면 맵열때 숫자가 바뀜
+        objectStat = new Constructure.MonsterStat(100); // DungeonManager.Instance.dungeonNum 으로 세팅하면 맵열때 숫자가 바뀜
         //hpSlider.maxValue = ObjectStat.maxHP;
         bossMoveCor = StartCoroutine(Bossmove());
         bossAttCor = StartCoroutine(AttackCor());
@@ -213,7 +213,7 @@ public class Boss : Object
         if (boundary)
         {
             anim.SetTrigger("closeSkill");
-            addAtt = 10;
+            addAtt = 1.1f;
             Debug.Log("closeSkill");
         }
         attackCount = 0;
@@ -223,7 +223,7 @@ public class Boss : Object
     {
         anim.SetTrigger("farAttack");
         GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
-        addAtt = 5;
+        addAtt = 1.2f;
         Debug.Log("farAttack");
         attackCount++;
     }
@@ -231,7 +231,7 @@ public class Boss : Object
     void FarSkill() // 원기옥 느낌
     {
         anim.SetTrigger("farSkill");
-        addAtt = 15;
+        addAtt = 1.5f;
         numberOfBullets = 8;
         angleStep = 360f / numberOfBullets;
         bulletRadius = 1.5f;
