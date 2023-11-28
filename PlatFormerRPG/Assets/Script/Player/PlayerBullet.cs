@@ -4,48 +4,62 @@ using UnityEngine;
 
 public class PlayerBullet : MonoBehaviour
 {
-    //public LayerMask isLayer;
-
     public float speed = 0;
-    public float distance = 0;
+    float distance = 0;
 
     Vector3 scaleVec = Vector3.one;
-    Vector2 vec = Vector2.right;
+    Vector2 vecR = Vector2.right;
 
-    private void Start()
+    void Start()
     {
-        Invoke("DestroyBullet", 2f);
+        if(PlayerManager.Instance.player.isWar == true)
+        {
+            Invoke("DestroyBullet", 1.2f);
+        }
+        else
+        {
+            if(PlayerManager.Instance.player.useSkill == true)
+            {
+                //if(Vector2.Distance(transform.position, /*타겟포지션*/))
+                //{
+                //    Invoke("DestroyBullet", 1f);
+                //}
+            }
+            else
+            {
+                Invoke("DestroyBullet", 0.8f);
+            }
+        }
     }
 
-    void Update()
+    //bullet 세팅
+    public void SetInfo(Vector2 myPosition, Vector2 targetPos)
     {
-        //RaycastHit2D ray = Physics2D.Raycast(transform.position, transform.right, distance, isLayer);
-        //if (ray.collider != null)
-        //{
-        //    if (ray.collider.tag == "GroundEnemy" && ray.collider.tag == "FlyEnemy")
-        //    {
-        //        Debug.Log("몬스터에 맞음");       //확인용
-        //    }
-        //    else if (ray.collider.tag == "Ground")
-        //    {
-        //        Debug.Log("땅에 맞음");           //확인용
-        //    }
-        //    DestroyBullet();
-        //}
+        transform.position = myPosition;
+        //this.targetPos = targetPos;       //몬스터 타겟
+    }
 
-        //scaleVec.x = PlayerManager.Instance.player.transform.localScale.x;
-
-        //if (scaleVec.x == 1)
-        //{
-        //    transform.Translate(vec * speed * Time.deltaTime);
-        //}
-        //else
-        //{
-        //    transform.Translate(vec * -1 * speed * Time.deltaTime);
-        //}
-        //transform.localScale = scaleVec;
-
-        transform.Translate(Vector2.up * speed * Time.deltaTime);
+    private void FixedUpdate()
+    {
+        //만약 전사라면
+        if (PlayerManager.Instance.player.isWar == true)
+        {
+            transform.Translate(Vector2.up * speed * Time.deltaTime);
+        }
+        //마법사면 => 플레이어 따라다니는 문제 있음..ㅠㅜ
+        else
+        {
+            scaleVec.x = PlayerManager.Instance.player.transform.localScale.x;
+            if (scaleVec.x == 1)
+            {
+                transform.Translate(vecR * speed * Time.deltaTime);
+            }
+            else
+            {
+                transform.Translate(vecR * -1 * speed * Time.deltaTime);
+            }
+            transform.localScale = scaleVec;
+        }
     }
 
     //파이어볼 삭제(=>생성 후 활성화, 비활성화로 변경 예정)
@@ -54,19 +68,32 @@ public class PlayerBullet : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {        
         //몬스터와 닿았을 때 피격
         if(collision.gameObject.CompareTag("GroundEnemy") || collision.gameObject.CompareTag("FlyEnemy") || collision.gameObject.CompareTag("Boss"))
         {
             IHit hit = collision.GetComponent<IHit>();
-            if (hit !=null)
+
+            //전사 스킬 관통
+            if (PlayerManager.Instance.player.isWar == true)
             {
-                hit.Hit(PlayerManager.Instance.player.Attak(), transform.position);
+                if (hit != null)
+                {
+                    hit.Hit(PlayerManager.Instance.player.Attak(), transform.position);
+                }
+                Debug.Log("몬스터에 맞음");       //확인용
             }
-            
-            Debug.Log("몬스터에 맞음");       //확인용
-            DestroyBullet();
+            //마법사 관통X
+            else
+            {
+                if (hit != null)
+                {
+                    hit.Hit(PlayerManager.Instance.player.Attak(), transform.position);
+                }
+                Debug.Log("몬스터에 맞음");       //확인용
+                DestroyBullet();
+            }
         }
         //땅에 닿았을 때 삭제
         else if (collision.gameObject.CompareTag("Ground"))
