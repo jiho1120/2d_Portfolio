@@ -74,6 +74,7 @@ public class Object : MonoBehaviour, IHit
         this.objectStat.hP = Mathf.Clamp(this.objectStat.hP - damage, 0, this.objectStat.maxHP);
         anim.SetTrigger("hit");
     }
+
     public float GetAtt()
     {
         return realAttack = objectStat.att * addAtt;
@@ -83,8 +84,8 @@ public class Object : MonoBehaviour, IHit
     {
         if (this.objectStat.hP <= 0)
         {
-            //PlayerManager.Instance.player.myStat.ExpVal += MonsterManager.Instance.objectStat.giveExp;
-            // PlayerManager.Instance.player.myStat.money += MonsterManager.Instance.objectStat.giveMoney;
+            //PlayerManager.Instance.player.myStat.ExpVal += objectStat.giveExp;
+            //PlayerManager.Instance.player.myStat.money += objectStat.giveMoney;
             this.gameObject.SetActive(false);
         }
 
