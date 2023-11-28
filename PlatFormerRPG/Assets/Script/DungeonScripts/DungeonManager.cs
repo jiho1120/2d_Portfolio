@@ -11,7 +11,7 @@ public class DungeonManager : Singleton<DungeonManager>
 
     public int dungeonNum { get; private set; }
 
-
+    Coroutine monCor = null;
 
     private void Start()
     {
@@ -25,10 +25,14 @@ public class DungeonManager : Singleton<DungeonManager>
     {
         if (dungeonNum <= 3)
         {
-            StartCoroutine(MonsterManager.instance.GenerateMonster());
+            monCor = StartCoroutine(MonsterManager.instance.GenerateMonster());
         }
         else
         {
+            if (monCor != null)
+            {
+                StopCoroutine(monCor);
+            }
             StartCoroutine(MonsterManager.instance.GenerateBullet());
         }
     }
