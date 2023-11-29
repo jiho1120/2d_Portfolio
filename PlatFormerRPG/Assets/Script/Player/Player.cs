@@ -12,6 +12,7 @@ public class Player : MonoBehaviour, IAtt
     public GameObject fireBallPrefab;       //마법사 기본 공격 object prefab
     public GameObject bigFireBallPrefab;    //마법사 스킬 공격 object prefab
     public Transform fireBallPos;           //마법사 공격 object 생성 위치
+    public Joystick joy;                    //조이스틱 조작
 
     Rigidbody2D rigid;
     Animator anim;
@@ -35,6 +36,7 @@ public class Player : MonoBehaviour, IAtt
     Vector3 direction = Vector3.zero;
 
     float x = 0;
+    float y = 0;
     public float speed = 6;
     public float jumpPower = 8;
     public int jumpCount = 0;
@@ -49,7 +51,7 @@ public class Player : MonoBehaviour, IAtt
 
     Coroutine cor = null;
 
-    //이지호 만듬
+    //이지호 제작
     bool ignoreCollision = false;
     //Collider2D col;    
     //Collider2D footCol;
@@ -82,7 +84,7 @@ public class Player : MonoBehaviour, IAtt
     //Player 스탯 세팅
     void StatSetting()
     {
-        myStat = new Constructure.Stat(100, 10, 20, 50, 100, 0);
+        myStat = new Constructure.Stat(100, 10, 20, 50, 100, 0, 0);
         if (UIManager.Instance != null)
         {
             UIManager.Instance.State(myStat);
@@ -125,7 +127,6 @@ public class Player : MonoBehaviour, IAtt
         }
 
         PlayerMove();       //player 조작
-        PlayerAttSkill();   //Player 공격, 스킬
 
         //HP회복 확인용 Key(임시)
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -147,22 +148,32 @@ public class Player : MonoBehaviour, IAtt
                 UIManager.Instance.expSlider.value = myStat.ExpVal;
                 myStat.MaxExpVal += 100;
                 UIManager.Instance.expSlider.maxValue = myStat.MaxExpVal;
-                myStat.Att += 10;
-                myStat.Skill += 10;
             }
         }
-
-        
     }
 
     //Player 조작
     void PlayerMove()
     {
-        //Key조작(차후 조이스틱으로 변경)
-        x = Input.GetAxisRaw("Horizontal");
+        //Key조작
+        //x = Input.GetAxisRaw("Horizontal");
+        //joystick 조작
+        x = joy.Horizontal;
+        y = joy.Vertical;
+
         if (isAtt == false)
         {
+            //Key 조작
             vec.x = x;
+            //joystick 조작
+            if(y < 0)
+            {
+                if (this.transform.position.y > 0)
+                {
+                    vec.y = y;
+                }
+            }
+
             transform.Translate(vec.normalized * Time.deltaTime * speed);
 
             //Player 이동 반전
@@ -177,58 +188,103 @@ public class Player : MonoBehaviour, IAtt
             }
         }
         transform.localScale = scaleVec;
+    }
 
-        //점프
-        if (Input.GetKeyDown(KeyCode.Space))
+    //플레이어 점프
+    void JumpMove()
+    {
+        //점프joystick
+        if (jumpCount < 2)
         {
-            if (jumpCount < 2)
-            {
-                rigid.velocity = Vector2.zero;      //velocity 초기화(일정한 점프 유지)
-                jumpCount++;
-            }
-            else
-            {
-                return;
-            }
-            rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-            anim.SetTrigger("IsJump");
+            rigid.velocity = Vector2.zero;      //velocity 초기화(일정한 점프 유지)
+            jumpCount++;
+        }
+        else
+        {
+            return;
+        }
+        rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+        anim.SetTrigger("IsJump");
+
+        //점프key
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    if (jumpCount < 2)
+        //    {
+        //        rigid.velocity = Vector2.zero;      //velocity 초기화(일정한 점프 유지)
+        //        jumpCount++;
+        //    }
+        //    else
+        //    {
+        //        return;
+        //    }
+        //    rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+        //    anim.SetTrigger("IsJump");
+        //}
+    }
+
+    //내림
+    void DownJumpMove()
+    {
+        //내림joystick
+        if (ignoreCollision == false && groundCol != null)
+        {
+            Debug.Log("다운키 실행");
+            ignoreCollision = true;
+            Physics2D.IgnoreCollision(cols[0], groundCol, true);
+            //Physics2D.IgnoreCollision(cols[1], groundCol, true);
+            StartCoroutine(CollisionForSeconds(1f));
         }
 
         //내림key
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {            
-            if (ignoreCollision == false && groundCol!=null)
-            {
-                Debug.Log("다운키 실행");
-                ignoreCollision = true;
-                Physics2D.IgnoreCollision(cols[0], groundCol, true);
-                //Physics2D.IgnoreCollision(cols[1], groundCol, true);
-                StartCoroutine(CollisionForSeconds(1f));
-            }            
-        }
+        //else if (Input.GetKeyDown(KeyCode.DownArrow))
+        //{
+        //    if (ignoreCollision == false && groundCol != null)
+        //    {
+        //        Debug.Log("다운키 실행");
+        //        ignoreCollision = true;
+        //        Physics2D.IgnoreCollision(cols[0], groundCol, true);
+        //        //Physics2D.IgnoreCollision(cols[1], groundCol, true);
+        //        StartCoroutine(CollisionForSeconds(1f));
+        //    }
+        //}
     }
 
-    //플레이어 공격, 스킬
-    void PlayerAttSkill()
+    //플레이어 공격
+    void PlayerAtt()
     {
-        //기본 공격
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            isAtt = true;
-            anim.SetTrigger("IsAtt");
-            Debug.Log("공격함");               //확인용
-        }
+        //기본 공격joystick
+        isAtt = true;
+        anim.SetTrigger("IsAtt");
+        Debug.Log("공격함");               //확인용
 
-        //스킬 공격
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            isAtt = true;
-            anim.SetTrigger("IsSkill");
-            Debug.Log("스킬씀");               //확인용
-        }
+        //기본 공격key
+        //if (Input.GetKeyDown(KeyCode.Z))
+        //{
+        //    isAtt = true;
+        //    anim.SetTrigger("IsAtt");
+        //    Debug.Log("공격함");               //확인용
+        //}
     }
 
-    //이지호 만듬
+    //플레이어 스킬
+    void PlayerSkill()
+    {
+        //스킬 공격joystick
+        isAtt = true;
+        anim.SetTrigger("IsSkill");
+        Debug.Log("스킬씀");               //확인용
+
+        //스킬 공격key
+        //if (Input.GetKeyDown(KeyCode.X))
+        //{
+        //    isAtt = true;
+        //    anim.SetTrigger("IsSkill");
+        //    Debug.Log("스킬씀");               //확인용
+        //}
+    }
+
+    //이지호 제작
     IEnumerator CollisionForSeconds(float seconds)
     {        
         yield return new WaitForSeconds(seconds);
@@ -355,7 +411,7 @@ public class Player : MonoBehaviour, IAtt
     void OnCollisionEnter2D(Collision2D collision)
     {
         //몬스터와 닿았을 때
-        else if (collision.gameObject.CompareTag("GroundEnemy") || collision.gameObject.CompareTag("MonsetBullet"))
+        if (collision.gameObject.CompareTag("GroundEnemy") || collision.gameObject.CompareTag("MonsetBullet"))
         {
             isHit = true;
 

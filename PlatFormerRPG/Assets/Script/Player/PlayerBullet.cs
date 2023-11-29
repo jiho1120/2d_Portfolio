@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerBullet : MonoBehaviour
 {
     public float speed = 0;
-    float distance = 0;
 
     Vector3 scaleVec = Vector3.one;
     Vector2 vecR = Vector2.right;
