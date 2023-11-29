@@ -24,31 +24,39 @@ public class MonsterManager : Singleton<MonsterManager>
 
     List<GameObject> allMonsterList = new List<GameObject>();
 
+    Coroutine cor = null;
     // Start is called before the first frame update
-    void Start()
-    {
-        spawn = GetComponent<Spawn>();
-    }
+    //void Start()
+    //{
+    //    //spawn = GetComponent<Spawn>();        
+    //}
 
     // Update is called once per frame
-    void Update()
+    public void InitSpawn()
     {
-
+        if (spawn == null)
+        {
+            spawn = GameObject.Find("DungeonScript").GetComponent<Spawn>();
+        }
     }
 
-    public void SetMonsterInfo() // 몬스터 프리팹 생성 후 큐랑 리스트에 담기 몬스터 스탯 저장
+    public void SetMonsterInfo()
     {
-        for (int i = 0; i < 2; i++)
+        if (monsterObjectPool.Count == 0)
         {
-            monsterObjectPool.Add(i, new Queue<Monster>());
-            for (int j = 0; j < 10; j++)
+            for (int i = 0; i < 2; i++)
             {
-                tmpobj = Instantiate(monsterPrefabs[i], this.transform.GetChild(0));
-                monsterObjectPool[i].Enqueue(tmpobj.GetComponent<Monster>());// Monster a = new flymonster();
-                tmpobj.SetActive(false);
-                allMonsterList.Add(tmpobj);
+                monsterObjectPool.Add(i, new Queue<Monster>());
+                for (int j = 0; j < 10; j++)
+                {
+                    tmpobj = Instantiate(monsterPrefabs[i], this.transform.GetChild(0));
+                    monsterObjectPool[i].Enqueue(tmpobj.GetComponent<Monster>());// Monster a = new flymonster();
+                    tmpobj.SetActive(false);
+                    allMonsterList.Add(tmpobj);
+                }
             }
         }
+
     }
 
 
@@ -67,8 +75,34 @@ public class MonsterManager : Singleton<MonsterManager>
         }
     }
 
-    public IEnumerator GenerateMonster() // 몬스터 생성 시간 설정 후 스폰
+    public void StartGenerateMonster(bool on)
     {
+        if (on)
+        {            
+            if (cor == null)
+            {
+                cor = StartCoroutine(GenerateMonster());
+            }
+        }
+        else
+        {
+            if (cor != null)
+            {
+                StopCoroutine(cor);
+                cor = null;
+            }
+        }
+    }
+    public void AllkillMonster()
+    {
+        for (int i = 0; i < allMonsterList.Count; i++)
+        {
+            allMonsterList[i].GetComponent<Object>().kill();
+            allMonsterList[i].GetComponent<Object>().isDead();
+        }
+    }
+    IEnumerator GenerateMonster() // 몬스터 생성 시간 설정 후 스폰
+    {       
         while (true)
         {
             generateTime = Random.Range(minGenerateTime, maxGenerateTime);

@@ -10,7 +10,7 @@ public class Object : MonoBehaviour, IHit
     protected Vector3 dir = Vector3.zero;
 
     protected float realAttack; // 나중에 공격력에다 추가 공격력 더해서 반환하는 최종 플레이어가 입을 데미지
-    protected float addAtt;
+    protected float addAtt =1;
     protected float limitAreaPos;
     protected float xDifference;
     protected float yDifference;
@@ -86,10 +86,16 @@ public class Object : MonoBehaviour, IHit
     {
         if (this.objectStat.hP <= 0)
         {
-            //PlayerManager.Instance.player.myStat.ExpVal += objectStat.giveExp;
+            PlayerManager.Instance.player.myStat.ExpVal += objectStat.giveExp;
             //PlayerManager.Instance.player.myStat.money += objectStat.giveMoney;
+            Debug.Log("죽음");
             this.gameObject.SetActive(false);
         }
+
+    }
+    public void kill()
+    {
+        this.objectStat.hP = 0;
 
     }
 

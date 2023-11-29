@@ -17,11 +17,6 @@ public class Spawn : MonoBehaviour
     float bulletRadius;
     float angle;
 
-
-
-
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -50,7 +45,7 @@ public class Spawn : MonoBehaviour
             tmpMonster.SetMonsterSprite(MonsterManager.Instance.AllGroundMonsterSprites[DungeonManager.Instance.dungeonNum]);
             vec.y = monsterSpawnPos[pos].position.y;
         }
-        tmpMonster.transform.position = vec;
+        tmpMonster.transform.position = vec;                
         tmpMonster.gameObject.SetActive(true);
     }
 

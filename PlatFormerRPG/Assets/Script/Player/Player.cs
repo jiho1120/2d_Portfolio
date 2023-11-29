@@ -30,7 +30,6 @@ public class Player : MonoBehaviour, IAtt
     //Dictionary<int, Queue<GameObject>> skillObjects = new Dictionary<int, Queue<GameObject>>();     //전사 스킬, 마법사 공격, 스킬 관리
 
     public Constructure.Stat myStat;       //스탯 정보
-
     Vector3 vec = Vector3.zero;
     Vector3 scaleVec = Vector3.one;
     Vector3 direction = Vector3.zero;
@@ -443,10 +442,11 @@ public class Player : MonoBehaviour, IAtt
     private void OnTriggerEnter2D(Collider2D other)
     {
         //포탈 이용_오도경 제작
-        if (other.gameObject.CompareTag("Potal"))
+        if (other.gameObject.CompareTag("Potal") || other.gameObject.CompareTag("VillagePotal"))
         {
             PlayerManager.Instance.InPotal = true;
         }
+        
         //이지호 제작
         else if (other.gameObject.CompareTag("MonsterBullet"))
         {
@@ -469,6 +469,10 @@ public class Player : MonoBehaviour, IAtt
     }
 
     //이지호 제작
+    public int GetLevel()
+    {
+        return myStat.Level;
+    }
     private IEnumerator DamageDelay()
     {
         isHit = true;
@@ -484,7 +488,7 @@ public class Player : MonoBehaviour, IAtt
     private void OnTriggerExit2D(Collider2D other)
     {
         //포탈 이용
-        if (other.gameObject.CompareTag("Potal"))
+        if (other.gameObject.CompareTag("Potal") || other.gameObject.CompareTag("VillagePotal"))
         {
             PlayerManager.Instance.InPotal = false;
         }

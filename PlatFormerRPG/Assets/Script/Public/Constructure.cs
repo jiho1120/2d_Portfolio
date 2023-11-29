@@ -28,12 +28,8 @@ public class Constructure
             this.Level = level;
             this.Money = Money;
         }
-        
-        
     }
     
-    
-
     public struct MonsterStat
     {
         public float hP;
@@ -43,11 +39,11 @@ public class Constructure
         public int giveMoney;
         public MonsterStat(int level)
         {
-            this.hP = 20 * level;
-            this.maxHP = 20 * level;
-            this.att = 10 * level;
-            this.giveExp = 50 * level;
-            this.giveMoney = 100 * level;
+            this.hP = 10 + (20 * level);
+            this.maxHP = 10 + (20 * level);
+            this.att = 1 + (1 * level);
+            this.giveExp = 10 + (1 * level);
+            this.giveMoney = 100 + (1 * level);
         }
     }
 }

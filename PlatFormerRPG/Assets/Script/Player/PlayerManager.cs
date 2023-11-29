@@ -9,7 +9,7 @@ public class PlayerManager : Singleton<PlayerManager>
     public bool InPotal = false;
     public PlayerBullet[] playerbullet;       //플레이어 원거리 공격
 
-    public Constructure.Stat defaultStats;
+   
 
     public int AddStatCount = 0;
     // 밑에 플레이어는 지우지 말아주세요 테스트용입니다.
@@ -29,13 +29,13 @@ public class PlayerManager : Singleton<PlayerManager>
         }
 
         // 스탯 초기화 레벨 1기준
-        defaultStats.Level = 1;
-        defaultStats.MaxExpVal = 5; // 레벨 1에서 2되는 5 이후로 레벨x 5의 조건으로
-        defaultStats.Att = 5;
-        defaultStats.HP = 50;
-        defaultStats.MaxHP = 50;
-        defaultStats.ExpVal = 0;
-        defaultStats.Skill = 10;
+        player.myStat.Level = 1;
+        player.myStat.MaxExpVal = 5; // 레벨 1에서 2되는 5 이후로 레벨x 5의 조건으로
+        player.myStat.Att = 5;
+        player.myStat.HP = 50;
+        player.myStat.MaxHP = 50;
+        player.myStat.ExpVal = 0;
+        player.myStat.Skill = 10;
         AddStatCount = 1;
     }
 

@@ -82,26 +82,33 @@ public class UIManager : Singleton<UIManager>
     private string PopupTypeText_string;
     public FixedJoystick joystick;
 
+    int scene = 2;
+    //Scene dungeon;
+
     private void Start()
     {
-        hpSlider.value = 0;
-        expSlider.value = 100;
+        //dungeon = SceneManager.GetSceneByName("Dungeon");
+        hpSlider.maxValue = PlayerManager.Instance.player.myStat.MaxHP;
+        expSlider.maxValue = PlayerManager.Instance.player.myStat.MaxExpVal;
         BossHpSlider.maxValue = 0;
         PotionCount += 3;
         PotionCountText.text = PotionCount.ToString();
-        PopupLevelText.text = PlayerManager.Instance.defaultStats.Level.ToString();
-        PopupAttText.text = PlayerManager.Instance.defaultStats.Att.ToString();
-        PopupExpText.text = PlayerManager.Instance.defaultStats.ExpVal.ToString();
-        PopupMaxExpText.text = PlayerManager.Instance.defaultStats.MaxExpVal.ToString();
+        PopupLevelText.text = PlayerManager.Instance.player.myStat.Level.ToString();
+        PopupAttText.text = PlayerManager.Instance.player.myStat.Att.ToString();
+        PopupExpText.text = PlayerManager.Instance.player.myStat.ExpVal.ToString();
+        PopupMaxExpText.text = PlayerManager.Instance.player.myStat.MaxExpVal.ToString();
         PopupNameText.text = PopupNameText_string;
         PopupTypeText.text = PopupTypeText_string;
-        StateBtn_levelTxt.text = PlayerManager.Instance.defaultStats.Level.ToString();
+        StateBtn_levelTxt.text = PlayerManager.Instance.player.myStat.Level.ToString();
         // AddStatCount.text = PlayerManager.Instance.AddStatCount.ToString();
     }
 
     private void Update()
     {
-        
+        expSlider.value = PlayerManager.Instance.player.myStat.ExpVal;
+        hpSlider.value = PlayerManager.Instance.player.myStat.HP;
+
+
         if (Input.GetKeyDown(KeyCode.P)) // Pause의 P
         {
             PauseObj.SetActive(true);
@@ -123,8 +130,16 @@ public class UIManager : Singleton<UIManager>
         {
             if (PlayerManager.Instance.InPotal == true)
             {
+                if (scene == 2)
+                {
+                    OnDungeon();
+                }
+                else if(scene == 3) 
+                {
+                    OnVillagePotal();
+                }
                 Debug.Log("이동");
-                OnDungeon();
+                
             }
             else if (PlayerManager.Instance.InPotal == false)
             {
@@ -162,30 +177,38 @@ public class UIManager : Singleton<UIManager>
                 LevelUp();
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.Insert))
+        if (Input.GetKeyDown(KeyCode.F5))
         {
-            UsePotion();
+            BossHpSlider.value += 100;
+            Debug.Log("보스의 채력을 강제로 채력 0");
+        }
+
+        if (PlayerManager.Instance.player.myStat.MaxExpVal <= PlayerManager.Instance.player.myStat.ExpVal)
+        {
+            LevelUp();
         }
     }
 
     public void LevelUp()
     {
-        PlayerManager.Instance.defaultStats.Level += 1;
+        PlayerManager.Instance.player.myStat.Level += 1;
         PlayerManager.Instance.AddStatCount += 2;
-        PlayerManager.Instance.defaultStats.Att += 1;
-        Debug.Log("레벨 : "+PlayerManager.Instance.defaultStats.Level);
+        PlayerManager.Instance.player.myStat.Att += 1;
+        Debug.Log("레벨 : "+PlayerManager.Instance.player.myStat.Level);
         Debug.Log("습득 능력치 카운트 : "+PlayerManager.Instance.AddStatCount);
         PotionCountText.text = PotionCount.ToString();
-        PopupLevelText.text = PlayerManager.Instance.defaultStats.Level.ToString();
-        PopupAttText.text = PlayerManager.Instance.defaultStats.Att.ToString();
-        PopupExpText.text = PlayerManager.Instance.defaultStats.ExpVal.ToString();
-        PopupMaxExpText.text = PlayerManager.Instance.defaultStats.MaxExpVal.ToString();
+        PopupLevelText.text = PlayerManager.Instance.player.myStat.Level.ToString();
+        PopupAttText.text = PlayerManager.Instance.player.myStat.Att.ToString();
+        PopupExpText.text = PlayerManager.Instance.player.myStat.ExpVal.ToString();
+        PopupMaxExpText.text = PlayerManager.Instance.player.myStat.MaxExpVal.ToString();
         PopupNameText.text = PopupNameText_string;
         PopupTypeText.text = PopupTypeText_string;
-        StateBtn_levelTxt.text = PlayerManager.Instance.defaultStats.Level.ToString();
+        StateBtn_levelTxt.text = PlayerManager.Instance.player.myStat.Level.ToString();
+        PlayerManager.Instance.player.myStat.ExpVal = 0;
+        PlayerManager.Instance.player.myStat.MaxExpVal += 10;
+        Debug.Log(PlayerManager.Instance.player.myStat.MaxExpVal);
         // AddStatCount.text = PlayerManager.Instance.AddStatCount.ToString();
-        
+
     }
 
     public void State(Constructure.Stat myStat)
@@ -271,6 +294,7 @@ public class UIManager : Singleton<UIManager>
 
     public void OnDungeon()
     {
+        scene = 3;
         SceneManager.LoadScene("Dungeon");
         Debug.Log("성공적으로 던전으로 이동하였습니다.  =  테스트 던전 이동");
         Debug.Log("UI매니져가 무사히 이동이 되었는지 확인을 하여야 합니다");
@@ -280,10 +304,27 @@ public class UIManager : Singleton<UIManager>
         InfoBtnCanvas.SetActive(false);
         OnShopCanvas.SetActive(false);
         OffShopCanvas.SetActive(false);
+
+        StartCoroutine(CheckDungeon());
+    }
+
+    IEnumerator CheckDungeon()
+    {        
+        yield return new WaitUntil(()=> SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Dungeon"));        
+
+        while (DungeonManager.instance ==null)
+        {
+            yield return null;
+        }
+
+        DungeonManager.instance.StartDungeon();
     }
 
     public void OnVillagePotal()
     {
+        scene = 2;
+        MonsterManager.instance.StartGenerateMonster(false);
+        MonsterManager.instance.AllkillMonster();
         SceneManager.LoadScene("VillageScene");
         QuestCanvas.SetActive(true);
         QuestOpenCanvas.SetActive(true);
@@ -291,8 +332,11 @@ public class UIManager : Singleton<UIManager>
         InfoBtnCanvas.SetActive(true);
         OnShopCanvas.SetActive(true);
         OffShopCanvas.SetActive(true);
-        // 코루틴 끄기
+        //StopCoroutine(DungeonManager.instance.monCor);
+        //StopCoroutine(MonsterManager.instance.GenerateMonster());        
+        //DungeonManager.instance.monCor = null;
     }
+     
     public void OnInfo()
     {
         StateInfoCanvas.SetActive(false);
