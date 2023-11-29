@@ -18,25 +18,14 @@ public class PlayerBullet : MonoBehaviour
         }
         else
         {
-            if(PlayerManager.Instance.player.useSkill == true)
-            {
-                //if(Vector2.Distance(transform.position, /*타겟포지션*/))
-                //{
-                //    Invoke("DestroyBullet", 1f);
-                //}
-            }
-            else
-            {
-                Invoke("DestroyBullet", 0.8f);
-            }
+            Invoke("DestroyBullet", 0.8f);
         }
     }
 
-    //bullet 세팅
-    public void SetInfo(Vector2 myPosition, Vector2 targetPos)
+    public void SetDir(Vector3 vec)
     {
-        transform.position = myPosition;
-        //this.targetPos = targetPos;       //몬스터 타겟
+        transform.localScale = vec;
+        vecR.x = vec.x;
     }
 
     private void FixedUpdate()
@@ -46,23 +35,14 @@ public class PlayerBullet : MonoBehaviour
         {
             transform.Translate(Vector2.up * speed * Time.deltaTime);
         }
-        //마법사면 => 플레이어 따라다니는 문제 있음..ㅠㅜ
+        //마법사면
         else
         {
-            scaleVec.x = PlayerManager.Instance.player.transform.localScale.x;
-            if (scaleVec.x == 1)
-            {
-                transform.Translate(vecR * speed * Time.deltaTime);
-            }
-            else
-            {
-                transform.Translate(vecR * -1 * speed * Time.deltaTime);
-            }
-            transform.localScale = scaleVec;
+            transform.Translate(vecR * speed * Time.deltaTime);
         }
     }
 
-    //파이어볼 삭제(=>생성 후 활성화, 비활성화로 변경 예정)
+    //파이어볼 삭제
     void DestroyBullet()
     {
         Destroy(gameObject);
@@ -80,7 +60,15 @@ public class PlayerBullet : MonoBehaviour
             {
                 if (hit != null)
                 {
-                    hit.Hit(PlayerManager.Instance.player.Attak(), transform.position);
+                    //스킬
+                    if (PlayerManager.Instance.player.useSkill == true)
+                    {
+                        hit.Hit(PlayerManager.Instance.player.Skill(), transform.position);
+                    }
+                    else
+                    {
+                        hit.Hit(PlayerManager.Instance.player.Attak(), transform.position);
+                    }
                 }
                 Debug.Log("몬스터에 맞음");       //확인용
             }
@@ -89,7 +77,16 @@ public class PlayerBullet : MonoBehaviour
             {
                 if (hit != null)
                 {
-                    hit.Hit(PlayerManager.Instance.player.Attak(), transform.position);
+                    //스킬(화염 지속 데미지)
+                    if (PlayerManager.Instance.player.useSkill == true)
+                    {
+                        hit.Hit(PlayerManager.Instance.player.WizSkill(), transform.position);
+                    }
+                    //일반 공격
+                    else
+                    {
+                        hit.Hit(PlayerManager.Instance.player.Attak(), transform.position);
+                    }
                 }
                 Debug.Log("몬스터에 맞음");       //확인용
                 DestroyBullet();

@@ -15,7 +15,7 @@ public class Player : MonoBehaviour, IAtt
 
     public Rigidbody2D rigid;
     Animator anim;
-    //GameObject skillObj;         //dic 임시변수
+    //GameObject skillObj;              //dic 임시변수
     GameObject warriorSkillObj;         //전사 bullet 생성 임시변수
     GameObject wizardAttObj;            //마법사 공격 bullet 생성 임시변수
     GameObject wizardSkillObj;          //마법사 스킬 bullet 생성 임시변수
@@ -43,8 +43,8 @@ public class Player : MonoBehaviour, IAtt
     public bool isAtt = false;      //공격 여부
     public bool isWar = false;      //전사, 마법사 구분
     bool isAlive = true;            //생사 여부
-    bool isStart = false;       //시작 판별
-    public bool useSkill = true;       //스킬 사용 여부
+    bool isStart = false;           //시작 판별
+    public bool useSkill = true;    //스킬 사용 여부
     int layermask = 0;
     
     Coroutine cor = null;
@@ -59,7 +59,7 @@ public class Player : MonoBehaviour, IAtt
         layermask = 1 << LayerMask.NameToLayer("Enemy");        //몬스터 위치
         //RangedAttInfo();        //player bullet 생성 세팅 정보
 
-        //==Dictionary 최적화 예정==
+        //==Dictionary 최적화 예정이었음..==
         skillObject_1 = Instantiate(swordSkillPrefab, swordPos);        //전사 스킬
         skillObject_2 = Instantiate(fireBallPrefab, fireBallPos);       //마법사 공격
         skillObject_3 = Instantiate(bigFireBallPrefab, fireBallPos);    //마법사 스킬
@@ -71,7 +71,7 @@ public class Player : MonoBehaviour, IAtt
     //Player 스탯 세팅
     void StatSetting()
     {
-        myStat = new Constructure.Stat(100, 10, 20, 0, 100, 0, 0);
+        myStat = new Constructure.Stat(100, 10, 20, 50, 100, 0, 0);
         if (UIManager.Instance !=null)
         {
             UIManager.Instance.State(myStat);
@@ -133,6 +133,8 @@ public class Player : MonoBehaviour, IAtt
                 myStat.Level += 1;
                 myStat.ExpVal = 0;
                 myStat.MaxExpVal += 100;
+                myStat.Att += 10;
+                myStat.Skill += 10;
             }
         }
     }
@@ -248,7 +250,8 @@ public class Player : MonoBehaviour, IAtt
 
         if (isAtt == true)
         {
-            wizardAttObj = Instantiate(fireBallPrefab, fireBallPos.position, transform.rotation);
+            wizardAttObj = Instantiate(fireBallPrefab, fireBallPos.position, transform.rotation);          
+            wizardAttObj.GetComponent<PlayerBullet>().SetDir(scaleVec);
         }
     }
 
@@ -261,6 +264,7 @@ public class Player : MonoBehaviour, IAtt
         {
             useSkill = false;
             wizardSkillObj = Instantiate(bigFireBallPrefab, fireBallPos.position, transform.rotation);
+            wizardSkillObj.GetComponent<PlayerBullet>().SetDir(scaleVec);
         }
     }
 
@@ -273,6 +277,13 @@ public class Player : MonoBehaviour, IAtt
     //스킬 공격
     public float Skill()
     {
+        return myStat.Skill;
+    }
+
+    //마법사 지속뎀 스킬
+    public float WizSkill()
+    {
+        cor = StartCoroutine(WizardSkillSet());
         return myStat.Skill;
     }
 
@@ -317,13 +328,11 @@ public class Player : MonoBehaviour, IAtt
                 rigid.velocity = Vector2.zero;      //미끄럼방지
             //}
         }
-
         //몬스터와 닿았을 때
-        else if (collision.gameObject.CompareTag("GroundEnemy") || collision.gameObject.CompareTag("FlyEnemy") /*|| collision.gameObject.CompareTag("Boss")*/)
+        else if (collision.gameObject.CompareTag("GroundEnemy") || collision.gameObject.CompareTag("MonsetBullet"))
         {
             isHit = true;
-            //부딪혔을 때 내가 몬스터보다 위에 있으면
-            
+
             direction = (transform.position - collision.transform.position).normalized;
             direction.y += 2;
             direction *= knockBack;
@@ -340,18 +349,6 @@ public class Player : MonoBehaviour, IAtt
         {
             PlayerManager.Instance.InPotal = true;
         }
-        //보스랑 닿았을 때
-        //else if (other.gameObject.CompareTag("Boss"))
-        //{
-        //    isHit = true;
-
-        //    direction = (transform.position - other.transform.position).normalized;
-        //    direction.y += 2;
-        //    direction *= knockBack;
-
-        //    GetHit(other.transform.GetComponent<IHit>().GetAtt(), direction);
-        //    Debug.Log("몬스터랑 닿았음");        //확인용
-        //}
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -360,6 +357,20 @@ public class Player : MonoBehaviour, IAtt
         if (other.gameObject.CompareTag("Potal"))
         {
             PlayerManager.Instance.InPotal = false;
+        }
+    }
+
+    IEnumerator WizardSkillSet()
+    {
+        while (true)
+        {
+            myStat.Skill = this.myStat.Skill / 3;
+
+            for (int i = 0; i < 5; i++)
+            {
+                myStat.Skill += 5f;
+                yield return new WaitForSeconds(0.2f);
+            }
         }
     }
 }
