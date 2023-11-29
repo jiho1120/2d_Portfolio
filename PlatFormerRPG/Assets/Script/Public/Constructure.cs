@@ -26,7 +26,11 @@ public class Constructure
             this.MaxExpVal = maxEXP;
             this.Level = level;
         }
+        
+        
     }
+    
+    
 
     public struct MonsterStat
     {
