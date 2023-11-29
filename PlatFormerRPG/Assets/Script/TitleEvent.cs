@@ -19,6 +19,7 @@ public class TitleEvent : MonoBehaviour
     
     private void Start()
     {
+        // UIManager.Instance.OffUiScript();
         LodingDisPlay.SetActive(false);
         sp = LodingDisPlay.transform.GetComponent<SpriteRenderer>();
         // Start the coroutine when the script is first initialized
