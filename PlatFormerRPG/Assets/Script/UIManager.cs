@@ -79,6 +79,8 @@ public class UIManager : Singleton<UIManager>
     public Text PopupTypeText;
     public Image panelImage;
 
+    int scene = 0;
+
     private void Start()
     {
         hpSlider.value = 0;
@@ -114,8 +116,16 @@ public class UIManager : Singleton<UIManager>
         {
             if (PlayerManager.Instance.InPotal == true)
             {
+                if (scene == 2)
+                {
+                    OnDungeon();
+                }
+                else if(scene == 3) 
+                {
+                    OnVillagePotal();
+                }
                 Debug.Log("이동");
-                OnDungeon();
+                
             }
             else if (PlayerManager.Instance.InPotal == false)
             {
@@ -242,6 +252,7 @@ public class UIManager : Singleton<UIManager>
 
     public void OnDungeon()
     {
+        scene = 3;
         SceneManager.LoadScene("Dungeon");
         Debug.Log("성공적으로 던전으로 이동하였습니다.  =  테스트 던전 이동");
         Debug.Log("UI매니져가 무사히 이동이 되었는지 확인을 하여야 합니다");
@@ -255,6 +266,11 @@ public class UIManager : Singleton<UIManager>
 
     public void OnVillagePotal()
     {
+        scene = 2;
+        Debug.Log("aaaaaaaaaaaaaa");
+        MonsterManager.instance.StartGenerateMonster(false);
+        MonsterManager.instance.AllkillMonster();
+
         SceneManager.LoadScene("VillageScene");
         QuestCanvas.SetActive(true);
         QuestOpenCanvas.SetActive(true);
@@ -262,8 +278,11 @@ public class UIManager : Singleton<UIManager>
         InfoBtnCanvas.SetActive(true);
         OnShopCanvas.SetActive(true);
         OffShopCanvas.SetActive(true);
-        // 코루틴 끄기
+        //StopCoroutine(DungeonManager.instance.monCor);
+        //StopCoroutine(MonsterManager.instance.GenerateMonster());        
+        //DungeonManager.instance.monCor = null;
     }
+     
     public void OnInfo()
     {
         StateInfoCanvas.SetActive(false);

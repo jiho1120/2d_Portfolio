@@ -17,11 +17,6 @@ public class Spawn : MonoBehaviour
     float bulletRadius;
     float angle;
 
-
-
-
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -55,6 +50,8 @@ public class Spawn : MonoBehaviour
         val++;
         tmpMonster.gameObject.SetActive(true);
     }
+
+
     static int val=0;
 
     public IEnumerator SetBulletSpawnPos()

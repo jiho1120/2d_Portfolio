@@ -24,6 +24,7 @@ public class MonsterManager : Singleton<MonsterManager>
 
     List<GameObject> allMonsterList = new List<GameObject>();
 
+    Coroutine cor = null;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +37,7 @@ public class MonsterManager : Singleton<MonsterManager>
 
     }
 
-    public void SetMonsterInfo() 
+    public void SetMonsterInfo()
     {
         for (int i = 0; i < 2; i++)
         {
@@ -45,7 +46,7 @@ public class MonsterManager : Singleton<MonsterManager>
             {
                 tmpobj = Instantiate(monsterPrefabs[i], this.transform.GetChild(0));
                 monsterObjectPool[i].Enqueue(tmpobj.GetComponent<Monster>());// Monster a = new flymonster();
-                tmpobj.SetActive(false);                
+                tmpobj.SetActive(false);
                 allMonsterList.Add(tmpobj);
             }
         }
@@ -67,13 +68,39 @@ public class MonsterManager : Singleton<MonsterManager>
         }
     }
 
-    public IEnumerator GenerateMonster() // 몬스터 생성 시간 설정 후 스폰
+    public void StartGenerateMonster(bool on)
+    {
+        if (on)
+        {
+            if (cor == null)
+            {
+                cor = StartCoroutine(GenerateMonster());
+            }
+        }
+        else
+        {
+            if (cor != null)
+            {
+                StopCoroutine(cor);
+                cor = null;
+            }
+        }
+    }
+    public void AllkillMonster()
+    {
+        for (int i = 0; i < allMonsterList.Count; i++)
+        {
+            allMonsterList[i].GetComponent<Object>().kill();
+            allMonsterList[i].GetComponent<Object>().isDead();
+        }
+    }
+    IEnumerator GenerateMonster() // 몬스터 생성 시간 설정 후 스폰
     {
         while (true)
         {
             generateTime = Random.Range(minGenerateTime, maxGenerateTime);
-            Debug.Log("generateTime:" +generateTime);
             yield return new WaitForSeconds(generateTime);
+            Debug.Log("setmonsterspawnaaaaaaaaaaaaaaaaaaaaaaa");
             spawn.SetMonsterSpawnPos();
         }
     }

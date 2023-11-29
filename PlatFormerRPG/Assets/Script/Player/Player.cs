@@ -210,10 +210,11 @@ public class Player : MonoBehaviour, IAtt
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Potal"))
+        if (other.gameObject.CompareTag("Potal") || other.gameObject.CompareTag("VillagePotal"))
         {
             PlayerManager.Instance.InPotal = true;
         }
+        
         //이지호 제작
         else if (other.gameObject.CompareTag("MonsterBullet"))
         {
@@ -251,9 +252,10 @@ public class Player : MonoBehaviour, IAtt
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Potal"))
+        if (other.gameObject.CompareTag("Potal") || other.gameObject.CompareTag("VillagePotal"))
         {
             PlayerManager.Instance.InPotal = false;
         }
+        
     }
 }

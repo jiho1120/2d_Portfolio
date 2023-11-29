@@ -93,6 +93,11 @@ public class Object : MonoBehaviour, IHit
         }
 
     }
+    public void kill()
+    {
+        this.objectStat.hP = 0;
+
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

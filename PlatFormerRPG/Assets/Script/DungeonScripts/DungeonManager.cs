@@ -12,8 +12,7 @@ public class DungeonManager : Singleton<DungeonManager>
     public Object boss;
 
     public int dungeonNum { get; private set; }
-
-    Coroutine monCor = null;
+    
 
     private void Start()
     {
@@ -29,10 +28,11 @@ public class DungeonManager : Singleton<DungeonManager>
     {
         if (dungeonNum <= 3)
         {
-            if (monCor == null)
-            {
-                monCor = StartCoroutine(MonsterManager.instance.GenerateMonster());
-            }
+            //if (monCor == null)
+            //{
+            //    monCor = StartCoroutine(MonsterManager.instance.GenerateMonster());
+            //}
+            MonsterManager.instance.StartGenerateMonster(true);
             Walls[0].gameObject.SetActive(true);
             Walls[1].gameObject.SetActive(true);
             Walls[2].gameObject.SetActive(false);
@@ -48,18 +48,19 @@ public class DungeonManager : Singleton<DungeonManager>
             boss.gameObject.SetActive(true);
             UIManager.instance.BossHpSlider.gameObject.SetActive(true);
 
-            if (monCor != null)
-            {
-                StopCoroutine(monCor);
-            }
+            //if (monCor != null)
+            //{
+            //    StopCoroutine(monCor);
+            //}
+            MonsterManager.instance.StartGenerateMonster(false);
             StartCoroutine(MonsterManager.instance.GenerateBullet());
         }
     }
 
-    public void StopCor()
-    {
-        monCor = null;
-    }
+    //public void StopCor()
+    //{
+    //    monCor = null;
+    //}
 
     public void checkDungeonNum(int playerLevel)
     {
