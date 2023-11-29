@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" addBOMForNewFiles="with BOM under Windows, with no BOM otherwise">
+    <file url="file://$PROJECT_DIR$/Assets/Script/DungeonScript.cs" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/Assets/Script/DungeonScripts/MonsterManager.cs" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/Assets/Script/DungeonScripts/Spawn.cs" charset="x-windows-949" />
     <file url="file://$PROJECT_DIR$/Assets/Script/Player/Player.cs" charset="EUC-KR" />
     <file url="file://$PROJECT_DIR$/Assets/Script/Player/PlayerManager.cs" charset="EUC-KR" />
   </component>

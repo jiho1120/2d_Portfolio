@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class PlayerManager : Singleton<PlayerManager>
 {
     public bool InPotal = false;
+    public bool VillPotal = false;
     public PlayerBullet[] playerbullet;       //플레이어 원거리 공격
 
    
@@ -32,8 +33,8 @@ public class PlayerManager : Singleton<PlayerManager>
         player.myStat.Level = 1;
         player.myStat.MaxExpVal = 5; // 레벨 1에서 2되는 5 이후로 레벨x 5의 조건으로
         player.myStat.Att = 5;
-        player.myStat.HP = 50;
-        player.myStat.MaxHP = 50;
+        player.myStat.HP = 100;
+        player.myStat.MaxHP = 100;
         player.myStat.ExpVal = 0;
         player.myStat.Skill = 10;
         AddStatCount = 1;
