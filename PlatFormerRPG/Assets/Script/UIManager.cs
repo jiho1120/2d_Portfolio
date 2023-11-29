@@ -380,6 +380,8 @@ public class UIManager : Singleton<UIManager>
         InfoBtnCanvas.SetActive(false);
         OnShopCanvas.SetActive(false);
         OffShopCanvas.SetActive(false);
+        PlayerManager.Instance.WarriorPlayer.transform.Translate(-640, -355,0);
+        PlayerManager.Instance.WizaldPlayer.transform.Translate(-640, -355,0);
 
         StartCoroutine(CheckDungeon());
     }
@@ -410,6 +412,8 @@ public class UIManager : Singleton<UIManager>
         InfoBtnCanvas.SetActive(true);
         OnShopCanvas.SetActive(true);
         OffShopCanvas.SetActive(true);
+        PlayerManager.Instance.WarriorPlayer.transform.Translate(-640, -355,0);
+        PlayerManager.Instance.WizaldPlayer.transform.Translate(-640, -355,0);
         //StopCoroutine(DungeonManager.instance.monCor);
         //StopCoroutine(MonsterManager.instance.GenerateMonster());        
         //DungeonManager.instance.monCor = null;
