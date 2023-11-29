@@ -136,7 +136,6 @@ public class UIManager : Singleton<UIManager>
             ResumeCanvas.SetActive(false);
             PauseCanvas.SetActive(true);
             ResumeGame();
-            Debug.Log("성공적으로 일시정지가 해제 되었습니다. 함수명 : OnResume");
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow) || (Input.GetKeyDown(KeyCode.W)))
@@ -372,8 +371,6 @@ public class UIManager : Singleton<UIManager>
         InPotalBtn.SetActive(false);
         scene = 3;
         SceneManager.LoadScene("Dungeon");
-        Debug.Log("성공적으로 던전으로 이동하였습니다.  =  테스트 던전 이동");
-        Debug.Log("UI매니져가 무사히 이동이 되었는지 확인을 하여야 합니다");
         QuestCanvas.SetActive(false);
         QuestOpenCanvas.SetActive(false);
         DunGeonCanvas.SetActive(false);
@@ -525,8 +522,6 @@ public class UIManager : Singleton<UIManager>
         }
         else
         {
-            Debug.Log("구매완료");
-            
             TotalGold -= UseGold;
             PotionCount += 1;
             PotionCountText.text = PotionCount.ToString();
@@ -578,8 +573,7 @@ public class UIManager : Singleton<UIManager>
         }
         else
         {
-            // 쿨다운 중일 때의 처리 (예를 들어 메시지 출력 등)
-            Debug.Log("Skill is on cooldown. Please wait.");
+            Debug.Log("cooldown.");
         }
         
     }
