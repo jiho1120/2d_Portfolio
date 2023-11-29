@@ -86,7 +86,7 @@ public class Object : MonoBehaviour, IHit
     {
         if (this.objectStat.hP <= 0)
         {
-            //PlayerManager.Instance.player.myStat.ExpVal += objectStat.giveExp;
+            PlayerManager.Instance.player.myStat.ExpVal += objectStat.giveExp;
             //PlayerManager.Instance.player.myStat.money += objectStat.giveMoney;
             Debug.Log("죽음");
             this.gameObject.SetActive(false);

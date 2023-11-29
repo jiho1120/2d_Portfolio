@@ -88,7 +88,7 @@ public class UIManager : Singleton<UIManager>
     {
         //dungeon = SceneManager.GetSceneByName("Dungeon");
         hpSlider.value = 0;
-        expSlider.value = 100;
+        expSlider.maxValue = PlayerManager.Instance.player.myStat.MaxExpVal;
         BossHpSlider.maxValue = 0;
         PotionCount += 3;
         PotionCountText.text = PotionCount.ToString();
@@ -106,7 +106,7 @@ public class UIManager : Singleton<UIManager>
 
     private void Update()
     {
-        
+        expSlider.value = PlayerManager.Instance.player.myStat.ExpVal;
         if (Input.GetKeyDown(KeyCode.P)) // Pause의 P
         {
             PauseObj.SetActive(true);
@@ -180,6 +180,11 @@ public class UIManager : Singleton<UIManager>
             BossHpSlider.value += 100;
             Debug.Log("보스의 채력을 강제로 채력 0");
         }
+
+        if (PlayerManager.Instance.player.myStat.MaxExpVal <= PlayerManager.Instance.player.myStat.ExpVal)
+        {
+            LevelUp();
+        }
     }
 
     public void LevelUp()
@@ -197,8 +202,11 @@ public class UIManager : Singleton<UIManager>
         PopupNameText.text = PopupNameText_string;
         PopupTypeText.text = PopupTypeText_string;
         StateBtn_levelTxt.text = PlayerManager.Instance.player.myStat.Level.ToString();
+        PlayerManager.Instance.player.myStat.ExpVal = 0;
+        PlayerManager.Instance.player.myStat.MaxExpVal += 10;
+        Debug.Log(PlayerManager.Instance.player.myStat.MaxExpVal);
         // AddStatCount.text = PlayerManager.Instance.AddStatCount.ToString();
-        
+
     }
 
     public void State(Constructure.Stat myStat)
