@@ -234,6 +234,11 @@ public class Player : MonoBehaviour, IAtt
             }
         }
     }
+
+    public int GetLevel()
+    {
+        return myStat.Level;
+    }
     private IEnumerator DamageDelay()
     {
         isHit = true;

@@ -18,17 +18,21 @@ public class DungeonManager : Singleton<DungeonManager>
     private void Start()
     {
         panelImage = UIManager.instance.panelImage;
-        checkDungeonNum(40);
-        ChangePanelImage();
-        CheckGenerateCoroutine();
-        MonsterManager.instance.SetMonsterInfo();
+        checkDungeonNum(PlayerManager.Instance.player.GetLevel());
+        Debug.Log(PlayerManager.Instance.player.GetLevel()); 
+        ChangePanelImage();        
+        MonsterManager.instance.SetMonsterInfo(); //실제로 애들풀을 만드는 ?
+        CheckGenerateCoroutine();//위치세팅
     }
 
     void CheckGenerateCoroutine()
     {
         if (dungeonNum <= 3)
         {
-            monCor = StartCoroutine(MonsterManager.instance.GenerateMonster());
+            if (monCor == null)
+            {
+                monCor = StartCoroutine(MonsterManager.instance.GenerateMonster());
+            }
             Walls[0].gameObject.SetActive(true);
             Walls[1].gameObject.SetActive(true);
             Walls[2].gameObject.SetActive(false);
@@ -50,6 +54,11 @@ public class DungeonManager : Singleton<DungeonManager>
             }
             StartCoroutine(MonsterManager.instance.GenerateBullet());
         }
+    }
+
+    public void StopCor()
+    {
+        monCor = null;
     }
 
     public void checkDungeonNum(int playerLevel)

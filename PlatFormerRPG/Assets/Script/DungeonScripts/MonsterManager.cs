@@ -36,7 +36,7 @@ public class MonsterManager : Singleton<MonsterManager>
 
     }
 
-    public void SetMonsterInfo() // 몬스터 프리팹 생성 후 큐랑 리스트에 담기 몬스터 스탯 저장
+    public void SetMonsterInfo() 
     {
         for (int i = 0; i < 2; i++)
         {
@@ -45,7 +45,7 @@ public class MonsterManager : Singleton<MonsterManager>
             {
                 tmpobj = Instantiate(monsterPrefabs[i], this.transform.GetChild(0));
                 monsterObjectPool[i].Enqueue(tmpobj.GetComponent<Monster>());// Monster a = new flymonster();
-                tmpobj.SetActive(false);
+                tmpobj.SetActive(false);                
                 allMonsterList.Add(tmpobj);
             }
         }
@@ -72,6 +72,7 @@ public class MonsterManager : Singleton<MonsterManager>
         while (true)
         {
             generateTime = Random.Range(minGenerateTime, maxGenerateTime);
+            Debug.Log("generateTime:" +generateTime);
             yield return new WaitForSeconds(generateTime);
             spawn.SetMonsterSpawnPos();
         }

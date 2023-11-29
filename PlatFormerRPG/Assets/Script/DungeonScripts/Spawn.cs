@@ -51,8 +51,11 @@ public class Spawn : MonoBehaviour
             vec.y = monsterSpawnPos[pos].position.y;
         }
         tmpMonster.transform.position = vec;
+        tmpMonster.gameObject.name = "ÀÌ°Å"+val;
+        val++;
         tmpMonster.gameObject.SetActive(true);
     }
+    static int val=0;
 
     public IEnumerator SetBulletSpawnPos()
     {

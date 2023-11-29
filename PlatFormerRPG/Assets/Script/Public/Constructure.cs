@@ -13,9 +13,9 @@ public class Constructure
         public float Skill;
         public float ExpVal;
         public float MaxExpVal;
-        public float Level;
+        public int Level;
 
-        public Stat(/*string name,*/ float hp, float att, float skill, float exp, float maxEXP, float level)
+        public Stat(/*string name,*/ float hp, float att, float skill, float exp, float maxEXP, int level)
         {
             //this.Name = name;
             this.HP = hp;
@@ -37,8 +37,8 @@ public class Constructure
         public int giveMoney;
         public MonsterStat(int level)
         {
-            this.hP = 20 * level;
-            this.maxHP = 20 * level;
+            this.hP = 10 + (20 * level);
+            this.maxHP = 10 + (20 * level);
             this.att = 1 * level;
             this.giveExp = 50 * level;
             this.giveMoney = 100 * level;
