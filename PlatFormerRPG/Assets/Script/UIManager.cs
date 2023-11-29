@@ -394,8 +394,30 @@ public class UIManager : Singleton<UIManager>
     }
 
     #endregion
+
+    #region 조이스틱버튼 함수
+
+    public void A_Btn()
+    {
+        
+    }
     
+    public void P_Btn()
+    {
+        UsePotion();
+    }
     
+    public void J_Btn()
+    {
+        
+    }
+    
+    public void S_Btn()
+    {
+        
+    }
+
+    #endregion
     
     
 }
