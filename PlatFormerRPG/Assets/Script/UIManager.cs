@@ -80,6 +80,7 @@ public class UIManager : Singleton<UIManager>
     public Image panelImage;
     private string PopupNameText_string;
     private string PopupTypeText_string;
+    public FixedJoystick joystick;
 
     private void Start()
     {
@@ -96,8 +97,6 @@ public class UIManager : Singleton<UIManager>
         PopupTypeText.text = PopupTypeText_string;
         StateBtn_levelTxt.text = PlayerManager.Instance.defaultStats.Level.ToString();
         // AddStatCount.text = PlayerManager.Instance.AddStatCount.ToString();
-
-
     }
 
     private void Update()
@@ -399,7 +398,7 @@ public class UIManager : Singleton<UIManager>
 
     public void A_Btn()
     {
-        
+        PlayerManager.instance.player.PlayerAtt();
     }
     
     public void P_Btn()
@@ -409,12 +408,12 @@ public class UIManager : Singleton<UIManager>
     
     public void J_Btn()
     {
-        
+        PlayerManager.instance.player.JumpMove();
     }
     
     public void S_Btn()
     {
-        
+        PlayerManager.instance.player.PlayerSkill();
     }
 
     #endregion

@@ -112,7 +112,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2423904100724103318}
   - component: {fileID: 2423904100724103403}
-  - component: {fileID: 1051783058075145395}
   - component: {fileID: 2423904100724103402}
   - component: {fileID: 2423904100724103317}
   - component: {fileID: 2423904100724103316}
@@ -158,7 +157,6 @@ MonoBehaviour:
   fireBallPrefab: {fileID: 6119763235419695949, guid: 869a03421a7db3d428f5f6dcf1f185e5, type: 3}
   bigFireBallPrefab: {fileID: 6119763235419695949, guid: 15f6a4966c5508246a59c67834dbb217, type: 3}
   fireBallPos: {fileID: 2423904099963424503}
-  joy: {fileID: 0}
   speed: 6
   jumpPower: 8
   jumpCount: 0
@@ -166,25 +164,6 @@ MonoBehaviour:
   isAtt: 0
   isWar: 0
   useSkill: 1
---- !u!114 &1051783058075145395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2423904100724103313}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  handleRange: 1
-  deadZone: 0
-  axisOptions: 0
-  snapX: 1
-  snapY: 1
-  background: {fileID: 0}
-  handle: {fileID: 0}
 --- !u!95 &2423904100724103402
 Animator:
   serializedVersion: 5

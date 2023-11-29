@@ -12,7 +12,7 @@ public class Player : MonoBehaviour, IAtt
     public GameObject fireBallPrefab;       //마법사 기본 공격 object prefab
     public GameObject bigFireBallPrefab;    //마법사 스킬 공격 object prefab
     public Transform fireBallPos;           //마법사 공격 object 생성 위치
-    public Joystick joy;                    //조이스틱 조작
+    //public Joystick joy;                    //조이스틱 조작
 
     Rigidbody2D rigid;
     Animator anim;
@@ -158,8 +158,8 @@ public class Player : MonoBehaviour, IAtt
         //Key조작
         //x = Input.GetAxisRaw("Horizontal");
         //joystick 조작
-        x = joy.Horizontal;
-        y = joy.Vertical;
+        x = UIManager.Instance.joystick.Horizontal;
+        y = UIManager.Instance.joystick.Vertical;
 
         if (isAtt == false)
         {
@@ -191,7 +191,7 @@ public class Player : MonoBehaviour, IAtt
     }
 
     //플레이어 점프
-    void JumpMove()
+    public void JumpMove()
     {
         //점프joystick
         if (jumpCount < 2)
@@ -224,7 +224,7 @@ public class Player : MonoBehaviour, IAtt
     }
 
     //내림
-    void DownJumpMove()
+    public void DownJumpMove()
     {
         //내림joystick
         if (ignoreCollision == false && groundCol != null)
@@ -251,7 +251,7 @@ public class Player : MonoBehaviour, IAtt
     }
 
     //플레이어 공격
-    void PlayerAtt()
+    public void PlayerAtt()
     {
         //기본 공격joystick
         isAtt = true;
@@ -268,7 +268,7 @@ public class Player : MonoBehaviour, IAtt
     }
 
     //플레이어 스킬
-    void PlayerSkill()
+    public void PlayerSkill()
     {
         //스킬 공격joystick
         isAtt = true;
@@ -411,7 +411,7 @@ public class Player : MonoBehaviour, IAtt
     void OnCollisionEnter2D(Collision2D collision)
     {
         //몬스터와 닿았을 때
-        if (collision.gameObject.CompareTag("GroundEnemy") || collision.gameObject.CompareTag("MonsetBullet"))
+        if (collision.gameObject.CompareTag("GroundEnemy") || collision.gameObject.CompareTag("MonsterBullet"))
         {
             isHit = true;
 
