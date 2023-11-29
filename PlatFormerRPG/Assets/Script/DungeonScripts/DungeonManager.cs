@@ -7,60 +7,45 @@ public class DungeonManager : Singleton<DungeonManager>
 {
     Image panelImage;
     public Sprite[] panelSprites;
-    public GameObject[] tileMap;
-    public GameObject[] Walls;
-    public Object boss;
-
-    public int dungeonNum { get; private set; }
     
 
-    private void Start()
+    public GameObject bossPrefab;
+    public Boss boss;
+
+
+    public int dungeonNum { get; private set; }
+    DungeonScript dgscript;
+
+    public void StartDungeon()
     {
+        dgscript = GameObject.Find("DungeonScript").GetComponent<DungeonScript>();
+        MonsterManager.instance.InitSpawn();
+
         panelImage = UIManager.instance.panelImage;
-        checkDungeonNum(PlayerManager.Instance.player.GetLevel());
-        Debug.Log(PlayerManager.Instance.player.GetLevel()); 
-        ChangePanelImage();        
+        checkDungeonNum(PlayerManager.Instance.player.GetLevel());                
+
+        ChangePanelImage();
         MonsterManager.instance.SetMonsterInfo(); //실제로 애들풀을 만드는 ?
-        CheckGenerateCoroutine();//위치세팅
-    }
+        dgscript.CheckGenerateCoroutine();//위치세팅
 
-    void CheckGenerateCoroutine()
-    {
-        if (dungeonNum <= 3)
+        if (boss == null)
         {
-            //if (monCor == null)
-            //{
-            //    monCor = StartCoroutine(MonsterManager.instance.GenerateMonster());
-            //}
-            MonsterManager.instance.StartGenerateMonster(true);
-            Walls[0].gameObject.SetActive(true);
-            Walls[1].gameObject.SetActive(true);
-            Walls[2].gameObject.SetActive(false);
-            boss.gameObject.SetActive(false);
-            UIManager.instance.BossHpSlider.gameObject.SetActive(false);
+            boss = Instantiate(bossPrefab, Vector3.zero, Quaternion.identity).GetComponent<Boss>();
+        }
 
+        if (dungeonNum >3)
+        {
+
+            boss.gameObject.SetActive(true);
         }
         else
         {
-            Walls[0].gameObject.SetActive(false);
-            Walls[1].gameObject.SetActive(false);
-            Walls[2].gameObject.SetActive(true);
-            boss.gameObject.SetActive(true);
-            UIManager.instance.BossHpSlider.gameObject.SetActive(true);
+            boss.gameObject.SetActive(false);
 
-            //if (monCor != null)
-            //{
-            //    StopCoroutine(monCor);
-            //}
-            MonsterManager.instance.StartGenerateMonster(false);
-            StartCoroutine(MonsterManager.instance.GenerateBullet());
         }
     }
 
-    //public void StopCor()
-    //{
-    //    monCor = null;
-    //}
+
 
     public void checkDungeonNum(int playerLevel)
     {
@@ -87,14 +72,12 @@ public class DungeonManager : Singleton<DungeonManager>
 
     public void ChangePanelImage() // 레벨 판별 번호 받아서 이미지 변경
     {
-        for (int i = 0; i < tileMap.Length; i++)
+        if (dgscript !=null)
         {
-            // 해당 인덱스의 tileMap 활성화 여부를 판별하여 설정
-            tileMap[i].SetActive(i == DungeonManager.Instance.dungeonNum); // 나중에 게임 매니저 통해서 씬 로드할때 추가해야함
-        }
-
+            dgscript.ChangePanelImage();
+        }       
         // 마지막에 패널 이미지를 설정
-        panelImage.sprite = panelSprites[DungeonManager.Instance.dungeonNum];
+        panelImage.sprite = panelSprites[dungeonNum];
 
     }
 }

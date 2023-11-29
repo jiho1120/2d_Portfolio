@@ -79,10 +79,12 @@ public class UIManager : Singleton<UIManager>
     public Text PopupTypeText;
     public Image panelImage;
 
-    int scene = 0;
+    int scene = 2;
+    //Scene dungeon;
 
     private void Start()
     {
+        //dungeon = SceneManager.GetSceneByName("Dungeon");
         hpSlider.value = 0;
         expSlider.value = 100;
         BossHpSlider.maxValue = 0;
@@ -262,15 +264,27 @@ public class UIManager : Singleton<UIManager>
         InfoBtnCanvas.SetActive(false);
         OnShopCanvas.SetActive(false);
         OffShopCanvas.SetActive(false);
+
+        StartCoroutine(CheckDungeon());
+    }
+
+    IEnumerator CheckDungeon()
+    {        
+        yield return new WaitUntil(()=> SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Dungeon"));        
+
+        while (DungeonManager.instance ==null)
+        {
+            yield return null;
+        }
+
+        DungeonManager.instance.StartDungeon();
     }
 
     public void OnVillagePotal()
     {
         scene = 2;
-        Debug.Log("aaaaaaaaaaaaaa");
         MonsterManager.instance.StartGenerateMonster(false);
         MonsterManager.instance.AllkillMonster();
-
         SceneManager.LoadScene("VillageScene");
         QuestCanvas.SetActive(true);
         QuestOpenCanvas.SetActive(true);

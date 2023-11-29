@@ -26,30 +26,37 @@ public class MonsterManager : Singleton<MonsterManager>
 
     Coroutine cor = null;
     // Start is called before the first frame update
-    void Start()
-    {
-        spawn = GetComponent<Spawn>();
-    }
+    //void Start()
+    //{
+    //    //spawn = GetComponent<Spawn>();        
+    //}
 
     // Update is called once per frame
-    void Update()
+    public void InitSpawn()
     {
-
+        if (spawn == null)
+        {
+            spawn = GameObject.Find("DungeonScript").GetComponent<Spawn>();
+        }
     }
 
     public void SetMonsterInfo()
     {
-        for (int i = 0; i < 2; i++)
+        if (monsterObjectPool.Count == 0)
         {
-            monsterObjectPool.Add(i, new Queue<Monster>());
-            for (int j = 0; j < 10; j++)
+            for (int i = 0; i < 2; i++)
             {
-                tmpobj = Instantiate(monsterPrefabs[i], this.transform.GetChild(0));
-                monsterObjectPool[i].Enqueue(tmpobj.GetComponent<Monster>());// Monster a = new flymonster();
-                tmpobj.SetActive(false);
-                allMonsterList.Add(tmpobj);
+                monsterObjectPool.Add(i, new Queue<Monster>());
+                for (int j = 0; j < 10; j++)
+                {
+                    tmpobj = Instantiate(monsterPrefabs[i], this.transform.GetChild(0));
+                    monsterObjectPool[i].Enqueue(tmpobj.GetComponent<Monster>());// Monster a = new flymonster();
+                    tmpobj.SetActive(false);
+                    allMonsterList.Add(tmpobj);
+                }
             }
         }
+
     }
 
 
@@ -71,7 +78,7 @@ public class MonsterManager : Singleton<MonsterManager>
     public void StartGenerateMonster(bool on)
     {
         if (on)
-        {
+        {            
             if (cor == null)
             {
                 cor = StartCoroutine(GenerateMonster());
@@ -95,12 +102,11 @@ public class MonsterManager : Singleton<MonsterManager>
         }
     }
     IEnumerator GenerateMonster() // 몬스터 생성 시간 설정 후 스폰
-    {
+    {       
         while (true)
         {
             generateTime = Random.Range(minGenerateTime, maxGenerateTime);
             yield return new WaitForSeconds(generateTime);
-            Debug.Log("setmonsterspawnaaaaaaaaaaaaaaaaaaaaaaa");
             spawn.SetMonsterSpawnPos();
         }
     }
