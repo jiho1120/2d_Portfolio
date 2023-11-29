@@ -14,7 +14,7 @@ public class DungeonScript : MonoBehaviour
             MonsterManager.Instance.StartGenerateMonster(true);
             Walls[0].gameObject.SetActive(true);
             Walls[1].gameObject.SetActive(true);
-            Walls[2].gameObject.SetActive(false);            
+            Walls[2].gameObject.SetActive(true);            
             UIManager.Instance.BossHpSlider.gameObject.SetActive(false);
 
         }
@@ -22,7 +22,8 @@ public class DungeonScript : MonoBehaviour
         {
             Walls[0].gameObject.SetActive(false);
             Walls[1].gameObject.SetActive(false);
-            Walls[2].gameObject.SetActive(true);            
+            Walls[2].gameObject.SetActive(false);
+            Walls[3].gameObject.SetActive(true);
             UIManager.Instance.BossHpSlider.gameObject.SetActive(true);
             MonsterManager.Instance.StartGenerateMonster(false);
             StartCoroutine(MonsterManager.Instance.GenerateBullet());
