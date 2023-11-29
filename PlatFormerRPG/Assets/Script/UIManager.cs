@@ -70,7 +70,13 @@ public class UIManager : Singleton<UIManager>
     public int TotalGold = 0;
     public int UseGold = 100;
     public Constructure.Stat stat;
-
+    public Text PopupLevelText;
+    public Text PopupAttText;
+    public Text PopupDefText;
+    public Text PopupExpText;
+    public Text PopupMaxExpText;
+    public Text PopupNameText;
+    public Text PopupTypeText;
     public Image panelImage;
 
     private void Start()
@@ -80,22 +86,22 @@ public class UIManager : Singleton<UIManager>
         BossHpSlider.maxValue = 0;
         PotionCount += 3;
         PotionCountText.text = PotionCount.ToString();
+        PopupLevelText.text = PlayerManager.Instance.defaultStats.Level.ToString();
 
     }
 
     private void Update()
     {
         
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetKeyDown(KeyCode.P)) // Pause의 P
         {
             PauseObj.SetActive(true);
             PauseCanvas.SetActive(false);
             ResumeCanvas.SetActive(true);
             PauseGame();
-            Debug.Log("성공적으로 일시정지 되었습니다. 함수명 : OnPause");
         }
 
-        if (Input.GetKeyDown(KeyCode.N))
+        if (Input.GetKeyDown(KeyCode.O)) // On의 O
         {
             PauseObj.SetActive(false);
             ResumeCanvas.SetActive(false);
@@ -104,7 +110,7 @@ public class UIManager : Singleton<UIManager>
             Debug.Log("성공적으로 일시정지가 해제 되었습니다. 함수명 : OnResume");
         }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow) || (Input.GetKeyDown(KeyCode.W)))
         {
             if (PlayerManager.Instance.InPotal == true)
             {
@@ -139,7 +145,7 @@ public class UIManager : Singleton<UIManager>
         if (Input.GetKeyDown(KeyCode.F4))
         {
             expSlider.value -= 50;
-            Debug.Log("경험치를 강제로 50씩 증가시킴");
+            Debug.Log("경험치를 강제로 50%씩 증가시킴");
             if (expSlider.value == 0)
             {
                 Debug.Log("레벨업!");
@@ -148,6 +154,11 @@ public class UIManager : Singleton<UIManager>
                 levelTxt.text = LevelCount.ToString();
                 Debug.Log("레벨"+stat.Level);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Insert))
+        {
+            UsePotion();
         }
     }
 
@@ -240,6 +251,18 @@ public class UIManager : Singleton<UIManager>
         InfoBtnCanvas.SetActive(false);
         OnShopCanvas.SetActive(false);
         OffShopCanvas.SetActive(false);
+    }
+
+    public void OnVillagePotal()
+    {
+        SceneManager.LoadScene("VillageScene");
+        QuestCanvas.SetActive(true);
+        QuestOpenCanvas.SetActive(true);
+        DunGeonCanvas.SetActive(true);
+        InfoBtnCanvas.SetActive(true);
+        OnShopCanvas.SetActive(true);
+        OffShopCanvas.SetActive(true);
+        // 코루틴 끄기
     }
     public void OnInfo()
     {
