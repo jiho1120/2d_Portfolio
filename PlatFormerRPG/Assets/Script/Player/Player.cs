@@ -143,7 +143,7 @@ public class Player : MonoBehaviour, IAtt
             if(myStat.ExpVal == myStat.MaxExpVal)
             {
                 myStat.Level += 1;
-                UIManager.Instance.levelTxt.text = $"{myStat.Level}";
+                UIManager.Instance.StateBtn_levelTxt.text = $"{myStat.Level}";
                 myStat.ExpVal = 0;
                 UIManager.Instance.expSlider.value = myStat.ExpVal;
                 myStat.MaxExpVal += 100;
