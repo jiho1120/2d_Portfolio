@@ -5,7 +5,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
+/*
+ * 용도 : 캐릭터를 새로 생성하여 싱글톤을 통해서 보냄
+ */
 public class NewLife : MonoBehaviour
 {
     public GameObject Character_Human;
@@ -16,6 +18,7 @@ public class NewLife : MonoBehaviour
     public GameObject SeletedWarrior;
     public GameObject SeletedDragon;
     private string OkName;
+    public Text testText;
     
     //private Dictionary<AllEnum.JobType, int> jobTypeValues = new Dictionary<AllEnum.JobType, int>();
     public static AllEnum.Type jobtype;
