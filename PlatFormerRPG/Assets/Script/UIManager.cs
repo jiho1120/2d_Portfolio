@@ -58,8 +58,7 @@ public class UIManager : Singleton<UIManager>
     //public Image[] coolImg;       //쿨타임 이미지
     public Slider hpSlider;         //HP Bar
     public Slider expSlider;        //EXP Bar
-    public Text levelTxt;           //Level Txt
-    public int LevelCount = 0;
+    public Text StateBtn_levelTxt;           //Level Txt
     public GameObject TypeW;
     public GameObject TypeD;
     public GameObject UiScript;
@@ -77,7 +76,10 @@ public class UIManager : Singleton<UIManager>
     public Text PopupMaxExpText;
     public Text PopupNameText;
     public Text PopupTypeText;
+    public Text AddStatCount;
     public Image panelImage;
+    private string PopupNameText_string;
+    private string PopupTypeText_string;
 
     private void Start()
     {
@@ -87,6 +89,14 @@ public class UIManager : Singleton<UIManager>
         PotionCount += 3;
         PotionCountText.text = PotionCount.ToString();
         PopupLevelText.text = PlayerManager.Instance.defaultStats.Level.ToString();
+        PopupAttText.text = PlayerManager.Instance.defaultStats.Att.ToString();
+        PopupExpText.text = PlayerManager.Instance.defaultStats.ExpVal.ToString();
+        PopupMaxExpText.text = PlayerManager.Instance.defaultStats.MaxExpVal.ToString();
+        PopupNameText.text = PopupNameText_string;
+        PopupTypeText.text = PopupTypeText_string;
+        StateBtn_levelTxt.text = PlayerManager.Instance.defaultStats.Level.ToString();
+        // AddStatCount.text = PlayerManager.Instance.AddStatCount.ToString();
+
 
     }
 
@@ -150,9 +160,7 @@ public class UIManager : Singleton<UIManager>
             {
                 Debug.Log("레벨업!");
                 expSlider.value = 100;
-                LevelCount += 1;
-                levelTxt.text = LevelCount.ToString();
-                Debug.Log("레벨"+stat.Level);
+                LevelUp();
             }
         }
 
@@ -160,6 +168,25 @@ public class UIManager : Singleton<UIManager>
         {
             UsePotion();
         }
+    }
+
+    public void LevelUp()
+    {
+        PlayerManager.Instance.defaultStats.Level += 1;
+        PlayerManager.Instance.AddStatCount += 2;
+        PlayerManager.Instance.defaultStats.Att += 1;
+        Debug.Log("레벨 : "+PlayerManager.Instance.defaultStats.Level);
+        Debug.Log("습득 능력치 카운트 : "+PlayerManager.Instance.AddStatCount);
+        PotionCountText.text = PotionCount.ToString();
+        PopupLevelText.text = PlayerManager.Instance.defaultStats.Level.ToString();
+        PopupAttText.text = PlayerManager.Instance.defaultStats.Att.ToString();
+        PopupExpText.text = PlayerManager.Instance.defaultStats.ExpVal.ToString();
+        PopupMaxExpText.text = PlayerManager.Instance.defaultStats.MaxExpVal.ToString();
+        PopupNameText.text = PopupNameText_string;
+        PopupTypeText.text = PopupTypeText_string;
+        StateBtn_levelTxt.text = PlayerManager.Instance.defaultStats.Level.ToString();
+        // AddStatCount.text = PlayerManager.Instance.AddStatCount.ToString();
+        
     }
 
     public void State(Constructure.Stat myStat)
@@ -174,8 +201,8 @@ public class UIManager : Singleton<UIManager>
             expSlider.maxValue = myStat.MaxExpVal;
             expSlider.value = myStat.ExpVal;
         }
-        if (levelTxt != null)        
-            levelTxt.text = myStat.Level.ToString();
+        if (StateBtn_levelTxt != null)        
+            StateBtn_levelTxt.text = myStat.Level.ToString();
     }
 
     public void SetHpSlider(float HP)
@@ -191,6 +218,8 @@ public class UIManager : Singleton<UIManager>
     public void SetName(string name)
     {
         Debug.Log(name+" 라는 이름이 정상적으로 입력이 되었습니다.");
+        PopupNameText_string = name;
+
     }
 
     public void SetType(AllEnum.Type type)
@@ -206,6 +235,7 @@ public class UIManager : Singleton<UIManager>
             TypeD.SetActive(true);
             TypeW.SetActive(false); 
         }
+        PopupTypeText_string = type.ToString();
     }
     #region 버튼 함수
     public void OnPause(bool pauseStatus)
