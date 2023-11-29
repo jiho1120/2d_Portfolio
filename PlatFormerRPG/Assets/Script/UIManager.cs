@@ -87,7 +87,7 @@ public class UIManager : Singleton<UIManager>
     private void Start()
     {
         //dungeon = SceneManager.GetSceneByName("Dungeon");
-        hpSlider.value = 0;
+        hpSlider.maxValue = PlayerManager.Instance.player.myStat.MaxHP;
         expSlider.maxValue = PlayerManager.Instance.player.myStat.MaxExpVal;
         BossHpSlider.maxValue = 0;
         PotionCount += 3;
@@ -107,6 +107,9 @@ public class UIManager : Singleton<UIManager>
     private void Update()
     {
         expSlider.value = PlayerManager.Instance.player.myStat.ExpVal;
+        hpSlider.value = PlayerManager.Instance.player.myStat.HP;
+
+
         if (Input.GetKeyDown(KeyCode.P)) // Pause의 P
         {
             PauseObj.SetActive(true);

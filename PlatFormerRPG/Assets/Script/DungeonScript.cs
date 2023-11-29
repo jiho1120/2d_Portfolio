@@ -20,7 +20,7 @@ public class DungeonScript : MonoBehaviour
         }
         else
         {
-            Walls[0].gameObject.SetActive(false);
+            Walls[0].gameObject.SetActive(true);
             Walls[1].gameObject.SetActive(false);
             Walls[2].gameObject.SetActive(false);
             Walls[3].gameObject.SetActive(true);
