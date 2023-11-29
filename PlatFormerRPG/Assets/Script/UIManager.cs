@@ -90,9 +90,11 @@ public class UIManager : Singleton<UIManager>
     public Constructure.MonsterStat objectStat;
     public float delayInSeconds = 2f;
     //Scene dungeon;
+    public GameObject SkillBtn;
 
     private void Start()
     {
+        PlayerManager.Instance.player.myStat.ExpVal = 0;
         //dungeon = SceneManager.GetSceneByName("Dungeon");
         hpSlider.maxValue = PlayerManager.Instance.player.myStat.MaxHP;
         expSlider.maxValue = PlayerManager.Instance.player.myStat.MaxExpVal;
@@ -111,6 +113,7 @@ public class UIManager : Singleton<UIManager>
         WinPopup_black.SetActive(false);
         WinPopup_White.SetActive(false);
         DeadPopup.SetActive(false);
+        objectStat.hP = objectStat.maxHP * 0.4f;
     }
 
     private void Update()
@@ -189,7 +192,7 @@ public class UIManager : Singleton<UIManager>
         }
         if (Input.GetKeyDown(KeyCode.F5))
         {
-            BossHpSlider.value += 100;
+            objectStat.hP = 0;
             Debug.Log("보스의 채력을 강제로 채력 0");
         }
 
@@ -217,17 +220,52 @@ public class UIManager : Singleton<UIManager>
             
         }
 
-        // if (objectStat.hP == 0)
-        // {
-        //     Debug.Log("보스잡힘");
-        // }
+        if (BossHpSlider.value == 0)
+        {
+            BossHpSlider.gameObject.SetActive(false);
+            StartCoroutine(AlternatePopups());
+            
+        }
+    }
+    
+    IEnumerator AlternatePopups()
+    {
+        while (true)
+        {
+            // 첫 번째 팝업을 활성화하고, 두 번째는 비활성화
+            WinPopup_black.SetActive(true);
+            WinPopup_White.SetActive(false);
+
+            // 2초 기다린 후
+            yield return new WaitForSeconds(4f);
+
+            // 두 번째 팝업을 활성화하고, 첫 번째는 비활성화
+            WinPopup_black.SetActive(false);
+            WinPopup_White.SetActive(true);
+
+            // 2초 기다린 후
+            yield return new WaitForSeconds(4f);
+            QuestCanvas.SetActive(false);
+            QuestOpenCanvas.SetActive(false);
+            DunGeonCanvas.SetActive(false);
+            InfoBtnCanvas.SetActive(false);
+            OnShopCanvas.SetActive(false);
+            OffShopCanvas.SetActive(false);
+            OffUiScript();
+            SceneManager.LoadScene("FirstScene");
+            
+            
+        }
     }
 
     public void LevelUp()
     {
         PlayerManager.Instance.player.myStat.Level += 1;
         PlayerManager.Instance.AddStatCount += 2;
-        PlayerManager.Instance.player.myStat.Att += 1;
+        PlayerManager.Instance.player.myStat.Att += 5;
+        PlayerManager.Instance.player.myStat.MaxHP += 100;
+        PlayerManager.Instance.player.myStat.HP += 100;
+        PlayerManager.Instance.player.myStat.Skill += 10;
         Debug.Log("레벨 : "+PlayerManager.Instance.player.myStat.Level);
         Debug.Log("습득 능력치 카운트 : "+PlayerManager.Instance.AddStatCount);
         PotionCountText.text = PotionCount.ToString();
@@ -510,9 +548,55 @@ public class UIManager : Singleton<UIManager>
         PlayerManager.instance.player.JumpMove();
     }
     
+    private void StartCooldown(float cooldownDuration)
+    {
+        // 쿨다운 중임을 표시
+        isCooldown = true;
+
+        // 쿨다운 타이머 설정
+        cooldownTimer = cooldownDuration;
+
+        // 쿨다운 타이머를 감소시키는 코루틴 시작
+        StartCoroutine(CooldownTimer());
+    }
+    
     public void S_Btn()
     {
-        PlayerManager.instance.player.PlayerSkill();
+        if (!isCooldown)
+        {
+            // 기능을 실행
+            PlayerManager.instance.player.PlayerSkill();
+            SkillBtn.SetActive(false);
+            
+
+            // 쿨다운 타이머 시작 (3초)
+            StartCooldown(3f);
+        }
+        else
+        {
+            // 쿨다운 중일 때의 처리 (예를 들어 메시지 출력 등)
+            Debug.Log("Skill is on cooldown. Please wait.");
+        }
+        
+    }
+    
+    private float cooldownTimer = 0f;
+    private bool isCooldown = false;
+    
+    private IEnumerator CooldownTimer()
+    {
+        while (cooldownTimer > 0)
+        {
+            // 1초씩 감소
+            cooldownTimer -= Time.deltaTime;
+
+            // 대기
+            yield return null;
+        }
+
+        // 쿨다운이 종료되면 상태 초기화
+        isCooldown = false;
+        SkillBtn.SetActive(true);
     }
 
     #endregion
