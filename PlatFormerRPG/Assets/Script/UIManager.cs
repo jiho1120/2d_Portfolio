@@ -92,13 +92,13 @@ public class UIManager : Singleton<UIManager>
         BossHpSlider.maxValue = 0;
         PotionCount += 3;
         PotionCountText.text = PotionCount.ToString();
-        PopupLevelText.text = PlayerManager.Instance.defaultStats.Level.ToString();
-        PopupAttText.text = PlayerManager.Instance.defaultStats.Att.ToString();
-        PopupExpText.text = PlayerManager.Instance.defaultStats.ExpVal.ToString();
-        PopupMaxExpText.text = PlayerManager.Instance.defaultStats.MaxExpVal.ToString();
+        PopupLevelText.text = PlayerManager.Instance.player.myStat.Level.ToString();
+        PopupAttText.text = PlayerManager.Instance.player.myStat.Att.ToString();
+        PopupExpText.text = PlayerManager.Instance.player.myStat.ExpVal.ToString();
+        PopupMaxExpText.text = PlayerManager.Instance.player.myStat.MaxExpVal.ToString();
         PopupNameText.text = PopupNameText_string;
         PopupTypeText.text = PopupTypeText_string;
-        StateBtn_levelTxt.text = PlayerManager.Instance.defaultStats.Level.ToString();
+        StateBtn_levelTxt.text = PlayerManager.Instance.player.myStat.Level.ToString();
         // AddStatCount.text = PlayerManager.Instance.AddStatCount.ToString();
 
 
@@ -175,28 +175,28 @@ public class UIManager : Singleton<UIManager>
                 LevelUp();
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.Insert))
+        if (Input.GetKeyDown(KeyCode.F5))
         {
-            UsePotion();
+            BossHpSlider.value += 100;
+            Debug.Log("보스의 채력을 강제로 채력 0");
         }
     }
 
     public void LevelUp()
     {
-        PlayerManager.Instance.defaultStats.Level += 1;
+        PlayerManager.Instance.player.myStat.Level += 1;
         PlayerManager.Instance.AddStatCount += 2;
-        PlayerManager.Instance.defaultStats.Att += 1;
-        Debug.Log("레벨 : "+PlayerManager.Instance.defaultStats.Level);
+        PlayerManager.Instance.player.myStat.Att += 1;
+        Debug.Log("레벨 : "+PlayerManager.Instance.player.myStat.Level);
         Debug.Log("습득 능력치 카운트 : "+PlayerManager.Instance.AddStatCount);
         PotionCountText.text = PotionCount.ToString();
-        PopupLevelText.text = PlayerManager.Instance.defaultStats.Level.ToString();
-        PopupAttText.text = PlayerManager.Instance.defaultStats.Att.ToString();
-        PopupExpText.text = PlayerManager.Instance.defaultStats.ExpVal.ToString();
-        PopupMaxExpText.text = PlayerManager.Instance.defaultStats.MaxExpVal.ToString();
+        PopupLevelText.text = PlayerManager.Instance.player.myStat.Level.ToString();
+        PopupAttText.text = PlayerManager.Instance.player.myStat.Att.ToString();
+        PopupExpText.text = PlayerManager.Instance.player.myStat.ExpVal.ToString();
+        PopupMaxExpText.text = PlayerManager.Instance.player.myStat.MaxExpVal.ToString();
         PopupNameText.text = PopupNameText_string;
         PopupTypeText.text = PopupTypeText_string;
-        StateBtn_levelTxt.text = PlayerManager.Instance.defaultStats.Level.ToString();
+        StateBtn_levelTxt.text = PlayerManager.Instance.player.myStat.Level.ToString();
         // AddStatCount.text = PlayerManager.Instance.AddStatCount.ToString();
         
     }
