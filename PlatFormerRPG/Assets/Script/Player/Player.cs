@@ -13,7 +13,7 @@ public class Player : MonoBehaviour, IAtt
     public GameObject bigFireBallPrefab;    //마법사 스킬 공격 object prefab
     public Transform fireBallPos;           //마법사 공격 object 생성 위치
 
-    public Rigidbody2D rigid;
+    Rigidbody2D rigid;
     Animator anim;
     //GameObject skillObj;              //dic 임시변수
     GameObject warriorSkillObj;         //전사 bullet 생성 임시변수
@@ -46,13 +46,24 @@ public class Player : MonoBehaviour, IAtt
     bool isStart = false;           //시작 판별
     public bool useSkill = true;    //스킬 사용 여부
     int layermask = 0;
-    
+
     Coroutine cor = null;
+
+    //이지호 만듬
+    bool ignoreCollision = false;
+    //Collider2D col;    
+    //Collider2D footCol;
+    Collider2D[] cols;
+    Collider2D groundCol;
 
     void Start()
     {
         rigid = transform.GetComponent<Rigidbody2D>();
-        anim = transform.GetComponent<Animator>();
+        //anim = transform.GetComponent<Animator>();
+        anim = transform.GetComponentInChildren<Animator>();
+        //col = transform.GetComponent<Collider2D>();
+        //footCol = transform.GetComponentInChildren<Collider2D>();
+        cols = transform.GetComponentsInChildren<Collider2D>();
         StatSetting();
         isStart = true;
 
@@ -71,11 +82,11 @@ public class Player : MonoBehaviour, IAtt
     //Player 스탯 세팅
     void StatSetting()
     {
-        myStat = new Constructure.Stat(100, 10, 20, 50, 100, 0, 0);
-        if (UIManager.Instance !=null)
+        myStat = new Constructure.Stat(100, 10, 20, 50, 100, 0);
+        if (UIManager.Instance != null)
         {
             UIManager.Instance.State(myStat);
-        }        
+        }
     }
 
     //플레이어 bullet 생성 세팅 정보(=최적화 미구현...)
@@ -92,7 +103,7 @@ public class Player : MonoBehaviour, IAtt
     //        }
     //    }
     //}
-
+    
     void Update()
     {
         if (isStart == false)
@@ -131,12 +142,17 @@ public class Player : MonoBehaviour, IAtt
             if(myStat.ExpVal == myStat.MaxExpVal)
             {
                 myStat.Level += 1;
+                UIManager.Instance.levelTxt.text = $"{myStat.Level}";
                 myStat.ExpVal = 0;
+                UIManager.Instance.expSlider.value = myStat.ExpVal;
                 myStat.MaxExpVal += 100;
+                UIManager.Instance.expSlider.maxValue = myStat.MaxExpVal;
                 myStat.Att += 10;
                 myStat.Skill += 10;
             }
         }
+
+        
     }
 
     //Player 조작
@@ -177,6 +193,19 @@ public class Player : MonoBehaviour, IAtt
             rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
             anim.SetTrigger("IsJump");
         }
+
+        //내림key
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {            
+            if (ignoreCollision == false && groundCol!=null)
+            {
+                Debug.Log("다운키 실행");
+                ignoreCollision = true;
+                Physics2D.IgnoreCollision(cols[0], groundCol, true);
+                //Physics2D.IgnoreCollision(cols[1], groundCol, true);
+                StartCoroutine(CollisionForSeconds(1f));
+            }            
+        }
     }
 
     //플레이어 공격, 스킬
@@ -197,6 +226,19 @@ public class Player : MonoBehaviour, IAtt
             anim.SetTrigger("IsSkill");
             Debug.Log("스킬씀");               //확인용
         }
+    }
+
+    //이지호 만듬
+    IEnumerator CollisionForSeconds(float seconds)
+    {        
+        yield return new WaitForSeconds(seconds);
+
+        Physics2D.IgnoreCollision(cols[0], groundCol, false);
+        //Physics2D.IgnoreCollision(cols[1], groundCol, false);
+        ignoreCollision = false;
+        groundCol = null;        
+
+        Debug.Log("코 실행");
     }
 
     //공격 끝
@@ -298,7 +340,7 @@ public class Player : MonoBehaviour, IAtt
     //입은 피해
     public void GetHit(float damage, Vector3 dir)
     {
-        if(myStat.HP <= 0)
+        if (myStat.HP <= 0)
         {
             return;
         }
@@ -312,22 +354,6 @@ public class Player : MonoBehaviour, IAtt
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        //땅과 닿았을 때
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            //isHit = false;
-
-            ////땅 통과_땅을 통과할 때 점프 카운트 리셋되면 안됨
-            //if(effector2D != null)
-            //{
-            //    effector2D.rotationalOffset = 180;
-            //}
-            //else
-            //{
-                jumpCount = 0;
-                rigid.velocity = Vector2.zero;      //미끄럼방지
-            //}
-        }
         //몬스터와 닿았을 때
         else if (collision.gameObject.CompareTag("GroundEnemy") || collision.gameObject.CompareTag("MonsetBullet"))
         {
@@ -340,17 +366,65 @@ public class Player : MonoBehaviour, IAtt
             GetHit(collision.transform.GetComponent<IHit>().GetAtt(), direction);
             Debug.Log("몬스터랑 닿았음");        //확인용
         }
+
+        //땅과 닿았을 때_이지호 제작
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            //Debug.Log("이게 실행되면 돼야함");            
+            groundCol = collision.collider;
+            jumpCount = 0;
+            rigid.velocity = Vector2.zero;      //미끄럼방지
+        }
+
+        if (collision.gameObject.CompareTag("DefaultGround"))
+        {
+            jumpCount = 0;
+            rigid.velocity = Vector2.zero;
+        }
+
     }
-    
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        //포탈 이용
+        //포탈 이용_오도경 제작
         if (other.gameObject.CompareTag("Potal"))
         {
             PlayerManager.Instance.InPotal = true;
         }
+        //이지호 제작
+        else if (other.gameObject.CompareTag("MonsterBullet"))
+        {
+            myStat.HP -= DungeonManager.Instance.boss.GetAtt();
+            anim.SetTrigger("IsHit");
+
+        }
+        else if (other.gameObject.CompareTag("Topbullet"))
+        {
+            myStat.HP -= 10f;
+            anim.SetTrigger("IsHit");
+        }
+        else if (other.gameObject.CompareTag("BossWeapon")) // 밑에 코루틴이랑 비교해서 왜안되는지 찾기
+        {
+            if (!isHit)
+            {
+                StartCoroutine(DamageDelay());
+            }
+        }
     }
 
+    //이지호 제작
+    private IEnumerator DamageDelay()
+    {
+        isHit = true;
+        GetHit(DungeonManager.Instance.boss.GetAtt(), Vector3.zero);
+
+        anim.SetTrigger("IsHit");
+
+        yield return new WaitForSeconds(1.0f);
+        isHit = false;
+    }
+
+    //오도경 제작
     private void OnTriggerExit2D(Collider2D other)
     {
         //포탈 이용

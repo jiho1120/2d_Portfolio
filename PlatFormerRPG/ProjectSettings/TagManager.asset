@@ -15,6 +15,9 @@ TagManager:
   - MonsterHitBox
   - Topbullet
   - PlayerBullet
+  - DefaultGround
+  - BackGround
+  - VillagePotal
   layers:
   - Default
   - TransparentFX

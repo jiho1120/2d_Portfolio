@@ -9,7 +9,7 @@ public class Object : MonoBehaviour, IHit
     protected Vector3 vec = Vector3.right;
     protected Vector3 dir = Vector3.zero;
 
-    public float realAttack; // ³ªÁß¿¡ °ø°İ·Â¿¡´Ù Ãß°¡ °ø°İ·Â ´õÇØ¼­ ¹İÈ¯ÇÏ´Â ÃÖÁ¾ ÇÃ·¹ÀÌ¾î°¡ ÀÔÀ» µ¥¹ÌÁö
+    protected float realAttack; // ë‚˜ì¤‘ì— ê³µê²©ë ¥ì—ë‹¤ ì¶”ê°€ ê³µê²©ë ¥ ë”í•´ì„œ ë°˜í™˜í•˜ëŠ” ìµœì¢… í”Œë ˆì´ì–´ê°€ ì…ì„ ë°ë¯¸ì§€
     protected float addAtt;
     protected float limitAreaPos;
     protected float xDifference;
@@ -21,7 +21,7 @@ public class Object : MonoBehaviour, IHit
     protected bool IsLeft = true;
     protected bool boundary = false;
     protected float timeAfterAttack;
-    protected float attackRate; // °ø°İÁÖ±â
+    protected float attackRate; // ê³µê²©ì£¼ê¸°
 
     protected Transform target;
     protected Rigidbody2D rigid;
@@ -74,17 +74,20 @@ public class Object : MonoBehaviour, IHit
         this.objectStat.hP = Mathf.Clamp(this.objectStat.hP - damage, 0, this.objectStat.maxHP);
         anim.SetTrigger("hit");
     }
+
     public float GetAtt()
     {
         return realAttack = objectStat.att * addAtt;
     }
 
+    
+
     public void isDead()
     {
         if (this.objectStat.hP <= 0)
         {
-            //PlayerManager.Instance.player.myStat.ExpVal += MonsterManager.Instance.objectStat.giveExp;
-            // PlayerManager.Instance.player.myStat.money += MonsterManager.Instance.objectStat.giveMoney;
+            //PlayerManager.Instance.player.myStat.ExpVal += objectStat.giveExp;
+            //PlayerManager.Instance.player.myStat.money += objectStat.giveMoney;
             this.gameObject.SetActive(false);
         }
 
@@ -98,7 +101,7 @@ public class Object : MonoBehaviour, IHit
             Hit(PlayerManager.Instance.player.Attak(), dir);
             Debug.Log(this.objectStat.hP);
         }
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.CompareTag("Wall"))
         {
             IsLeft = true ? false : true;
         }

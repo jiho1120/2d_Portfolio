@@ -24,9 +24,6 @@ public class MonsterManager : Singleton<MonsterManager>
 
     List<GameObject> allMonsterList = new List<GameObject>();
 
-    Coroutine bulletCor = null;
-
-
     // Start is called before the first frame update
     void Start()
     {

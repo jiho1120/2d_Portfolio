@@ -28,7 +28,11 @@ public class Constructure
             this.Level = level;
             this.Money = Money;
         }
+        
+        
     }
+    
+    
 
     public struct MonsterStat
     {

@@ -5,16 +5,19 @@ using UnityEngine.UI;
 
 public class DungeonManager : Singleton<DungeonManager>
 {
-    public Image panelImage;
+    Image panelImage;
     public Sprite[] panelSprites;
     public GameObject[] tileMap;
+    public GameObject[] Walls;
+    public Object boss;
 
     public int dungeonNum { get; private set; }
 
-
+    Coroutine monCor = null;
 
     private void Start()
     {
+        panelImage = UIManager.instance.panelImage;
         checkDungeonNum(40);
         ChangePanelImage();
         CheckGenerateCoroutine();
@@ -25,10 +28,26 @@ public class DungeonManager : Singleton<DungeonManager>
     {
         if (dungeonNum <= 3)
         {
-            StartCoroutine(MonsterManager.instance.GenerateMonster());
+            monCor = StartCoroutine(MonsterManager.instance.GenerateMonster());
+            Walls[0].gameObject.SetActive(true);
+            Walls[1].gameObject.SetActive(true);
+            Walls[2].gameObject.SetActive(false);
+            boss.gameObject.SetActive(false);
+            UIManager.instance.BossHpSlider.gameObject.SetActive(false);
+
         }
         else
         {
+            Walls[0].gameObject.SetActive(false);
+            Walls[1].gameObject.SetActive(false);
+            Walls[2].gameObject.SetActive(true);
+            boss.gameObject.SetActive(true);
+            UIManager.instance.BossHpSlider.gameObject.SetActive(true);
+
+            if (monCor != null)
+            {
+                StopCoroutine(monCor);
+            }
             StartCoroutine(MonsterManager.instance.GenerateBullet());
         }
     }
