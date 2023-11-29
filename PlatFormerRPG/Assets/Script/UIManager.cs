@@ -39,6 +39,8 @@ public class UIManager : Singleton<UIManager>
     public GameObject StateInfoOffCanvas;
     public GameObject OnShopCanvas;
     public GameObject OffShopCanvas;
+    public GameObject InPotalBtn;
+    public GameObject InPotalVillBtn;
     #endregion
 
     #region 게임이 현재 일시정지 중인지 여부를 나타내는 변수
@@ -81,8 +83,12 @@ public class UIManager : Singleton<UIManager>
     private string PopupNameText_string;
     private string PopupTypeText_string;
     public FixedJoystick joystick;
-
+    public GameObject WinPopup_black;
+    public GameObject WinPopup_White;
     int scene = 2;
+    public GameObject DeadPopup;
+    public Constructure.MonsterStat objectStat;
+    public float delayInSeconds = 2f;
     //Scene dungeon;
 
     private void Start()
@@ -90,7 +96,6 @@ public class UIManager : Singleton<UIManager>
         //dungeon = SceneManager.GetSceneByName("Dungeon");
         hpSlider.maxValue = PlayerManager.Instance.player.myStat.MaxHP;
         expSlider.maxValue = PlayerManager.Instance.player.myStat.MaxExpVal;
-        BossHpSlider.maxValue = 0;
         PotionCount += 3;
         PotionCountText.text = PotionCount.ToString();
         PopupLevelText.text = PlayerManager.Instance.player.myStat.Level.ToString();
@@ -101,6 +106,11 @@ public class UIManager : Singleton<UIManager>
         PopupTypeText.text = PopupTypeText_string;
         StateBtn_levelTxt.text = PlayerManager.Instance.player.myStat.Level.ToString();
         // AddStatCount.text = PlayerManager.Instance.AddStatCount.ToString();
+        InPotalBtn.SetActive(false);
+        InPotalVillBtn.SetActive(false);
+        WinPopup_black.SetActive(false);
+        WinPopup_White.SetActive(false);
+        DeadPopup.SetActive(false);
     }
 
     private void Update()
@@ -149,13 +159,13 @@ public class UIManager : Singleton<UIManager>
 
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            BossHpSlider.value += 100;
+            objectStat.hP = 0;
             Debug.Log("보스의 채력을 강제로 채력 0");
         }
         
         if (Input.GetKeyDown(KeyCode.F2))
         {
-            hpSlider.value += 100;
+            PlayerManager.Instance.player.myStat.HP = 0;
             Debug.Log("플레이어의 채력을 강제로 채력 0");
         }
 
@@ -168,9 +178,9 @@ public class UIManager : Singleton<UIManager>
 
         if (Input.GetKeyDown(KeyCode.F4))
         {
-            expSlider.value -= 50;
+            PlayerManager.Instance.player.myStat.ExpVal += 50;
             Debug.Log("경험치를 강제로 50%씩 증가시킴");
-            if (expSlider.value == 0)
+            if (PlayerManager.Instance.player.myStat.ExpVal == 100)
             {
                 Debug.Log("레벨업!");
                 expSlider.value = 100;
@@ -187,6 +197,30 @@ public class UIManager : Singleton<UIManager>
         {
             LevelUp();
         }
+
+        if (PlayerManager.Instance.InPotal == true)
+        {
+            InPotalBtn.SetActive(true);
+        }
+        else
+        {
+            InPotalBtn.SetActive(false);
+        }
+
+        if (PlayerManager.Instance.player.myStat.HP == 0)
+        {
+            DeadPopup.SetActive(true);
+            PlayerManager.Instance.player.myStat.HP += 100;
+            BossHpSlider.gameObject.SetActive(false);
+            Invoke("DeadAfterDelay", delayInSeconds);
+            OnVillPotal();
+            
+        }
+
+        // if (objectStat.hP == 0)
+        // {
+        //     Debug.Log("보스잡힘");
+        // }
     }
 
     public void LevelUp()
@@ -208,7 +242,14 @@ public class UIManager : Singleton<UIManager>
         PlayerManager.Instance.player.myStat.MaxExpVal += 10;
         Debug.Log(PlayerManager.Instance.player.myStat.MaxExpVal);
         // AddStatCount.text = PlayerManager.Instance.AddStatCount.ToString();
+        
 
+    }
+    
+    void DeadAfterDelay()
+    {
+        DeadPopup.SetActive(false);
+        
     }
 
     public void State(Constructure.Stat myStat)
@@ -230,11 +271,6 @@ public class UIManager : Singleton<UIManager>
     public void SetHpSlider(float HP)
     {
         hpSlider.value = HP;
-    }
-
-    public void SetExpSlider(float Exp)
-    {
-        expSlider.value = Exp;
     }
 
     public void SetName(string name)
@@ -294,6 +330,8 @@ public class UIManager : Singleton<UIManager>
 
     public void OnDungeon()
     {
+        InPotalVillBtn.SetActive(true);
+        InPotalBtn.SetActive(false);
         scene = 3;
         SceneManager.LoadScene("Dungeon");
         Debug.Log("성공적으로 던전으로 이동하였습니다.  =  테스트 던전 이동");
@@ -323,6 +361,8 @@ public class UIManager : Singleton<UIManager>
     public void OnVillagePotal()
     {
         scene = 2;
+        InPotalBtn.SetActive(true); 
+        InPotalVillBtn.SetActive(false);
         MonsterManager.instance.StartGenerateMonster(false);
         MonsterManager.instance.AllkillMonster();
         SceneManager.LoadScene("VillageScene");
@@ -375,6 +415,21 @@ public class UIManager : Singleton<UIManager>
         UiScript.SetActive(true);
     }
 
+    public void OnPotal()
+    {
+        
+        InPotalVillBtn.SetActive(true);
+        InPotalBtn.SetActive(false);
+        OnDungeon();
+    }
+
+    public void OnVillPotal()
+    {
+        InPotalBtn.SetActive(true); 
+        InPotalVillBtn.SetActive(false);
+        OnVillagePotal();
+    }
+
     
     
 
@@ -405,7 +460,7 @@ public class UIManager : Singleton<UIManager>
     public void UsePotion()
     {
         
-        if (PotionCount <= 0 || hpSlider.value == 0)
+        if (PotionCount <= 0 || PlayerManager.Instance.player.myStat.HP == 100)
         {
             PotionCount -= 0;
             PotionCountText.text = PotionCount.ToString();
@@ -413,7 +468,7 @@ public class UIManager : Singleton<UIManager>
         }
         else
         {
-            hpSlider.value -= 100;
+            PlayerManager.Instance.player.myStat.HP = 100;
             PotionCount -= 1;
             PotionCountText.text = PotionCount.ToString();
         }
