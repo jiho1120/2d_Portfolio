@@ -131,7 +131,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7617993168721994051}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10240, y: -5680, z: 0}
+  m_LocalPosition: {x: -64000, y: -35500, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -164,6 +164,14 @@ MonoBehaviour:
   isAtt: 0
   isWar: 0
   useSkill: 1
+  AttackClop: {fileID: 8300000, guid: 2b21ef916f6943c439b71a7c74568878, type: 3}
+  JumpSound: {fileID: 0}
+  JumpClip: {fileID: 8300000, guid: fd25a15f9797641458336cccfb445343, type: 3}
+  SkillClip: {fileID: 8300000, guid: 56703418e3aed4c47a5f6622816b8e41, type: 3}
+  WalkingClip: {fileID: 8300000, guid: df7087e4d8a8bb546bc08ce68632903f, type: 3}
+  isDieClip: {fileID: 8300000, guid: ff5f85da24bc943d1abdc5760a22bc81, type: 3}
+  HitClip: {fileID: 8300000, guid: b9eff218e132a4e76be78840eca96fb2, type: 3}
+  GroundHitClip: {fileID: 8300000, guid: 3becec1909f194046945d85ac1077772, type: 3}
 --- !u!95 &7617993168721994040
 Animator:
   serializedVersion: 5

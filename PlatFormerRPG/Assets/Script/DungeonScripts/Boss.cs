@@ -27,6 +27,13 @@ public class Boss : Object
     Coroutine bossMoveCor = null;
     Coroutine bossAttCor = null;
 
+    AudioSource BossAttck;
+    public AudioClip BossAttckClip;
+    AudioSource BossSkill;
+    public AudioClip BossSkillClip;
+    AudioSource BossSkill2;
+    public AudioClip BossSkill2Clip;
+
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +50,10 @@ public class Boss : Object
         bossMoveCor = StartCoroutine(Bossmove());
         bossAttCor = StartCoroutine(AttackCor());
         InvokeRepeating("Teleport", 1f, 10f);
+        BossAttck = gameObject.AddComponent<AudioSource>();
+        BossSkill = gameObject.AddComponent<AudioSource>();
+        BossSkill2 = gameObject.AddComponent<AudioSource>();
+        
     }
 
     // Update is called once per frame
@@ -203,6 +214,7 @@ public class Boss : Object
         if (boundary)
         {
             anim.SetTrigger("closeAttack");
+            BossAttck.PlayOneShot(BossAttckClip);
             addAtt = 1;
             //Debug.Log("closeAttack");
         }
@@ -214,6 +226,7 @@ public class Boss : Object
         if (boundary)
         {
             anim.SetTrigger("closeSkill");
+            BossSkill.PlayOneShot(BossSkillClip);
             addAtt = 1.1f;
             //Debug.Log("closeSkill");
         }
@@ -223,6 +236,7 @@ public class Boss : Object
     void FarAttack()
     {
         anim.SetTrigger("farAttack");
+        BossAttck.PlayOneShot(BossAttckClip);
         GameObject monsterBullet = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, bulletSpawnPos.transform.rotation);
         addAtt = 1.2f;
         //Debug.Log("farAttack");
@@ -232,6 +246,7 @@ public class Boss : Object
     void FarSkill() // 원기옥 느낌
     {
         anim.SetTrigger("farSkill");
+        BossSkill2.PlayOneShot(BossSkill2Clip);
         addAtt = 1.5f;
         numberOfBullets = 8;
         angleStep = 360f / numberOfBullets;

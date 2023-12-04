@@ -68,6 +68,7 @@ public class DungeonManager : Singleton<DungeonManager>
         {
             dungeonNum = 4;
         }
+        Debug.Log("dungeonNum : "+dungeonNum);
     }
 
     public void ChangePanelImage() // 레벨 판별 번호 받아서 이미지 변경

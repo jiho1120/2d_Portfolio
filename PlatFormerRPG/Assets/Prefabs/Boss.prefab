@@ -14985,10 +14985,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faab1f8ff518a344b9d5d5338b37dab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  realAttack: 0
   bulletPrefab: {fileID: 8445012293128930882, guid: b366ecef5deaa584d9e27a3086214c06, type: 3}
   bulletSpawnPos: {fileID: 2504038256056761787}
-  hpSlider: {fileID: 0}
+  BossAttckClip: {fileID: 8300000, guid: 26c977aeff814974d96f4ee6f803fb1a, type: 3}
+  BossSkillClip: {fileID: 8300000, guid: 24c8a6f9f87804a408f0e5230ad221ee, type: 3}
+  BossSkill2Clip: {fileID: 8300000, guid: 57bc5844454367648995e69a1617cc91, type: 3}
 --- !u!1 &4070143728713425523
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,14 +24,14 @@ public class Monster : Object
         speed = Random.Range(speedMin, speedMax);
     }
 
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
+    // void Start()
+    // {
+    // }
+    //
+    // // Update is called once per frame
+    // void Update()
+    // {
+    // }
 
     public void basicMove()
     {

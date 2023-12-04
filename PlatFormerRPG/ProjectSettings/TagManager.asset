@@ -18,6 +18,9 @@ TagManager:
   - DefaultGround
   - BackGround
   - VillagePotal
+  - GoldHouse
+  - ExpHouse
+  - ExpObject
   layers:
   - Default
   - TransparentFX

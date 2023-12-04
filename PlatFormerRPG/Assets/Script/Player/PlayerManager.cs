@@ -17,6 +17,8 @@ public class PlayerManager : Singleton<PlayerManager>
     public Player player;
     public GameObject WarriorPlayer;
     public GameObject WizaldPlayer;
+    
+    
 
     public void NewCharacter(AllEnum.Type characterType)
     {
