@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,20 +11,6 @@ public class UIManager : Singleton<UIManager>
     /*
      * 사용 이유 : UI의 버튼과 캐릭터 바를 관리한다.
      * 싱글톤을 사용함으로서 맵이동이 되어도 현재 상태가 씬이 바뀌어도 지속되도록 하려고 한다.
-     */
-    /*
-     * UI 설명
-     * 일시정지 버튼 : 현재 상태에서 일시정지.  pause 기능
-     * 일시정지 해제 버튼 : 일시정지를 푸는 기능
-     * 메시지 버튼 : 퀘스트 기능
-     * 플레이 버튼 : 던전으로 가는 기능
-     * 하트 버튼 : 현재 자신의 상태를 볼 수 있는 기능
-     * 딸라 버튼 : 상점을 열 수 있는 버튼
-     *
-     * 초록색 동그라미 : 캐릭터 얼굴
-     * 주황색 동그라미 : 레벨
-     * 빨간색 슬라이더 : 채력
-     * 노란색 슬라이더 : 경험치
      */
 
     #region 버튼 리스트
@@ -54,13 +41,13 @@ public class UIManager : Singleton<UIManager>
     public GameObject StateInfoDialog;
     public GameObject ShupUi;
     #endregion
-    
-    
+
+    #region GameObject
     //public Camera cam;
     //public Image[] coolImg;       //쿨타임 이미지
     public Slider hpSlider;         //HP Bar
     public Slider expSlider;        //EXP Bar
-    public Text StateBtn_levelTxt;           //Level Txt
+    public Text StateBtn_levelTxt;  //Level Txt
     public GameObject TypeW;
     public GameObject TypeD;
     public GameObject UiScript;
@@ -69,7 +56,7 @@ public class UIManager : Singleton<UIManager>
     public Text PotionCountText;
     public Text GoldText;
     public int TotalGold = 0;
-    public int UseGold = 100;
+    public int UseGold = 5000;
     public Constructure.Stat stat;
     public Text PopupLevelText;
     public Text PopupAttText;
@@ -91,22 +78,44 @@ public class UIManager : Singleton<UIManager>
     public float delayInSeconds = 2f;
     //Scene dungeon;
     public GameObject SkillBtn;
+    public Text Name;
+    public Text MyGold;
+    #endregion
+
+    #region Start
 
     private void Start()
     {
+        // 초기 경험치는 0이다.
         PlayerManager.Instance.player.myStat.ExpVal = 0;
         //dungeon = SceneManager.GetSceneByName("Dungeon");
+        // 최대채력을 슬라이더바에 설정
         hpSlider.maxValue = PlayerManager.Instance.player.myStat.MaxHP;
+        // 레벨업에 필요한 경험치를 슬라이더바에 설정
         expSlider.maxValue = PlayerManager.Instance.player.myStat.MaxExpVal;
+        // 포션 갯수
         PotionCount += 3;
+        // 문자열 전환
         PotionCountText.text = PotionCount.ToString();
+        // 정보창에 보일 현재 레벨
         PopupLevelText.text = PlayerManager.Instance.player.myStat.Level.ToString();
+        // 정보창에 보일 현재 공격력
         PopupAttText.text = PlayerManager.Instance.player.myStat.Att.ToString();
+        // 현재 경험치
         PopupExpText.text = PlayerManager.Instance.player.myStat.ExpVal.ToString();
+        // 정보창에 보일 현재 경험치
         PopupMaxExpText.text = PlayerManager.Instance.player.myStat.MaxExpVal.ToString();
+        // 정보창에 보일 이름
         PopupNameText.text = PopupNameText_string;
+        // 정보창에 보일 직업
         PopupTypeText.text = PopupTypeText_string;
+        // 메인창 레벨
         StateBtn_levelTxt.text = PlayerManager.Instance.player.myStat.Level.ToString();
+        // 보유골드
+        MyGold.text = PlayerManager.Instance.player.myStat.Money.ToString();
+        // 이름
+        Name.text = PopupNameText_string;
+        // 사용가능한 능력치 카운트
         // AddStatCount.text = PlayerManager.Instance.AddStatCount.ToString();
         InPotalBtn.SetActive(false);
         InPotalVillBtn.SetActive(false);
@@ -114,12 +123,18 @@ public class UIManager : Singleton<UIManager>
         WinPopup_White.SetActive(false);
         DeadPopup.SetActive(false);
         objectStat.hP = objectStat.maxHP * 0.4f;
+        
     }
+
+    #endregion
+
+    #region Update
 
     private void Update()
     {
         expSlider.value = PlayerManager.Instance.player.myStat.ExpVal;
         hpSlider.value = PlayerManager.Instance.player.myStat.HP;
+        MyGold.text = PlayerManager.Instance.player.myStat.Money.ToString();
 
 
         if (Input.GetKeyDown(KeyCode.P)) // Pause의 P
@@ -226,6 +241,9 @@ public class UIManager : Singleton<UIManager>
             
         }
     }
+
+    #endregion
+    
     
     IEnumerator AlternatePopups()
     {
@@ -257,6 +275,8 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    #region 레벨업을 했을경우
+
     public void LevelUp()
     {
         PlayerManager.Instance.player.myStat.Level += 1;
@@ -279,9 +299,10 @@ public class UIManager : Singleton<UIManager>
         PlayerManager.Instance.player.myStat.MaxExpVal += 10;
         Debug.Log(PlayerManager.Instance.player.myStat.MaxExpVal);
         // AddStatCount.text = PlayerManager.Instance.AddStatCount.ToString();
-        
-
     }
+
+    #endregion
+    
     
     void DeadAfterDelay()
     {
@@ -370,6 +391,7 @@ public class UIManager : Singleton<UIManager>
         InPotalVillBtn.SetActive(true);
         InPotalBtn.SetActive(false);
         scene = 3;
+        // DungeonManager.Instance.gameObject.SetActive(true);
         SceneManager.LoadScene("Dungeon");
         QuestCanvas.SetActive(false);
         QuestOpenCanvas.SetActive(false);
@@ -379,7 +401,7 @@ public class UIManager : Singleton<UIManager>
         OffShopCanvas.SetActive(false);
         PlayerManager.Instance.WarriorPlayer.transform.Translate(-640, -355,0);
         PlayerManager.Instance.WizaldPlayer.transform.Translate(-640, -355,0);
-
+        
         StartCoroutine(CheckDungeon());
     }
 
@@ -414,6 +436,7 @@ public class UIManager : Singleton<UIManager>
         //StopCoroutine(DungeonManager.instance.monCor);
         //StopCoroutine(MonsterManager.instance.GenerateMonster());        
         //DungeonManager.instance.monCor = null;
+        
     }
      
     public void OnInfo()
@@ -495,7 +518,6 @@ public class UIManager : Singleton<UIManager>
     #endregion
 
     #region Potion
-
     public void UsePotion()
     {
         
@@ -512,22 +534,20 @@ public class UIManager : Singleton<UIManager>
             PotionCountText.text = PotionCount.ToString();
         }
     }
-
     public void GetPotion()
     {
-        
-        if (TotalGold < UseGold)
+        if (PlayerManager.Instance.player.myStat.Money < UseGold)
         {
-            Debug.Log("보유금액이 구매하고자 하는 금액보다 적음");
+            PotionCount += 0;
+            PotionCountText.text = PotionCount.ToString();
         }
         else
         {
-            TotalGold -= UseGold;
+            PlayerManager.Instance.player.myStat.Money -= UseGold;
             PotionCount += 1;
             PotionCountText.text = PotionCount.ToString();
         }
     }
-
     #endregion
 
     #region 조이스틱버튼 함수
@@ -545,6 +565,7 @@ public class UIManager : Singleton<UIManager>
     public void J_Btn()
     {
         PlayerManager.instance.player.JumpMove();
+        PlayerManager.Instance.player.JumpSound.PlayOneShot(PlayerManager.Instance.player.JumpClip);
     }
     
     private void StartCooldown(float cooldownDuration)

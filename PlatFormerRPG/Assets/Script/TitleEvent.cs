@@ -15,7 +15,7 @@ public class TitleEvent : MonoBehaviour
     public float LodingTime = 3.0f;
     private SpriteRenderer sp;
     private Color color = Color.white;
-    private string secenName = "NewUserLife"; // 이동시킬 씬 이름
+    private string secenName = "NewUser"; // 이동시킬 씬 이름
     
     private void Start()
     {
@@ -44,7 +44,6 @@ public class TitleEvent : MonoBehaviour
     public void GameStart()
     {
         StartCoroutine(OKDialogDisappear());
-        Debug.Log("정상적으로 씬이동을 완료하였습니다. : GameStart()");
     }
     
     IEnumerator OKDialogDisappear()

@@ -47,6 +47,7 @@ public class Player : MonoBehaviour, IAtt
     bool isStart = false;           //시작 판별
     public bool useSkill = true;    //스킬 사용 여부
     int layermask = 0;
+    
 
     Coroutine cor = null;
 
@@ -56,6 +57,22 @@ public class Player : MonoBehaviour, IAtt
     //Collider2D footCol;
     Collider2D[] cols;
     Collider2D groundCol;
+    
+    // 소리
+    AudioSource AttackSound;
+    public AudioClip AttackClop;
+    public AudioSource JumpSound;
+    public AudioClip JumpClip;
+    AudioSource SkiilSound;
+    public AudioClip SkillClip;
+    AudioSource WalkingSound;
+    public AudioClip WalkingClip;
+    private AudioSource isDieSoune;
+    public AudioClip isDieClip;
+    private AudioSource HitSound;
+    public AudioClip HitClip;
+    private AudioSource GroundHit;
+    public AudioClip GroundHitClip;
 
     void Start()
     {
@@ -78,6 +95,15 @@ public class Player : MonoBehaviour, IAtt
         skillObject_1.SetActive(false);
         skillObject_2.SetActive(false);
         skillObject_3.SetActive(false);
+
+        AttackSound = gameObject.AddComponent<AudioSource>();
+        JumpSound = gameObject.AddComponent<AudioSource>();
+        SkiilSound = gameObject.AddComponent<AudioSource>();
+        WalkingSound = gameObject.AddComponent<AudioSource>();
+        isDieSoune = gameObject.AddComponent<AudioSource>();
+        HitSound = gameObject.AddComponent<AudioSource>();
+        GroundHit = gameObject.AddComponent<AudioSource>();
+        
     }
 
     //Player 스탯 세팅
@@ -118,6 +144,7 @@ public class Player : MonoBehaviour, IAtt
             if (!isAlive)
             {
                 Die();
+                isDieSoune.PlayOneShot(isDieClip);
             }
             else
             {
@@ -170,16 +197,19 @@ public class Player : MonoBehaviour, IAtt
                 if (this.transform.position.y > 0)
                 {
                     vec.y = y;
+                    WalkingSound.PlayOneShot(WalkingClip);
                 }
             }
 
             transform.Translate(vec.normalized * Time.deltaTime * speed);
+            
 
             //Player 이동 반전
             if (vec.x != 0)
             {
                 scaleVec.x = vec.x;
                 anim.SetBool("IsMove", true);
+                WalkingSound.PlayOneShot(WalkingClip);
             }
             else
             {
@@ -187,6 +217,7 @@ public class Player : MonoBehaviour, IAtt
             }
         }
         transform.localScale = scaleVec;
+        
     }
 
     //플레이어 점프
@@ -197,6 +228,7 @@ public class Player : MonoBehaviour, IAtt
         {
             rigid.velocity = Vector2.zero;      //velocity 초기화(일정한 점프 유지)
             jumpCount++;
+            
         }
         else
         {
@@ -204,6 +236,7 @@ public class Player : MonoBehaviour, IAtt
         }
         rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
         anim.SetTrigger("IsJump");
+        JumpSound.PlayOneShot(JumpClip);
 
         //점프key
         //if (Input.GetKeyDown(KeyCode.Space))
@@ -255,15 +288,7 @@ public class Player : MonoBehaviour, IAtt
         //기본 공격joystick
         isAtt = true;
         anim.SetTrigger("IsAtt");
-        Debug.Log("공격함");               //확인용
-
-        //기본 공격key
-        //if (Input.GetKeyDown(KeyCode.Z))
-        //{
-        //    isAtt = true;
-        //    anim.SetTrigger("IsAtt");
-        //    Debug.Log("공격함");               //확인용
-        //}
+        AttackSound.PlayOneShot(AttackClop);
     }
 
     //플레이어 스킬
@@ -272,15 +297,7 @@ public class Player : MonoBehaviour, IAtt
         //스킬 공격joystick
         isAtt = true;
         anim.SetTrigger("IsSkill");
-        Debug.Log("스킬씀");               //확인용
-
-        //스킬 공격key
-        //if (Input.GetKeyDown(KeyCode.X))
-        //{
-        //    isAtt = true;
-        //    anim.SetTrigger("IsSkill");
-        //    Debug.Log("스킬씀");               //확인용
-        //}
+        
     }
 
     //이지호 제작
@@ -324,6 +341,7 @@ public class Player : MonoBehaviour, IAtt
             {
                 allcols[i].GetComponent<IHit>().Hit(Attak(), transform.right /*내 데미지, 방향*/);
                 Debug.Log("때림");
+                AttackSound.PlayOneShot(AttackClop);
             }                        
         }
     }
@@ -337,6 +355,7 @@ public class Player : MonoBehaviour, IAtt
         {
             useSkill = false;
             warriorSkillObj = Instantiate(swordSkillPrefab, swordPos.position, Quaternion.Euler(Vector3.forward * -90 * transform.localScale.x));        //생성과 동시에 물체의 각도를 맞춤
+            SkiilSound.PlayOneShot(SkillClip);
         }
     }
 
@@ -362,6 +381,7 @@ public class Player : MonoBehaviour, IAtt
             useSkill = false;
             wizardSkillObj = Instantiate(bigFireBallPrefab, fireBallPos.position, transform.rotation);
             wizardSkillObj.GetComponent<PlayerBullet>().SetDir(scaleVec);
+            SkiilSound.PlayOneShot(SkillClip);
         }
     }
 
@@ -390,6 +410,7 @@ public class Player : MonoBehaviour, IAtt
         isAlive = false;
         anim.SetTrigger("IsDie");
         transform.gameObject.SetActive(false);
+        isDieSoune.PlayOneShot(isDieClip);
     }
 
     //입은 피해
@@ -405,6 +426,7 @@ public class Player : MonoBehaviour, IAtt
         anim.SetTrigger("IsHit");
         rigid.AddForce(dir, ForceMode2D.Impulse);
         isAtt = false;
+        HitSound.PlayOneShot(HitClip);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -419,7 +441,7 @@ public class Player : MonoBehaviour, IAtt
             direction *= knockBack;
 
             GetHit(collision.transform.GetComponent<IHit>().GetAtt(), direction);
-            Debug.Log("몬스터랑 닿았음");        //확인용
+            // HitSound.PlayOneShot(HitClip);
         }
 
         //땅과 닿았을 때_이지호 제작
@@ -429,6 +451,7 @@ public class Player : MonoBehaviour, IAtt
             groundCol = collision.collider;
             jumpCount = 0;
             rigid.velocity = Vector2.zero;      //미끄럼방지
+            // GroundHit.PlayOneShot(GroundHitClip);
         }
 
         if (collision.gameObject.CompareTag("DefaultGround"))
@@ -465,6 +488,16 @@ public class Player : MonoBehaviour, IAtt
             {
                 StartCoroutine(DamageDelay());
             }
+        }
+
+        if (other.gameObject.CompareTag("ExpObject"))
+        {
+            myStat.ExpVal += 1;
+        }
+
+        if (other.gameObject.CompareTag("GoldHouse"))
+        {
+            myStat.Money += 10;
         }
     }
 

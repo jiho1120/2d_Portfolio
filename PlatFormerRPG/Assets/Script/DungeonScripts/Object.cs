@@ -28,14 +28,14 @@ public class Object : MonoBehaviour, IHit
     protected Animator anim;
     public Constructure.MonsterStat objectStat;
 
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
+    // void Start()
+    // {
+    // }
+    //
+    // // Update is called once per frame
+    // void Update()
+    // {
+    // }
 
     public void LimitArea(float limitAreaPos)
     {
@@ -87,8 +87,7 @@ public class Object : MonoBehaviour, IHit
         if (this.objectStat.hP <= 0)
         {
             PlayerManager.Instance.player.myStat.ExpVal += objectStat.giveExp;
-            //PlayerManager.Instance.player.myStat.money += objectStat.giveMoney;
-            Debug.Log("죽음");
+            PlayerManager.Instance.player.myStat.Money += objectStat.giveMoney;
             this.gameObject.SetActive(false);
         }
 
